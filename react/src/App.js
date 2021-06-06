@@ -4,6 +4,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import jaLocale from "date-fns/locale/ja";
 import format from "date-fns/format";
+import MaterialUIPickers from "./components/MaterialUIPickers";
 
 class ExtendedUtils extends DateFnsUtils {
   getCalendarHeaderText(date) {
@@ -18,15 +19,16 @@ function App() {
   const [selectedDate, handleDateChange] = useState(new Date());
   return (
     <div className="App">
-      <h1>日報管理アプリ</h1>
-      <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
+      <h1>日報管理</h1>
+      {/* <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
         <DatePicker
           okLabel="決定"
           cancelLabel="キャンセル"
           value={selectedDate}
           onChange={handleDateChange}
         />
-      </MuiPickersUtilsProvider>
+      </MuiPickersUtilsProvider> */}
+      <MaterialUIPickers></MaterialUIPickers>
     </div>
   );
 }

@@ -10,9 +10,7 @@ import { theme } from "./theme";
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <CssBaseline>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      <App />
     </CssBaseline>
   </MuiThemeProvider>,
   document.getElementById("root")
