@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DatePicker from "./components/DatePicker";
+import CustomDatePicker from "./components/CustomDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Button, Typography } from "@material-ui/core";
@@ -28,6 +29,7 @@ function App() {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
           />
+          {/* <CustomDatePicker /> */}
         </div>
         <div className={classes.rightColumn}>
           <Typography variant="h5">
