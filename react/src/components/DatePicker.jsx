@@ -17,12 +17,10 @@ class ExtendedUtils extends DateFnsUtils {
   }
 }
 
-export default function DatePicker() {
-  // The first commit of Material-UI
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-
+export default function DatePicker(props) {
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    // console.log(format(date, "yyyy/MM/dd"));
+    props.setSelectedDate(date);
   };
 
   return (
@@ -33,9 +31,7 @@ export default function DatePicker() {
           variant="static"
           format="yyyy/MM/dd"
           margin="normal"
-          id="date-picker-inline"
-          label="日付を選択"
-          value={selectedDate}
+          value={props.selectedDate}
           onChange={handleDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",
