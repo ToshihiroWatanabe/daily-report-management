@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DatePicker from "./components/DatePicker";
+import ReportDatePicker from "./components/ReportDatePicker";
 import CustomDatePicker from "./components/CustomDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
@@ -25,7 +25,7 @@ function App() {
       <h1>日報管理</h1>
       <main className={classes.main}>
         <div className={classes.leftColumn}>
-          <DatePicker
+          <ReportDatePicker
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
           />
