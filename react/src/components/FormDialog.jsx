@@ -189,18 +189,28 @@ export default function FormDialog(props) {
   };
 
   const onHourTextChange = (index, target) => {
-    if (target.value.match(/.*\D.*/)) {
-      target.value = 0;
+    if (target.value.match(/.*\d.*/)) {
+      setReport((report) => {
+        report.report_items[index].hour =
+          parseInt(target.value) > 24 ? 24 : parseInt(target.value);
+        return {
+          date: report.date,
+          content: report.content,
+          report_items: report.report_items,
+          updatedAt: report.updatedAt,
+        };
+      });
+    } else {
+      setReport((report) => {
+        report.report_items[index].hour = 0;
+        return {
+          date: report.date,
+          content: report.content,
+          report_items: report.report_items,
+          updatedAt: report.updatedAt,
+        };
+      });
     }
-    setReport((report) => {
-      report.report_items[index].hour = parseInt(target.value);
-      return {
-        date: report.date,
-        content: report.content,
-        report_items: report.report_items,
-        updatedAt: report.updatedAt,
-      };
-    });
   };
 
   /**
@@ -221,18 +231,28 @@ export default function FormDialog(props) {
   };
 
   const onMinuteTextChange = (index, target) => {
-    if (target.value.match(/.*\D.*/)) {
-      target.value = 0;
+    if (target.value.match(/.*\d.*/)) {
+      setReport((report) => {
+        report.report_items[index].minute =
+          parseInt(target.value) > 59 ? 59 : parseInt(target.value);
+        return {
+          date: report.date,
+          content: report.content,
+          report_items: report.report_items,
+          updatedAt: report.updatedAt,
+        };
+      });
+    } else {
+      setReport((report) => {
+        report.report_items[index].minute = 0;
+        return {
+          date: report.date,
+          content: report.content,
+          report_items: report.report_items,
+          updatedAt: report.updatedAt,
+        };
+      });
     }
-    setReport((report) => {
-      report.report_items[index].minute = parseInt(target.value);
-      return {
-        date: report.date,
-        content: report.content,
-        report_items: report.report_items,
-        updatedAt: report.updatedAt,
-      };
-    });
   };
 
   /**
@@ -309,6 +329,10 @@ export default function FormDialog(props) {
                           width: "2rem",
                           marginRight: "4px",
                         }}
+                        value={{
+                          label: value.hour.toString(),
+                          value: value.hour,
+                        }}
                         inputProps={{
                           ...params.inputProps,
                           maxLength: 2,
@@ -341,6 +365,10 @@ export default function FormDialog(props) {
                         style={{
                           width: "2rem",
                           marginRight: "4px",
+                        }}
+                        value={{
+                          label: value.minute.toString(),
+                          value: value.minute,
                         }}
                         inputProps={{
                           ...params.inputProps,
