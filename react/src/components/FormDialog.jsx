@@ -188,6 +188,21 @@ export default function FormDialog(props) {
     });
   };
 
+  const onHourTextChange = (index, target) => {
+    if (target.value.match(/.*\D.*/)) {
+      target.value = 0;
+    }
+    setReport((report) => {
+      report.report_items[index].hour = parseInt(target.value);
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
+    });
+  };
+
   /**
    * 分に変化があったときの処理です。
    * @param {*} index
@@ -196,6 +211,21 @@ export default function FormDialog(props) {
   const onMinuteChange = (index, value) => {
     setReport((report) => {
       report.report_items[index].minute = value;
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
+    });
+  };
+
+  const onMinuteTextChange = (index, target) => {
+    if (target.value.match(/.*\D.*/)) {
+      target.value = 0;
+    }
+    setReport((report) => {
+      report.report_items[index].minute = parseInt(target.value);
       return {
         date: report.date,
         content: report.content,
@@ -274,6 +304,7 @@ export default function FormDialog(props) {
                       <TextField
                         {...params}
                         margin="dense"
+                        onChange={(e, v) => onHourTextChange(index, e.target)}
                         style={{
                           width: "2rem",
                           marginRight: "4px",
@@ -306,6 +337,7 @@ export default function FormDialog(props) {
                       <TextField
                         {...params}
                         margin="dense"
+                        onChange={(e, v) => onMinuteTextChange(index, e.target)}
                         style={{
                           width: "2rem",
                           marginRight: "4px",
