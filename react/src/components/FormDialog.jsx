@@ -106,6 +106,21 @@ export default function FormDialog(props) {
   };
 
   /**
+   * 内容に変化があったときの処理です。
+   * @param {*} index
+   * @param {*} target
+   */
+  const onItemContentChange = (index, target) => {
+    // console.log(index, value);
+    setReportItems((reportItems) => {
+      // reportItems[index].category = target.value;
+      reportItems[index] = { ...reportItems[index], content: target.value };
+      // console.log(reportItems);
+      return [...reportItems];
+    });
+  };
+
+  /**
    * 時間に変化があったときの処理です。
    * @param {*} index
    * @param {*} value
@@ -140,7 +155,6 @@ export default function FormDialog(props) {
                   autoFocus
                   label="カテゴリ"
                   variant="outlined"
-                  name={index.toString()}
                   margin="dense"
                   value={reportItems[index].category}
                   onChange={(e, v) => onCategoryChange(index, e.target)}
@@ -150,6 +164,7 @@ export default function FormDialog(props) {
                   label="内容"
                   variant="outlined"
                   margin="dense"
+                  onChange={(e, v) => onItemContentChange(index, e.target)}
                   style={{ width: "12rem", marginRight: "4px" }}
                 />
                 {/* 時間 */}
