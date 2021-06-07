@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -10,6 +10,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { FormControl, IconButton, Popper } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -20,12 +22,12 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-let hours = [];
+const hours = [];
 for (let i = 0; i <= 24; i++) {
   hours.push({ label: i.toString(), value: i });
 }
 
-let minutes = [];
+const minutes = [];
 minutes.push({ label: "0", value: 0 });
 minutes.push({ label: "15", value: 15 });
 minutes.push({ label: "30", value: 30 });
@@ -34,11 +36,81 @@ for (let i = 0; i <= 59; i++) {
   minutes.push({ label: i.toString(), value: i });
 }
 
+const DEFAULT_REPORT_ITEM = {
+  category: "",
+  content: "",
+  hour: 1,
+  minute: 0,
+};
+
 export default function FormDialog(props) {
   const classes = useStyles();
 
-  const handleClose = () => {
+  const [reportItems, setReportItems] = useState([DEFAULT_REPORT_ITEM]);
+
+  const onCancelButtonClick = () => {
     props.setOpen(false);
+    setReportItems((reportItems) => {
+      const copy = [DEFAULT_REPORT_ITEM];
+      return [...copy];
+    });
+  };
+
+  const onCreateButtonClick = () => {
+    props.setOpen(false);
+    let input = {
+      date: format(props.selectedDate, "yyyy-MM-dd"),
+      content: "",
+      report_items: [DEFAULT_REPORT_ITEM],
+      updatedAt: 0,
+    };
+    setReportItems((reportItems) => {
+      const copy = [DEFAULT_REPORT_ITEM];
+      return [...copy];
+    });
+    props.onCreate(input);
+  };
+
+  /**
+   * 追加ボタンがクリックされたときの処理です。
+   */
+  const onAddButtonClick = () => {
+    setReportItems([...reportItems, DEFAULT_REPORT_ITEM]);
+  };
+
+  /**
+   * 削除ボタンがクリックされたときの処理です。
+   * @param {*} index
+   */
+  const onDeleteButtonClick = (index) => {
+    setReportItems((reportItems) => {
+      return reportItems.filter((e, i) => {
+        return i !== index;
+      });
+    });
+  };
+
+  /**
+   * カテゴリーに変化があったときの処理です。
+   * @param {*} index
+   * @param {*} value
+   */
+  const onCategoryChange = (index, value) => {
+    // console.log(index, value);
+    setReportItems((reportItems) => {
+      reportItems[index].category = value;
+      // console.log(reportItems);
+      return [...reportItems];
+    });
+  };
+
+  /**
+   * 時間に変化があったときの処理です。
+   * @param {*} index
+   * @param {*} value
+   */
+  const onHourChange = (index, value) => {
+    console.log(index, value);
   };
 
   const PopperMy = function (props) {
@@ -60,76 +132,104 @@ export default function FormDialog(props) {
           <DialogContentText>
             {props.selectedDate.toLocaleDateString()}
           </DialogContentText>
-          <div className={classes.dFlex}>
-            <TextField
-              autoFocus
-              label="カテゴリ"
-              variant="outlined"
-              margin="dense"
-              style={{ width: "8rem", marginRight: "4px" }}
-            />
-            <TextField
-              label="内容"
-              variant="outlined"
-              margin="dense"
-              style={{ width: "12rem", marginRight: "4px" }}
-            />
-            <FormControl>
-              <Autocomplete
-                freeSolo
-                disableClearable // バツマークを無効にする
-                PopperComponent={PopperMy}
-                options={hours}
-                getOptionLabel={(option) => option.label}
-                defaultValue={{ label: "1", value: 1 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    margin="dense"
-                    style={{
-                      width: "2rem",
-                      marginRight: "4px",
+          {reportItems.map((value, index) => {
+            return (
+              <div key={index} className={classes.dFlex}>
+                <TextField
+                  autoFocus
+                  label="カテゴリ"
+                  variant="outlined"
+                  margin="dense"
+                  value={reportItems[index].category}
+                  onChange={(e, v) => onCategoryChange(index, e.target.value)}
+                  style={{ width: "8rem", marginRight: "4px" }}
+                />
+                <TextField
+                  label="内容"
+                  variant="outlined"
+                  margin="dense"
+                  style={{ width: "12rem", marginRight: "4px" }}
+                />
+                {/* 時間 */}
+                <FormControl>
+                  <Autocomplete
+                    freeSolo
+                    disableClearable // バツマークを無効にする
+                    PopperComponent={PopperMy}
+                    options={hours}
+                    getOptionLabel={(option) => option.label}
+                    defaultValue={{
+                      label: reportItems[index].hour.toString(),
+                      value: reportItems[index].hour,
                     }}
-                    inputProps={{
-                      ...params.inputProps,
-                      maxLength: 2,
-                      style: { textAlign: "right" },
-                    }}
+                    onChange={(e, v) => onHourChange(index, v.value)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        margin="dense"
+                        style={{
+                          width: "2rem",
+                          marginRight: "4px",
+                        }}
+                        inputProps={{
+                          ...params.inputProps,
+                          maxLength: 2,
+                          style: { textAlign: "right" },
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
-            </FormControl>
-            <div>時間</div>
-            <FormControl>
-              <Autocomplete
-                freeSolo
-                disableClearable // バツマークを無効にする
-                PopperComponent={PopperMy}
-                options={minutes}
-                getOptionLabel={(option) => option.label}
-                defaultValue={{ label: "0", value: 0 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    margin="dense"
-                    style={{
-                      width: "2rem",
-                      marginRight: "4px",
+                </FormControl>
+                <div>時間</div>
+                {/* 分 */}
+                <FormControl>
+                  <Autocomplete
+                    freeSolo
+                    disableClearable // バツマークを無効にする
+                    PopperComponent={PopperMy}
+                    options={minutes}
+                    getOptionLabel={(option) => option.label}
+                    defaultValue={{
+                      label: reportItems[index].minute.toString(),
+                      value: reportItems[index].minute,
                     }}
-                    inputProps={{
-                      ...params.inputProps,
-                      maxLength: 2,
-                      style: { textAlign: "right" },
-                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        margin="dense"
+                        style={{
+                          width: "2rem",
+                          marginRight: "4px",
+                        }}
+                        inputProps={{
+                          ...params.inputProps,
+                          maxLength: 2,
+                          style: { textAlign: "right" },
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
-            </FormControl>
-            <div>分</div>
-            <IconButton>
-              <AddCircleOutlineIcon />
-            </IconButton>
-          </div>
+                </FormControl>
+                <div>分</div>
+                <IconButton
+                  style={{
+                    visibility: reportItems.length > 16 ? "hidden" : "",
+                  }}
+                  onClick={onAddButtonClick}
+                >
+                  <AddCircleOutlineIcon />
+                </IconButton>
+                <IconButton
+                  style={{ visibility: reportItems.length < 2 ? "hidden" : "" }}
+                  onClick={(event) => onDeleteButtonClick(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            );
+          })}
+
+          {/* 感想 */}
           <TextField
             margin="dense"
             id="name"
@@ -143,10 +243,14 @@ export default function FormDialog(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={onCancelButtonClick} color="primary">
             キャンセル
           </Button>
-          <Button onClick={handleClose} variant="contained" color="primary">
+          <Button
+            onClick={onCreateButtonClick}
+            variant="contained"
+            color="primary"
+          >
             作成
           </Button>
         </DialogActions>

@@ -19,7 +19,12 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [open, setOpen] = React.useState(false);
+  const [formDialogOpen, setFormDialogOpen] = useState(false);
+
+  const onCreateReport = (input) => {
+    console.log(input);
+  };
+
   return (
     <>
       <h1>日報管理</h1>
@@ -42,14 +47,15 @@ function App() {
             size="medium"
             className={classes.createReportButton}
             startIcon={<AddCircleOutlineIcon />}
-            onClick={(event) => setOpen(true)}
+            onClick={(event) => setFormDialogOpen(true)}
           >
             日報作成
           </Button>
           <FormDialog
-            open={open}
-            setOpen={setOpen}
+            open={formDialogOpen}
+            setOpen={setFormDialogOpen}
             selectedDate={selectedDate}
+            onCreate={onCreateReport}
           />
         </div>
       </main>
