@@ -46,7 +46,11 @@ function App() {
           >
             日報作成
           </Button>
-          <FormDialog open={open} setOpen={setOpen} />
+          <FormDialog
+            open={open}
+            setOpen={setOpen}
+            selectedDate={selectedDate}
+          />
         </div>
       </main>
     </>

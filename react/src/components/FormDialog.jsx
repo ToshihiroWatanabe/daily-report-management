@@ -38,7 +38,7 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">日報作成</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {new Date().toLocaleDateString()}
+            {props.selectedDate.toLocaleDateString()}
           </DialogContentText>
           <div className={classes.dFlex}>
             <TextField
