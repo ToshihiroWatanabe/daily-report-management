@@ -93,12 +93,13 @@ export default function FormDialog(props) {
   /**
    * カテゴリーに変化があったときの処理です。
    * @param {*} index
-   * @param {*} value
+   * @param {*} target
    */
-  const onCategoryChange = (index, value) => {
+  const onCategoryChange = (index, target) => {
     // console.log(index, value);
     setReportItems((reportItems) => {
-      reportItems[index].category = value;
+      // reportItems[index].category = target.value;
+      reportItems[index] = { ...reportItems[index], category: target.value };
       // console.log(reportItems);
       return [...reportItems];
     });
@@ -139,9 +140,10 @@ export default function FormDialog(props) {
                   autoFocus
                   label="カテゴリ"
                   variant="outlined"
+                  name={index.toString()}
                   margin="dense"
                   value={reportItems[index].category}
-                  onChange={(e, v) => onCategoryChange(index, e.target.value)}
+                  onChange={(e, v) => onCategoryChange(index, e.target)}
                   style={{ width: "8rem", marginRight: "4px" }}
                 />
                 <TextField
