@@ -85,18 +85,36 @@ export default function FormDialog(props) {
                       width: "2rem",
                       marginRight: "4px",
                     }}
-                    inputProps={{ style: { textAlign: "right" } }}
+                    inputProps={{
+                      ...params.inputProps,
+                      style: { textAlign: "right" },
+                    }}
                   />
                 )}
               />
             </FormControl>
             <div>時間</div>
             <FormControl>
-              <TextField
-                defaultValue="0"
-                margin="dense"
-                style={{ width: "2rem", marginRight: "4px" }}
-                inputProps={{ style: { textAlign: "right" } }}
+              <Autocomplete
+                freeSolo
+                disableClearable // バツマークを無効にする
+                PopperComponent={PopperMy}
+                options={minutes.map((option) => option.text)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    defaultValue="1"
+                    margin="dense"
+                    style={{
+                      width: "2rem",
+                      marginRight: "4px",
+                    }}
+                    inputProps={{
+                      ...params.inputProps,
+                      style: { textAlign: "right" },
+                    }}
+                  />
+                )}
               />
             </FormControl>
             <div>分</div>
