@@ -26,6 +26,10 @@ for (let i = 0; i <= 24; i++) {
 }
 
 let minutes = [];
+minutes.push({ text: "0", value: 0 });
+minutes.push({ text: "15", value: 15 });
+minutes.push({ text: "30", value: 30 });
+minutes.push({ text: "45", value: 45 });
 for (let i = 0; i <= 59; i++) {
   minutes.push({ text: i.toString(), value: i });
 }
@@ -87,6 +91,7 @@ export default function FormDialog(props) {
                     }}
                     inputProps={{
                       ...params.inputProps,
+                      maxLength: 2,
                       style: { textAlign: "right" },
                     }}
                   />
@@ -111,6 +116,7 @@ export default function FormDialog(props) {
                     }}
                     inputProps={{
                       ...params.inputProps,
+                      maxLength: 2,
                       style: { textAlign: "right" },
                     }}
                   />
