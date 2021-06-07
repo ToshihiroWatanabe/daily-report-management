@@ -9,7 +9,9 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { FormControl, IconButton, Popper } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { format } from "date-fns";
 
@@ -43,30 +45,47 @@ const DEFAULT_REPORT_ITEM = {
   minute: 0,
 };
 
+const DEFAULT_REPORT = {
+  date: "",
+  content: "",
+  report_items: [DEFAULT_REPORT_ITEM],
+  updatedAt: 0,
+};
+
+const filterOptions = createFilterOptions({
+  matchFrom: "start",
+});
+
 export default function FormDialog(props) {
   const classes = useStyles();
 
-  const [reportItems, setReportItems] = useState([DEFAULT_REPORT_ITEM]);
+  const [report, setReport] = useState(DEFAULT_REPORT);
 
+  /**
+   * キャンセルボタンが押されたときの処理です。
+   */
   const onCancelButtonClick = () => {
     props.setOpen(false);
-    setReportItems((reportItems) => {
-      const copy = [DEFAULT_REPORT_ITEM];
-      return [...copy];
+    setReport((report) => {
+      report = DEFAULT_REPORT;
+      return report;
     });
   };
 
+  /**
+   * 作成ボタンが押されたときの処理です。
+   */
   const onCreateButtonClick = () => {
     props.setOpen(false);
     let input = {
       date: format(props.selectedDate, "yyyy-MM-dd"),
-      content: "",
-      report_items: [DEFAULT_REPORT_ITEM],
-      updatedAt: 0,
+      content: report.content,
+      report_items: report.report_items,
+      updatedAt: Date.now(),
     };
-    setReportItems((reportItems) => {
-      const copy = [DEFAULT_REPORT_ITEM];
-      return [...copy];
+    setReport((report) => {
+      report = DEFAULT_REPORT;
+      return report;
     });
     props.onCreate(input);
   };
@@ -75,7 +94,10 @@ export default function FormDialog(props) {
    * 追加ボタンがクリックされたときの処理です。
    */
   const onAddButtonClick = () => {
-    setReportItems([...reportItems, DEFAULT_REPORT_ITEM]);
+    setReport((report) => {
+      report.report_items.push({ ...DEFAULT_REPORT_ITEM });
+      return { ...report };
+    });
   };
 
   /**
@@ -83,10 +105,11 @@ export default function FormDialog(props) {
    * @param {*} index
    */
   const onDeleteButtonClick = (index) => {
-    setReportItems((reportItems) => {
-      return reportItems.filter((e, i) => {
+    setReport((report) => {
+      let newReportItems = report.report_items.filter((e, i) => {
         return i !== index;
       });
+      return { ...report, report_items: newReportItems };
     });
   };
 
@@ -96,12 +119,14 @@ export default function FormDialog(props) {
    * @param {*} target
    */
   const onCategoryChange = (index, target) => {
-    // console.log(index, value);
-    setReportItems((reportItems) => {
-      // reportItems[index].category = target.value;
-      reportItems[index] = { ...reportItems[index], category: target.value };
-      // console.log(reportItems);
-      return [...reportItems];
+    setReport((report) => {
+      report.report_items[index].category = target.value;
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
     });
   };
 
@@ -111,12 +136,14 @@ export default function FormDialog(props) {
    * @param {*} target
    */
   const onItemContentChange = (index, target) => {
-    // console.log(index, value);
-    setReportItems((reportItems) => {
-      // reportItems[index].category = target.value;
-      reportItems[index] = { ...reportItems[index], content: target.value };
-      // console.log(reportItems);
-      return [...reportItems];
+    setReport((report) => {
+      report.report_items[index].content = target.value;
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
     });
   };
 
@@ -126,7 +153,42 @@ export default function FormDialog(props) {
    * @param {*} value
    */
   const onHourChange = (index, value) => {
-    console.log(index, value);
+    setReport((report) => {
+      report.report_items[index].hour = value;
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
+    });
+  };
+
+  /**
+   * 分に変化があったときの処理です。
+   * @param {*} index
+   * @param {*} value
+   */
+  const onMinuteChange = (index, value) => {
+    setReport((report) => {
+      report.report_items[index].minute = value;
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
+    });
+  };
+
+  /**
+   * 感想に変化があったときの処理です。
+   * @param {*} event
+   */
+  const onContentChange = (event) => {
+    setReport((report) => {
+      return { ...report, content: event.target.value };
+    });
   };
 
   const PopperMy = function (props) {
@@ -148,7 +210,7 @@ export default function FormDialog(props) {
           <DialogContentText>
             {props.selectedDate.toLocaleDateString()}
           </DialogContentText>
-          {reportItems.map((value, index) => {
+          {report.report_items.map((value, index) => {
             return (
               <div key={index} className={classes.dFlex}>
                 <TextField
@@ -156,7 +218,7 @@ export default function FormDialog(props) {
                   label="カテゴリ"
                   variant="outlined"
                   margin="dense"
-                  value={reportItems[index].category}
+                  value={value.category}
                   onChange={(e, v) => onCategoryChange(index, e.target)}
                   style={{ width: "8rem", marginRight: "4px" }}
                 />
@@ -164,6 +226,7 @@ export default function FormDialog(props) {
                   label="内容"
                   variant="outlined"
                   margin="dense"
+                  value={value.content}
                   onChange={(e, v) => onItemContentChange(index, e.target)}
                   style={{ width: "12rem", marginRight: "4px" }}
                 />
@@ -175,9 +238,10 @@ export default function FormDialog(props) {
                     PopperComponent={PopperMy}
                     options={hours}
                     getOptionLabel={(option) => option.label}
-                    defaultValue={{
-                      label: reportItems[index].hour.toString(),
-                      value: reportItems[index].hour,
+                    filterOptions={filterOptions}
+                    value={{
+                      label: report.report_items[index].hour.toString(),
+                      value: report.report_items[index].hour,
                     }}
                     onChange={(e, v) => onHourChange(index, v.value)}
                     renderInput={(params) => (
@@ -206,10 +270,12 @@ export default function FormDialog(props) {
                     PopperComponent={PopperMy}
                     options={minutes}
                     getOptionLabel={(option) => option.label}
-                    defaultValue={{
-                      label: reportItems[index].minute.toString(),
-                      value: reportItems[index].minute,
+                    filterOptions={filterOptions}
+                    value={{
+                      label: report.report_items[index].minute.toString(),
+                      value: report.report_items[index].minute,
                     }}
+                    onChange={(e, v) => onMinuteChange(index, v.value)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -230,14 +296,16 @@ export default function FormDialog(props) {
                 <div>分</div>
                 <IconButton
                   style={{
-                    visibility: reportItems.length > 16 ? "hidden" : "",
+                    visibility: report.report_items.length > 16 ? "hidden" : "",
                   }}
                   onClick={onAddButtonClick}
                 >
                   <AddCircleOutlineIcon />
                 </IconButton>
                 <IconButton
-                  style={{ visibility: reportItems.length < 2 ? "hidden" : "" }}
+                  style={{
+                    visibility: report.report_items.length < 2 ? "hidden" : "",
+                  }}
                   onClick={(event) => onDeleteButtonClick(index)}
                 >
                   <DeleteIcon />
@@ -257,6 +325,7 @@ export default function FormDialog(props) {
             rows={8}
             rowsMax={8}
             fullWidth
+            onChange={onContentChange}
           />
         </DialogContent>
         <DialogActions>
