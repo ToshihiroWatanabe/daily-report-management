@@ -22,16 +22,16 @@ const useStyles = makeStyles((theme) =>
 
 let hours = [];
 for (let i = 0; i <= 24; i++) {
-  hours.push({ text: i.toString(), value: i });
+  hours.push({ label: i.toString(), value: i });
 }
 
 let minutes = [];
-minutes.push({ text: "0", value: 0 });
-minutes.push({ text: "15", value: 15 });
-minutes.push({ text: "30", value: 30 });
-minutes.push({ text: "45", value: 45 });
+minutes.push({ label: "0", value: 0 });
+minutes.push({ label: "15", value: 15 });
+minutes.push({ label: "30", value: 30 });
+minutes.push({ label: "45", value: 45 });
 for (let i = 0; i <= 59; i++) {
-  minutes.push({ text: i.toString(), value: i });
+  minutes.push({ label: i.toString(), value: i });
 }
 
 export default function FormDialog(props) {
@@ -78,10 +78,10 @@ export default function FormDialog(props) {
               <Autocomplete
                 freeSolo
                 disableClearable // バツマークを無効にする
-                defaultValue={{ text: "1", value: 1 }}
                 PopperComponent={PopperMy}
                 options={hours}
-                getOptionLabel={(option) => option.text}
+                getOptionLabel={(option) => option.label}
+                defaultValue={{ label: "1", value: 1 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -104,14 +104,13 @@ export default function FormDialog(props) {
               <Autocomplete
                 freeSolo
                 disableClearable // バツマークを無効にする
-                defaultValue={{ text: "0", value: 0 }}
                 PopperComponent={PopperMy}
                 options={minutes}
-                getOptionLabel={(option) => option.text}
+                getOptionLabel={(option) => option.label}
+                defaultValue={{ label: "0", value: 0 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    defaultValue="1"
                     margin="dense"
                     style={{
                       width: "2rem",
