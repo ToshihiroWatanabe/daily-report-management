@@ -266,8 +266,8 @@ export default function FormDialog(props) {
                     getOptionLabel={(option) => option.label}
                     filterOptions={filterOptions}
                     value={{
-                      label: report.report_items[index].hour.toString(),
-                      value: report.report_items[index].hour,
+                      label: value.hour.toString(),
+                      value: value.hour,
                     }}
                     onChange={(e, v) => onHourChange(index, v.value)}
                     renderInput={(params) => (
@@ -281,7 +281,6 @@ export default function FormDialog(props) {
                         inputProps={{
                           ...params.inputProps,
                           maxLength: 2,
-                          pattern: "^[0-9]+$",
                           style: { textAlign: "right" },
                         }}
                       />
