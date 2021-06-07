@@ -68,7 +68,7 @@ export default function FormDialog(props) {
     props.setOpen(false);
     setReport((report) => {
       report = DEFAULT_REPORT;
-      return report;
+      return { ...report };
     });
   };
 
@@ -76,18 +76,35 @@ export default function FormDialog(props) {
    * 作成ボタンが押されたときの処理です。
    */
   const onCreateButtonClick = () => {
-    props.setOpen(false);
-    let input = {
-      date: format(props.selectedDate, "yyyy-MM-dd"),
-      content: report.content,
-      report_items: report.report_items,
-      updatedAt: Date.now(),
-    };
-    setReport((report) => {
-      report = DEFAULT_REPORT;
-      return report;
-    });
-    props.onCreate(input);
+    if (validate()) {
+      props.setOpen(false);
+      let input = {
+        date: format(props.selectedDate, "yyyy-MM-dd"),
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: Date.now(),
+      };
+      setReport((report) => {
+        report = DEFAULT_REPORT;
+        return { ...report };
+      });
+      props.onCreate(input);
+    }
+  };
+
+  /**
+   * 入力されたデータを検証します。
+   */
+  const validate = () => {
+    for (let i = 0; i < report.report_items.length; i++) {
+      let category = report.report_items[i].category.trim();
+      if (category.length > 45) {
+        console.error("カテゴリーは45文字以内で入力してください");
+      } else if (category.length === 0) {
+        console.error("カテゴリーを入力してください");
+      }
+    }
+    return true;
   };
 
   /**
@@ -95,7 +112,14 @@ export default function FormDialog(props) {
    */
   const onAddButtonClick = () => {
     setReport((report) => {
-      report.report_items.push({ ...DEFAULT_REPORT_ITEM });
+      report.report_items.push({
+        ...{
+          category: "",
+          content: "",
+          hour: 1,
+          minute: 0,
+        },
+      });
       return { ...report };
     });
   };
@@ -221,6 +245,7 @@ export default function FormDialog(props) {
                   value={value.category}
                   onChange={(e, v) => onCategoryChange(index, e.target)}
                   style={{ width: "8rem", marginRight: "4px" }}
+                  inputProps={{ maxLength: 45 }}
                 />
                 <TextField
                   label="内容"
@@ -229,6 +254,7 @@ export default function FormDialog(props) {
                   value={value.content}
                   onChange={(e, v) => onItemContentChange(index, e.target)}
                   style={{ width: "12rem", marginRight: "4px" }}
+                  inputProps={{ maxLength: 45 }}
                 />
                 {/* 時間 */}
                 <FormControl>
@@ -255,6 +281,7 @@ export default function FormDialog(props) {
                         inputProps={{
                           ...params.inputProps,
                           maxLength: 2,
+                          pattern: "^[0-9]+$",
                           style: { textAlign: "right" },
                         }}
                       />

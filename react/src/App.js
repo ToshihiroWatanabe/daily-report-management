@@ -21,6 +21,10 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formDialogOpen, setFormDialogOpen] = useState(false);
 
+  /**
+   * 日報を作成する処理です。
+   * @param {*} input
+   */
   const onCreateReport = (input) => {
     console.log(input);
   };
