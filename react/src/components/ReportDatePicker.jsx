@@ -45,10 +45,14 @@ export default function DatePicker(props) {
   };
 
   const renderDay = (day, selectedDate, dayInCurrentMonth, dayComponent) => {
-    if (day.getDay() === 0) {
-      return React.cloneElement(dayComponent, { style: { color: "red" } });
-    } else if (day.getDay() === 6) {
-      return React.cloneElement(dayComponent, { style: { color: "blue" } });
+    if (day.getDay() === 0 && day < new Date()) {
+      return React.cloneElement(dayComponent, {
+        style: { ...dayComponent.props.style, color: "red" },
+      });
+    } else if (day.getDay() === 6 && day < new Date()) {
+      return React.cloneElement(dayComponent, {
+        style: { ...dayComponent.props.style, color: "blue" },
+      });
     } else {
       return dayComponent;
     }
