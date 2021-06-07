@@ -8,7 +8,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { FormControl, IconButton } from "@material-ui/core";
+import { FormControl, IconButton, Popper } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useStyles = makeStyles((theme) =>
@@ -20,11 +20,27 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
+let hours = [];
+for (let i = 0; i <= 24; i++) {
+  hours.push({ text: i.toString(), value: i });
+}
+
+let minutes = [];
+for (let i = 0; i <= 59; i++) {
+  minutes.push({ text: i.toString(), value: i });
+}
+
 export default function FormDialog(props) {
   const classes = useStyles();
 
   const handleClose = () => {
     props.setOpen(false);
+  };
+
+  const PopperMy = function (props) {
+    return (
+      <Popper {...props} style={{ width: "4rem" }} placement="bottom-start" />
+    );
   };
 
   return (
@@ -57,17 +73,19 @@ export default function FormDialog(props) {
             <FormControl>
               <Autocomplete
                 freeSolo
-                disableClearable
-                options={hours}
+                disableClearable // バツマークを無効にする
+                PopperComponent={PopperMy}
+                options={hours.map((option) => option.text)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     defaultValue="1"
                     margin="dense"
-                    style={{ width: "2rem", marginRight: "4px" }}
-                    inputProps={{
-                      style: { textAlign: "right" },
+                    style={{
+                      width: "2rem",
+                      marginRight: "4px",
                     }}
+                    inputProps={{ style: { textAlign: "right" } }}
                   />
                 )}
               />
@@ -110,8 +128,3 @@ export default function FormDialog(props) {
     </div>
   );
 }
-
-const hours = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  22, 23,
-];
