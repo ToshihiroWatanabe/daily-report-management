@@ -78,12 +78,13 @@ export default function FormDialog(props) {
               <Autocomplete
                 freeSolo
                 disableClearable // バツマークを無効にする
+                defaultValue={{ text: "1", value: 1 }}
                 PopperComponent={PopperMy}
-                options={hours.map((option) => option.text)}
+                options={hours}
+                getOptionLabel={(option) => option.text}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    defaultValue="1"
                     margin="dense"
                     style={{
                       width: "2rem",
@@ -103,8 +104,10 @@ export default function FormDialog(props) {
               <Autocomplete
                 freeSolo
                 disableClearable // バツマークを無効にする
+                defaultValue={{ text: "0", value: 0 }}
                 PopperComponent={PopperMy}
-                options={minutes.map((option) => option.text)}
+                options={minutes}
+                getOptionLabel={(option) => option.text}
                 renderInput={(params) => (
                   <TextField
                     {...params}
