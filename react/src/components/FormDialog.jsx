@@ -309,7 +309,7 @@ export default function FormDialog(props) {
               <div key={index} className={classes.dFlex}>
                 <TextField
                   autoFocus
-                  label="カテゴリ"
+                  label="カテゴリー"
                   variant="outlined"
                   margin="dense"
                   value={value.category}
