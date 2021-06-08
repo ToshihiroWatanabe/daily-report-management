@@ -67,8 +67,19 @@ export default function FormDialog(props) {
   const onCancelButtonClick = () => {
     props.setOpen(false);
     setReport((report) => {
-      report = DEFAULT_REPORT;
-      return { ...report };
+      return {
+        date: "",
+        content: "",
+        report_items: [
+          {
+            category: "",
+            content: "",
+            hour: 1,
+            minute: 0,
+          },
+        ],
+        updatedAt: 0,
+      };
     });
   };
 
@@ -85,8 +96,19 @@ export default function FormDialog(props) {
         updatedAt: Date.now(),
       };
       setReport((report) => {
-        report = DEFAULT_REPORT;
-        return { ...report };
+        return {
+          date: "",
+          content: "",
+          report_items: [
+            {
+              category: "",
+              content: "",
+              hour: 1,
+              minute: 0,
+            },
+          ],
+          updatedAt: 0,
+        };
       });
       props.onCreate(input);
     }
