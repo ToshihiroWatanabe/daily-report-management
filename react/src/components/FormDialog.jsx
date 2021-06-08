@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -50,12 +50,6 @@ export default function FormDialog(props) {
   const classes = useStyles();
 
   const [report, setReport] = useState(props.defaultReport);
-
-  useEffect(() => {
-    if (props.open) {
-      setReport(props.defaultReport);
-    }
-  }, [props.open]);
 
   /**
    * キャンセルボタンが押されたときの処理です。

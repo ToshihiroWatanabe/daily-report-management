@@ -18,17 +18,17 @@ const useStyles = makeStyles((theme) => ({
   createReportButton: { margin: theme.spacing(1) },
 }));
 
-const DEFAULT_REPORT_ITEM = {
-  category: "",
-  content: "",
-  hour: 1,
-  minute: 0,
-};
-
 const DEFAULT_REPORT = {
   date: "",
   content: "",
-  report_items: [DEFAULT_REPORT_ITEM],
+  report_items: [
+    {
+      category: "",
+      content: "",
+      hour: 1,
+      minute: 0,
+    },
+  ],
   updatedAt: 0,
 };
 
@@ -195,13 +195,15 @@ const App = () => {
                   return <Fragment key={index}></Fragment>;
                 }
               })}
-            <FormDialog
-              open={formDialogOpen}
-              setOpen={setFormDialogOpen}
-              selectedDate={selectedDate}
-              onCreate={onCreateReport}
-              defaultReport={defaultReport}
-            />
+            {formDialogOpen && (
+              <FormDialog
+                open={formDialogOpen}
+                setOpen={setFormDialogOpen}
+                selectedDate={selectedDate}
+                onCreate={onCreateReport}
+                defaultReport={defaultReport}
+              />
+            )}
           </div>
         </div>
         <Typography variant="h5">日報一覧</Typography>
