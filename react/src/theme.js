@@ -23,7 +23,7 @@ export const theme = createMuiTheme({
     // 水色
     primary: {
       light: "#64c9e5",
-      main: "#2498b3",
+      main: "#2ab8d9",
       dark: "#006a83",
       contrastText: "#ffffff",
     },

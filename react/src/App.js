@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
-import CustomDatePicker from "./components/CustomDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, Divider, Box } from "@material-ui/core";
@@ -86,6 +85,7 @@ const App = () => {
               setSelectedDate={setSelectedDate}
               onMonthChange={onMonthChange}
               onDateChange={onDateChange}
+              reports={reports}
             />
             {/* <CustomDatePicker /> */}
           </div>

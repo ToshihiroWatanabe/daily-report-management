@@ -26,6 +26,21 @@ const useStyles = makeStyles((theme) => ({
   blue: {
     color: "blue",
   },
+  dayWithDotContainer: {
+    position: "relative",
+  },
+  dayWithDot: {
+    position: "absolute",
+    height: 0,
+    width: 0,
+    border: "3px solid",
+    borderRadius: "50%",
+    borderColor: theme.palette.secondary.main,
+    right: "50%",
+    transform: "translateX(3px)",
+    top: "75%",
+    backgroundColor: theme.palette.secondary.main,
+  },
 }));
 
 class ExtendedUtils extends DateFnsUtils {
@@ -40,17 +55,80 @@ class ExtendedUtils extends DateFnsUtils {
 export default function DatePicker(props) {
   const classes = useStyles();
 
+  /**
+   * 日を描画します。
+   */
   const renderDay = (day, selectedDate, dayInCurrentMonth, dayComponent) => {
+    // 日曜日
     if (day.getDay() === 0 && day < new Date()) {
-      return React.cloneElement(dayComponent, {
-        style: { ...dayComponent.props.style, color: "red" },
-      });
+      if (
+        props.reports.filter((report, index) => {
+          return report.date.includes(format(day, "yyyy-MM-dd"));
+        }).length !== 0
+      ) {
+        return (
+          <>
+            <div className={classes.dayWithDotContainer}>
+              {React.cloneElement(dayComponent, {
+                style: { ...dayComponent.props.style, color: "red" },
+              })}
+              <div className={classes.dayWithDot} />
+            </div>
+          </>
+        );
+      }
+      return (
+        <>
+          {React.cloneElement(dayComponent, {
+            style: { ...dayComponent.props.style, color: "red" },
+          })}
+        </>
+      );
+      // 土曜日
     } else if (day.getDay() === 6 && day < new Date()) {
-      return React.cloneElement(dayComponent, {
-        style: { ...dayComponent.props.style, color: "blue" },
-      });
+      if (
+        props.reports.filter((report, index) => {
+          return report.date.includes(format(day, "yyyy-MM-dd"));
+        }).length !== 0
+      ) {
+        return (
+          <>
+            <div className={classes.dayWithDotContainer}>
+              {React.cloneElement(dayComponent, {
+                style: {
+                  ...dayComponent.props.style,
+                  color: "blue",
+                  textShadow: "0px 0px 1px #000",
+                },
+              })}
+              <div className={classes.dayWithDot} />
+            </div>
+          </>
+        );
+      }
+      return (
+        <>
+          {React.cloneElement(dayComponent, {
+            style: { ...dayComponent.props.style, color: "blue" },
+          })}
+        </>
+      );
+      // 平日
     } else {
-      return dayComponent;
+      if (
+        props.reports.filter((report, index) => {
+          return report.date.includes(format(day, "yyyy-MM-dd"));
+        }).length !== 0
+      ) {
+        return (
+          <div className={classes.dayWithDotContainer}>
+            {dayComponent}
+            <div className={classes.dayWithDot} />
+          </div>
+        );
+      } else {
+        return dayComponent;
+      }
     }
   };
 
