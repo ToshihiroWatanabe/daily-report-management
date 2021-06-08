@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
 import CustomDatePicker from "./components/CustomDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Button, Divider, Typography } from "@material-ui/core";
+import { Button, Typography, Divider } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import FormDialog from "./components/FormDialog";
-import { Fragment } from "react";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
   contents1: { [theme.breakpoints.up("sm")]: { display: "flex" } },
@@ -17,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
   createReportButton: { margin: theme.spacing(1) },
 }));
 
+const localStorageGetItemReports = localStorage.getItem("reports")
+  ? JSON.parse(localStorage.getItem("reports"))
+  : [];
+
 const App = () => {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -24,7 +29,7 @@ const App = () => {
     format(new Date(), "yyyy-MM")
   );
   const [formDialogOpen, setFormDialogOpen] = useState(false);
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState(localStorageGetItemReports);
   const [isExist, setIsExist] = useState(false);
 
   /**
@@ -36,7 +41,7 @@ const App = () => {
       let newReports = [...reports, input].sort((a, b) => {
         return a.date.replaceAll("-", "") - b.date.replaceAll("-", "");
       });
-      // localStorage.setItem("reports", JSON.stringify(newReports));
+      localStorage.setItem("reports", JSON.stringify(newReports));
       return newReports;
     });
   };
@@ -75,7 +80,7 @@ const App = () => {
             <Typography variant="h5">
               {format(selectedDate, "yyyy.MM.dd")}の日報
             </Typography>
-            {/* 選択した日の日報があるかどうか */}
+            {/* 選択した日に日報がなかったとき */}
             {reports.filter((report, index) => {
               return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
             }).length === 0 && (
@@ -93,6 +98,7 @@ const App = () => {
                 </Button>
               </>
             )}
+            {/* 選択した日に日報があったとき */}
             {reports.filter((report, index) => {
               return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
             }).length > 0 &&
@@ -107,7 +113,7 @@ const App = () => {
                             return (
                               <>
                                 <div key={reportItemIndex}>
-                                  {reportItem.category} {reportItem.content}{" "}
+                                  《{reportItem.category}》 {reportItem.content}{" "}
                                   {reportItem.hour}:{reportItem.minute}
                                 </div>
                               </>
@@ -115,6 +121,14 @@ const App = () => {
                           }
                         )}
                         {report.content}
+                        <Button>
+                          <EditIcon fontSize="inherit" />
+                          編集
+                        </Button>
+                        <Button>
+                          <DeleteIcon fontSize="inherit" />
+                          削除
+                        </Button>
                       </div>
                     </>
                   );
@@ -141,13 +155,14 @@ const App = () => {
                     return (
                       <>
                         <div key={reportItemIndex}>
-                          {reportItem.category} {reportItem.content}{" "}
+                          《{reportItem.category}》 {reportItem.content}{" "}
                           {reportItem.hour}:{reportItem.minute}
                         </div>
                       </>
                     );
                   })}
                   {report.content}
+                  <Divider />
                 </div>
               </>
             );
