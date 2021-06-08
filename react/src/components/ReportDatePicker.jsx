@@ -39,10 +39,6 @@ class ExtendedUtils extends DateFnsUtils {
 
 export default function DatePicker(props) {
   const classes = useStyles();
-  const handleDateChange = (date) => {
-    // console.log(format(date, "yyyy/MM/dd"));
-    props.setSelectedDate(date);
-  };
 
   const renderDay = (day, selectedDate, dayInCurrentMonth, dayComponent) => {
     if (day.getDay() === 0 && day < new Date()) {
@@ -67,14 +63,14 @@ export default function DatePicker(props) {
           format="yyyy/MM/dd"
           margin="normal"
           value={props.selectedDate}
-          onChange={handleDateChange}
+          onChange={props.onDateChange}
+          onMonthChange={props.onMonthChange}
           KeyboardButtonProps={{
             "aria-label": "change date",
           }}
           maxDate={new Date()}
           minDate={new Date("2019-08-20")}
           renderDay={renderDay}
-          onMonthChange={props.onMonthChange}
         />
       </Grid>
     </MuiPickersUtilsProvider>

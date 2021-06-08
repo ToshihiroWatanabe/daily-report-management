@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
 import CustomDatePicker from "./components/CustomDatePicker";
 import format from "date-fns/format";
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   createReportButton: { margin: theme.spacing(1) },
 }));
 
-function App() {
+const App = () => {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarMonth, setCalendarMonth] = useState(
@@ -25,6 +25,7 @@ function App() {
   );
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [reports, setReports] = useState([]);
+  const [isExist, setIsExist] = useState(false);
 
   /**
    * 日報を作成する処理です。
@@ -40,8 +41,19 @@ function App() {
     });
   };
 
+  /**
+   * カレンダーの月が変わったときの処理です。
+   * @param {*} event
+   */
   const onMonthChange = (event) => {
     setCalendarMonth(format(event, "yyyy-MM"));
+  };
+
+  /**
+   * 選択した日時が変わったときの処理です。
+   */
+  const onDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   return (
@@ -50,28 +62,66 @@ function App() {
       <main>
         <div className={classes.contents1}>
           <div className={classes.leftColumn}>
+            {/* 日付選択カレンダー */}
             <ReportDatePicker
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               onMonthChange={onMonthChange}
+              onDateChange={onDateChange}
             />
             {/* <CustomDatePicker /> */}
           </div>
           <div className={classes.rightColumn}>
             <Typography variant="h5">
-              {format(selectedDate, "yyyy/MM/dd")}の日報
+              {format(selectedDate, "yyyy.MM.dd")}の日報
             </Typography>
-            <Typography>日報はありません</Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              size="medium"
-              className={classes.createReportButton}
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={(event) => setFormDialogOpen(true)}
-            >
-              日報作成
-            </Button>
+            {/* 選択した日の日報があるかどうか */}
+            {reports.filter((report, index) => {
+              return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
+            }).length === 0 && (
+              <>
+                <Typography>日報はありません</Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="medium"
+                  className={classes.createReportButton}
+                  startIcon={<AddCircleOutlineIcon />}
+                  onClick={(event) => setFormDialogOpen(true)}
+                >
+                  日報作成
+                </Button>
+              </>
+            )}
+            {reports.filter((report, index) => {
+              return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
+            }).length > 0 &&
+              reports.map((report, index) => {
+                if (report.date.includes(format(selectedDate, "yyyy-MM-dd"))) {
+                  return (
+                    <>
+                      <div key={index}>
+                        {report.date.replaceAll("-", ".")}
+                        {report.report_items.map(
+                          (reportItem, reportItemIndex) => {
+                            return (
+                              <>
+                                <div key={reportItemIndex}>
+                                  {reportItem.category} {reportItem.content}{" "}
+                                  {reportItem.hour}:{reportItem.minute}
+                                </div>
+                              </>
+                            );
+                          }
+                        )}
+                        {report.content}
+                      </div>
+                    </>
+                  );
+                } else {
+                  return null;
+                }
+              })}
             <FormDialog
               open={formDialogOpen}
               setOpen={setFormDialogOpen}
@@ -86,7 +136,7 @@ function App() {
             return (
               <>
                 <div key={index}>
-                  {report.date}
+                  {report.date.replaceAll("-", ".")}
                   {report.report_items.map((reportItem, reportItemIndex) => {
                     return (
                       <>
@@ -101,12 +151,13 @@ function App() {
                 </div>
               </>
             );
+          } else {
+            return null;
           }
-          return null;
         })}
       </main>
     </>
   );
-}
+};
 
 export default App;
