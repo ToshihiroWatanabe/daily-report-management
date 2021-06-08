@@ -209,7 +209,7 @@ const App = () => {
             />
           </div>
         </div>
-        <Typography>日報一覧</Typography>
+        <Typography variant="h5">日報一覧</Typography>
         {reports.map((report, index) => {
           if (report.date.includes(calendarMonth)) {
             return (
