@@ -31,8 +31,6 @@ const DEFAULT_REPORT = {
   updatedAt: 0,
 };
 
-let defaultReport = {};
-
 const localStorageGetItemReports = localStorage.getItem("reports")
   ? JSON.parse(localStorage.getItem("reports"))
   : [];
@@ -48,13 +46,14 @@ const App = () => {
   );
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [reports, setReports] = useState(localStorageGetItemReports);
-  const [isExist, setIsExist] = useState(false);
+  const [defaultReport, setDefaultReport] = useState(DEFAULT_REPORT);
 
   /**
    * 日報を作成する処理です。
    * @param {*} input
    */
   const onCreateReport = (input) => {
+    // TODO: 重複を削除
     setReports((reports) => {
       let newReports = [...reports, input].sort((a, b) => {
         return a.date.replaceAll("-", "") - b.date.replaceAll("-", "");
@@ -84,7 +83,21 @@ const App = () => {
    * @param {*} event
    */
   const onCreateButtonClick = (event) => {
-    defaultReport = DEFAULT_REPORT;
+    setDefaultReport(DEFAULT_REPORT);
+    setFormDialogOpen(true);
+  };
+
+  /**
+   * 編集ボタンがクリックされたときの処理です。
+   * @param {*} date
+   */
+  const onEditButtonClick = (date) => {
+    setDefaultReport((defaultReport) => {
+      return reports.filter((report, index) => {
+        return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
+      })[0];
+    });
+    console.log(defaultReport);
     setFormDialogOpen(true);
   };
 
@@ -115,7 +128,6 @@ const App = () => {
               onDateChange={onDateChange}
               reports={reports}
             />
-            {/* <CustomDatePicker /> */}
           </div>
           <div className={classes.rightColumn}>
             <Typography variant="h5">
@@ -163,7 +175,9 @@ const App = () => {
                         )}
                         <Box fontSize="0.5rem">{report.content}</Box>
                         <div>
-                          <Button>
+                          <Button
+                            onClick={() => onEditButtonClick(report.date)}
+                          >
                             <EditIcon fontSize="inherit" />
                             編集
                           </Button>
@@ -186,7 +200,7 @@ const App = () => {
               setOpen={setFormDialogOpen}
               selectedDate={selectedDate}
               onCreate={onCreateReport}
-              DEFAULT_REPORT={defaultReport}
+              defaultReport={defaultReport}
             />
           </div>
         </div>
