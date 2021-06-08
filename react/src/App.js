@@ -7,6 +7,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import FormDialog from "./components/FormDialog";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { Fragment } from "react";
 
 const useStyles = makeStyles((theme) => ({
   contents1: { [theme.breakpoints.up("sm")]: { display: "flex" } },
@@ -163,41 +164,35 @@ const App = () => {
               reports.map((report, index) => {
                 if (report.date.includes(format(selectedDate, "yyyy-MM-dd"))) {
                   return (
-                    <>
-                      <div key={index}>
-                        {report.date.replaceAll("-", ".")}
-                        {report.report_items.map(
-                          (reportItem, reportItemIndex) => {
-                            return (
-                              <>
-                                <div key={reportItemIndex}>
-                                  《{reportItem.category}》 {reportItem.content}{" "}
-                                  {reportItem.hour}:{reportItem.minute}
-                                </div>
-                              </>
-                            );
-                          }
-                        )}
-                        <Box fontSize="0.5rem">{report.content}</Box>
-                        <div>
-                          <Button
-                            onClick={() => onEditButtonClick(report.date)}
-                          >
-                            <EditIcon fontSize="inherit" />
-                            編集
-                          </Button>
-                          <Button
-                            onClick={() => onDeleteButtonClick(report.date)}
-                          >
-                            <DeleteIcon fontSize="inherit" />
-                            削除
-                          </Button>
-                        </div>
+                    <div key={index}>
+                      {report.date.replaceAll("-", ".")}
+                      {report.report_items.map(
+                        (reportItem, reportItemIndex) => {
+                          return (
+                            <div key={reportItemIndex}>
+                              《{reportItem.category}》 {reportItem.content}{" "}
+                              {reportItem.hour}:{reportItem.minute}
+                            </div>
+                          );
+                        }
+                      )}
+                      <Box fontSize="0.5rem">{report.content}</Box>
+                      <div>
+                        <Button onClick={() => onEditButtonClick(report.date)}>
+                          <EditIcon fontSize="inherit" />
+                          編集
+                        </Button>
+                        <Button
+                          onClick={() => onDeleteButtonClick(report.date)}
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                          削除
+                        </Button>
                       </div>
-                    </>
+                    </div>
                   );
                 } else {
-                  return null;
+                  return <Fragment key={index}></Fragment>;
                 }
               })}
             <FormDialog
@@ -211,29 +206,27 @@ const App = () => {
         </div>
         <Typography variant="h5">日報一覧</Typography>
         {reports.map((report, index) => {
-          if (report.date.includes(calendarMonth)) {
-            return (
-              <>
-                <div key={index}>
+          return (
+            <Fragment key={index}>
+              {report.date.includes(calendarMonth) && (
+                <div>
                   {report.date.replaceAll("-", ".")}
                   {report.report_items.map((reportItem, reportItemIndex) => {
                     return (
-                      <>
-                        <div key={reportItemIndex}>
+                      <Fragment key={reportItemIndex}>
+                        <div>
                           《{reportItem.category}》 {reportItem.content}{" "}
                           {reportItem.hour}:{reportItem.minute}
                         </div>
-                      </>
+                      </Fragment>
                     );
                   })}
                   <Box fontSize="0.5rem">{report.content}</Box>
                   <Divider />
                 </div>
-              </>
-            );
-          } else {
-            return null;
-          }
+              )}
+            </Fragment>
+          );
         })}
       </main>
     </>
