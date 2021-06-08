@@ -74,6 +74,7 @@ export default function DatePicker(props) {
           maxDate={new Date()}
           minDate={new Date("2019-08-20")}
           renderDay={renderDay}
+          onMonthChange={props.onMonthChange}
         />
       </Grid>
     </MuiPickersUtilsProvider>
