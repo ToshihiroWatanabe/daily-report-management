@@ -49,6 +49,14 @@ const App = () => {
   const [reports, setReports] = useState(localStorageGetItemReports);
   const [defaultReport, setDefaultReport] = useState(DEFAULT_REPORT);
 
+  React.useEffect(() => {
+    setInterval(() => {
+      console.log("reports[0].report_items[0]:");
+      console.log(reports[0].report_items[0]);
+      // console.log(defaultReport.report_items[0]);
+    }, 1000);
+  }, []);
+
   /**
    * 日報を作成する処理です。
    * @param {*} input
@@ -100,9 +108,10 @@ const App = () => {
    */
   const onEditButtonClick = (date) => {
     setDefaultReport((defaultReport) => {
-      return reports.filter((report, index) => {
+      defaultReport = reports.filter((report, index) => {
         return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
       })[0];
+      return defaultReport;
     });
     setFormDialogOpen(true);
   };
@@ -195,15 +204,6 @@ const App = () => {
                   return <Fragment key={index}></Fragment>;
                 }
               })}
-            {formDialogOpen && (
-              <FormDialog
-                open={formDialogOpen}
-                setOpen={setFormDialogOpen}
-                selectedDate={selectedDate}
-                onCreate={onCreateReport}
-                defaultReport={defaultReport}
-              />
-            )}
           </div>
         </div>
         <Typography variant="h5">日報一覧</Typography>
@@ -231,6 +231,15 @@ const App = () => {
           );
         })}
       </main>
+      {formDialogOpen && (
+        <FormDialog
+          open={formDialogOpen}
+          setOpen={setFormDialogOpen}
+          selectedDate={selectedDate}
+          onCreate={onCreateReport}
+          defaultReport={defaultReport}
+        />
+      )}
     </>
   );
 };

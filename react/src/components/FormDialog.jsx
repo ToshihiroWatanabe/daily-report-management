@@ -170,6 +170,11 @@ export default function FormDialog(props) {
     });
   };
 
+  /**
+   * 時間の値に変化があったときの処理です。
+   * @param {*} index
+   * @param {*} target
+   */
   const onHourTextChange = (index, target) => {
     if (target.value.match(/.*\d.*/)) {
       setReport((report) => {
@@ -212,6 +217,11 @@ export default function FormDialog(props) {
     });
   };
 
+  /**
+   * 分の値に変化があったときの処理です。
+   * @param {*} index
+   * @param {*} target
+   */
   const onMinuteTextChange = (index, target) => {
     if (target.value.match(/.*\d.*/)) {
       setReport((report) => {
