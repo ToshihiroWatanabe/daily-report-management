@@ -297,7 +297,9 @@ export default function FormDialog(props) {
         // onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">日報作成</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          {report.updatedAt === 0 ? "日報作成" : "日報編集"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             {props.selectedDate.toLocaleDateString()}
@@ -442,7 +444,7 @@ export default function FormDialog(props) {
             variant="contained"
             color="primary"
           >
-            作成
+            {report.updatedAt === 0 ? "作成" : "更新"}
           </Button>
         </DialogActions>
       </Dialog>

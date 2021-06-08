@@ -103,7 +103,6 @@ const App = () => {
         return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
       })[0];
     });
-    console.log(defaultReport);
     setFormDialogOpen(true);
   };
 
