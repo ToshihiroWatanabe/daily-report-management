@@ -60,7 +60,7 @@ export default function DatePicker(props) {
    */
   const renderDay = (day, selectedDate, dayInCurrentMonth, dayComponent) => {
     // 日曜日
-    if (day.getDay() === 0 && day < new Date()) {
+    if (day.getDay() === 0 && day < new Date() && dayInCurrentMonth) {
       if (
         props.reports.filter((report, index) => {
           return report.date.includes(format(day, "yyyy-MM-dd"));
@@ -85,7 +85,7 @@ export default function DatePicker(props) {
         </>
       );
       // 土曜日
-    } else if (day.getDay() === 6 && day < new Date()) {
+    } else if (day.getDay() === 6 && day < new Date() && dayInCurrentMonth) {
       if (
         props.reports.filter((report, index) => {
           return report.date.includes(format(day, "yyyy-MM-dd"));
@@ -118,7 +118,8 @@ export default function DatePicker(props) {
       if (
         props.reports.filter((report, index) => {
           return report.date.includes(format(day, "yyyy-MM-dd"));
-        }).length !== 0
+        }).length !== 0 &&
+        dayInCurrentMonth
       ) {
         return (
           <div className={classes.dayWithDotContainer}>
