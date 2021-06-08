@@ -434,6 +434,7 @@ export default function FormDialog(props) {
             rowsMax={8}
             fullWidth
             onChange={onContentChange}
+            inputProps={{ maxLength: 140 }}
           />
         </DialogContent>
         <DialogActions>

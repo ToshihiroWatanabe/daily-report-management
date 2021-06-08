@@ -3,7 +3,7 @@ import ReportDatePicker from "./components/ReportDatePicker";
 import CustomDatePicker from "./components/CustomDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography, Divider } from "@material-ui/core";
+import { Button, Typography, Divider, Box } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import FormDialog from "./components/FormDialog";
 import EditIcon from "@material-ui/icons/Edit";
@@ -59,6 +59,19 @@ const App = () => {
    */
   const onDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  /**
+   * 削除ボタンがクリックされたときの処理です。
+   * @param {*} date 削除する日報の日付
+   */
+  const onDeleteButtonClick = (date) => {
+    setReports((reports) => {
+      let newReports = reports.filter((report) => {
+        return report.date !== date;
+      });
+      return newReports;
+    });
   };
 
   return (
@@ -120,15 +133,19 @@ const App = () => {
                             );
                           }
                         )}
-                        {report.content}
-                        <Button>
-                          <EditIcon fontSize="inherit" />
-                          編集
-                        </Button>
-                        <Button>
-                          <DeleteIcon fontSize="inherit" />
-                          削除
-                        </Button>
+                        <Box fontSize="0.5rem">{report.content}</Box>
+                        <div>
+                          <Button>
+                            <EditIcon fontSize="inherit" />
+                            編集
+                          </Button>
+                          <Button
+                            onClick={() => onDeleteButtonClick(report.date)}
+                          >
+                            <DeleteIcon fontSize="inherit" />
+                            削除
+                          </Button>
+                        </div>
                       </div>
                     </>
                   );
@@ -161,7 +178,7 @@ const App = () => {
                       </>
                     );
                   })}
-                  {report.content}
+                  <Box fontSize="0.5rem">{report.content}</Box>
                   <Divider />
                 </div>
               </>
