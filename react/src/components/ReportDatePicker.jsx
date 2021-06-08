@@ -52,6 +52,10 @@ class ExtendedUtils extends DateFnsUtils {
   }
 }
 
+/**
+ * 日付を選択するカレンダーのコンポーネントです。
+ * @param props
+ */
 export default function DatePicker(props) {
   const classes = useStyles();
 
@@ -148,7 +152,7 @@ export default function DatePicker(props) {
             "aria-label": "change date",
           }}
           maxDate={new Date()}
-          minDate={new Date("2019-08-20")}
+          minDate={new Date("2020-01-01")}
           renderDay={renderDay}
         />
       </Grid>

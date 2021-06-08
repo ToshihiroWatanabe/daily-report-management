@@ -17,10 +17,29 @@ const useStyles = makeStyles((theme) => ({
   createReportButton: { margin: theme.spacing(1) },
 }));
 
+const DEFAULT_REPORT_ITEM = {
+  category: "",
+  content: "",
+  hour: 1,
+  minute: 0,
+};
+
+const DEFAULT_REPORT = {
+  date: "",
+  content: "",
+  report_items: [DEFAULT_REPORT_ITEM],
+  updatedAt: 0,
+};
+
+let defaultReport = {};
+
 const localStorageGetItemReports = localStorage.getItem("reports")
   ? JSON.parse(localStorage.getItem("reports"))
   : [];
 
+/**
+ * コンポーネントです。
+ */
 const App = () => {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -58,6 +77,15 @@ const App = () => {
    */
   const onDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  /**
+   * 作成ボタンがクリックされたときの処理です。
+   * @param {*} event
+   */
+  const onCreateButtonClick = (event) => {
+    defaultReport = DEFAULT_REPORT;
+    setFormDialogOpen(true);
   };
 
   /**
@@ -105,7 +133,7 @@ const App = () => {
                   size="medium"
                   className={classes.createReportButton}
                   startIcon={<AddCircleOutlineIcon />}
-                  onClick={(event) => setFormDialogOpen(true)}
+                  onClick={(event) => onCreateButtonClick(event)}
                 >
                   日報作成
                 </Button>
@@ -158,6 +186,7 @@ const App = () => {
               setOpen={setFormDialogOpen}
               selectedDate={selectedDate}
               onCreate={onCreateReport}
+              DEFAULT_REPORT={defaultReport}
             />
           </div>
         </div>

@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import React, { useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -38,28 +38,18 @@ for (let i = 0; i <= 59; i++) {
   minutes.push({ label: i.toString(), value: i });
 }
 
-const DEFAULT_REPORT_ITEM = {
-  category: "",
-  content: "",
-  hour: 1,
-  minute: 0,
-};
-
-const DEFAULT_REPORT = {
-  date: "",
-  content: "",
-  report_items: [DEFAULT_REPORT_ITEM],
-  updatedAt: 0,
-};
-
 const filterOptions = createFilterOptions({
   matchFrom: "start",
 });
 
+/**
+ * 日報データを入力するダイアログのコンポーネントです。
+ * @param {*} props
+ */
 export default function FormDialog(props) {
   const classes = useStyles();
 
-  const [report, setReport] = useState(DEFAULT_REPORT);
+  const [report, setReport] = useState(props.DEFAULT_REPORT);
 
   /**
    * キャンセルボタンが押されたときの処理です。
