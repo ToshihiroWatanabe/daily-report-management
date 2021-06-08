@@ -53,11 +53,17 @@ const App = () => {
    * @param {*} input
    */
   const onCreateReport = (input) => {
-    // TODO: 重複を削除
     setReports((reports) => {
-      let newReports = [...reports, input].sort((a, b) => {
-        return a.date.replaceAll("-", "") - b.date.replaceAll("-", "");
-      });
+      let newReports = [input, ...reports]
+        // 重複を削除
+        .filter(
+          (element, index, array) =>
+            array.findIndex((e) => e.date === element.date) === index
+        )
+        // 並べ替え
+        .sort((a, b) => {
+          return a.date.replaceAll("-", "") - b.date.replaceAll("-", "");
+        });
       localStorage.setItem("reports", JSON.stringify(newReports));
       return newReports;
     });
