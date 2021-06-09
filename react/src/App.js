@@ -21,6 +21,18 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: { margin: theme.spacing(1) },
   },
   rightColumn: { [theme.breakpoints.up("md")]: { margin: theme.spacing(1) } },
+  selectedDateReportHeading: {
+    [theme.breakpoints.down("sm")]: {
+      textAlign: "center",
+      marginTop: "0.5rem",
+    },
+  },
+  selectedDateReportNotFound: {
+    marginTop: "0.5rem",
+    [theme.breakpoints.down("sm")]: {
+      textAlign: "center",
+    },
+  },
   createReportButton: { margin: theme.spacing(1) },
   reportCard: {
     margin: theme.spacing(2),
@@ -161,14 +173,17 @@ const App = () => {
             />
           </div>
           <div className={classes.rightColumn}>
-            <Typography variant="h5">
+            <Typography
+              variant="h5"
+              className={classes.selectedDateReportHeading}
+            >
               {format(selectedDate, "yyyy.MM.dd")}の日報
             </Typography>
             {/* 選択した日に日報がなかったとき */}
             {reports.filter((report, index) => {
               return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
             }).length === 0 && (
-              <>
+              <div className={classes.selectedDateReportNotFound}>
                 <Typography>日報はありません</Typography>
                 <Button
                   variant="contained"
@@ -180,7 +195,7 @@ const App = () => {
                 >
                   日報作成
                 </Button>
-              </>
+              </div>
             )}
             {/* 選択した日に日報があったとき */}
             {reports.filter((report, index) => {

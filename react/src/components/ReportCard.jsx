@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     maxWidth: "30rem",
-    [theme.breakpoints.down("sm")]: { width: 500, maxWidth: "100vw" },
+    [theme.breakpoints.down("sm")]: { width: 500, maxWidth: "85vw" },
     [theme.breakpoints.up("md")]: { width: "30rem" },
   },
   title: {

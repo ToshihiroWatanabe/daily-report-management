@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -14,14 +14,13 @@ import Autocomplete, {
 } from "@material-ui/lab/Autocomplete";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    dFlex: {
-      display: "flex",
-      alignItems: "center",
-    },
-  })
-);
+const useStyles = makeStyles((theme) => ({
+  reportItem: {
+    alignItems: "center",
+    [theme.breakpoints.down("sm")]: { display: "inline-flex", flex: "auto" },
+    [theme.breakpoints.up("sm")]: { display: "flex" },
+  },
+}));
 
 const hours = [];
 for (let i = 0; i <= 24; i++) {
@@ -283,7 +282,7 @@ export default function FormDialog(props) {
           </DialogContentText>
           {report.report_items.map((value, index) => {
             return (
-              <div key={index} className={classes.dFlex}>
+              <div key={index} className={classes.reportItem}>
                 <TextField
                   autoFocus
                   label="カテゴリー"
