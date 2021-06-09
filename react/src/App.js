@@ -2,11 +2,19 @@ import React, { useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Link,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ReportFormDialog from "./components/ReportFormDialog";
 import { Fragment } from "react";
 import ReportCard from "./components/ReportCard";
+import preval from "preval.macro";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -159,7 +167,26 @@ const App = () => {
 
   return (
     <>
-      <h1>日報管理</h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h1>日報管理</h1>
+        <Typography
+          variant="caption"
+          style={{ margin: "0 1rem", marginTop: "0.5rem" }}
+        >
+          ビルド時刻 {preval`module.exports = new Date().toLocaleString("ja");`}
+        </Typography>
+        <Tooltip title="GitHubのリポジトリを見る">
+          <Link
+            href="https://github.com/ToshihiroWatanabe/daily-report-management"
+            target="_blank"
+            rel="noopener"
+          >
+            <IconButton size="small">
+              <GitHubIcon></GitHubIcon>
+            </IconButton>
+          </Link>
+        </Tooltip>
+      </div>
       <main className={classes.main}>
         <div className={classes.contents1}>
           <div className={classes.leftColumn}>
