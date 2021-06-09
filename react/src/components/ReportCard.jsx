@@ -1,19 +1,22 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { Divider, Tooltip } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Divider,
+  Tooltip,
+  Chip,
+} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { Chip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
-    [theme.breakpoints.up("sm")]: { maxWidth: "30rem" },
+    maxWidth: "30rem",
+    [theme.breakpoints.up("md")]: { width: "30rem" },
   },
   title: {
     fontSize: 14,
@@ -47,13 +50,34 @@ export default function ReportCard(props) {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          {props.report.date.replaceAll("-", ".")}
-        </Typography>
+        <div style={{ display: "flex" }}>
+          <div style={{ marginTop: "-2px" }}>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              {props.report.date.replaceAll("-", ".")}
+            </Typography>
+          </div>
+          <div style={{ marginLeft: "auto", marginTop: "-10px" }}>
+            <Button
+              onClick={() => props.onEditButtonClick(props.report.date)}
+              style={{ color: "#ff9800" }}
+              color="inherit"
+            >
+              <EditIcon fontSize="inherit" />
+              編集
+            </Button>
+            <Button
+              onClick={() => props.onDeleteButtonClick(props.report.date)}
+              color="primary"
+            >
+              <DeleteIcon fontSize="inherit" />
+              削除
+            </Button>
+          </div>
+        </div>
         <Typography variant="body1" component="h2">
           {props.report.report_items.map((reportItem, reportItemIndex) => {
             return (
@@ -84,7 +108,7 @@ export default function ReportCard(props) {
           {props.report.content}
         </Typography>
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button onClick={() => props.onEditButtonClick(props.report.date)}>
           <EditIcon fontSize="inherit" />
           編集
@@ -93,7 +117,7 @@ export default function ReportCard(props) {
           <DeleteIcon fontSize="inherit" />
           削除
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }

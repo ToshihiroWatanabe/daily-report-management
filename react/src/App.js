@@ -9,11 +9,11 @@ import { Fragment } from "react";
 import ReportCard from "./components/ReportCard";
 
 const useStyles = makeStyles((theme) => ({
-  contents1: { [theme.breakpoints.up("sm")]: { display: "flex" } },
+  contents1: { [theme.breakpoints.up("md")]: { display: "flex" } },
   leftColumn: {
-    [theme.breakpoints.up("sm")]: { margin: theme.spacing(1) },
+    [theme.breakpoints.up("md")]: { margin: theme.spacing(1) },
   },
-  rightColumn: { [theme.breakpoints.up("sm")]: { margin: theme.spacing(1) } },
+  rightColumn: { [theme.breakpoints.up("md")]: { margin: theme.spacing(1) } },
   createReportButton: { margin: theme.spacing(1) },
   reportCard: {
     margin: theme.spacing(2),
