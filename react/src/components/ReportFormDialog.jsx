@@ -8,7 +8,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { FormControl, IconButton, Popper } from "@material-ui/core";
+import {
+  FormControl,
+  IconButton,
+  Popper,
+  useMediaQuery,
+  useTheme,
+} from "@material-ui/core";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
@@ -46,6 +52,8 @@ const filterOptions = createFilterOptions({
  */
 export default function FormDialog(props) {
   const classes = useStyles();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [report, setReport] = useState(props.defaultReport);
 
@@ -266,8 +274,9 @@ export default function FormDialog(props) {
   };
 
   return (
-    <div>
+    <>
       <Dialog
+        fullScreen={fullScreen}
         open={props.open}
         // 別の場所をクリックした時
         // onClose={handleClose}
@@ -425,6 +434,6 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
