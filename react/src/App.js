@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
 import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Typography, Divider, Box } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ReportFormDialog from "./components/ReportFormDialog";
 import { Fragment } from "react";

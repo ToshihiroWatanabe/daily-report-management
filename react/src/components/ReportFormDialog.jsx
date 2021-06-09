@@ -13,7 +13,6 @@ import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -53,7 +52,7 @@ export default function FormDialog(props) {
 
   useEffect(() => {
     setReport(props.defaultReport);
-  }, [props.open]);
+  }, [props.open, props.defaultReport]);
 
   /**
    * キャンセルボタンが押されたときの処理です。
