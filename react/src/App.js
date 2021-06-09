@@ -9,6 +9,13 @@ import { Fragment } from "react";
 import ReportCard from "./components/ReportCard";
 
 const useStyles = makeStyles((theme) => ({
+  main: {
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column",
+    },
+  },
   contents1: { [theme.breakpoints.up("md")]: { display: "flex" } },
   leftColumn: {
     [theme.breakpoints.up("md")]: { margin: theme.spacing(1) },
@@ -111,8 +118,6 @@ const App = () => {
    * @param {*} date
    */
   const onEditButtonClick = (date) => {
-    console.log(date);
-    console.log(selectedDate);
     setDefaultReport(() => {
       let defaultReport = JSON.parse(
         JSON.stringify(
@@ -143,7 +148,7 @@ const App = () => {
   return (
     <>
       <h1>日報管理</h1>
-      <main>
+      <main className={classes.main}>
         <div className={classes.contents1}>
           <div className={classes.leftColumn}>
             {/* 日付選択カレンダー */}

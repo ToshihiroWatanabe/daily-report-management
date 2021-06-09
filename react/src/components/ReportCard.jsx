@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     maxWidth: "30rem",
+    [theme.breakpoints.down("sm")]: { width: 500, maxWidth: "100vw" },
     [theme.breakpoints.up("md")]: { width: "30rem" },
   },
   title: {
@@ -82,17 +83,17 @@ export default function ReportCard(props) {
           {props.report.report_items.map((reportItem, reportItemIndex) => {
             return (
               <div key={reportItemIndex} className={classes.reportItem}>
-                <Tooltip title={reportItem.category} placement="top">
-                  <div style={{ marginRight: "1rem" }}>
+                <div>
+                  <Tooltip title={reportItem.category} placement="top">
                     <Chip
                       label={reportItem.category}
                       color="secondary"
                       size="small"
                       className={classes.categoryChip}
                     />
-                    {reportItem.content}
-                  </div>
-                </Tooltip>
+                  </Tooltip>
+                </div>
+                <div style={{ marginRight: "1rem" }}>{reportItem.content}</div>
                 <div className={classes.time}>
                   {reportItem.hour}:
                   {reportItem.minute >= 10
@@ -108,16 +109,6 @@ export default function ReportCard(props) {
           {props.report.content}
         </Typography>
       </CardContent>
-      {/* <CardActions>
-        <Button onClick={() => props.onEditButtonClick(props.report.date)}>
-          <EditIcon fontSize="inherit" />
-          編集
-        </Button>
-        <Button onClick={() => props.onDeleteButtonClick(props.report.date)}>
-          <DeleteIcon fontSize="inherit" />
-          削除
-        </Button>
-      </CardActions> */}
     </Card>
   );
 }
