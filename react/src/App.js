@@ -4,7 +4,7 @@ import format from "date-fns/format";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, Divider, Box } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import FormDialog from "./components/FormDialog";
+import ReportFormDialog from "./components/ReportFormDialog";
 import { Fragment } from "react";
 import ReportCard from "./components/ReportCard";
 
@@ -215,7 +215,7 @@ const App = () => {
           return report.date.includes(calendarMonth);
         }).length === 0 && <>日報がありません</>}
       </main>
-      <FormDialog
+      <ReportFormDialog
         open={formDialogOpen}
         setOpen={setFormDialogOpen}
         selectedDate={selectedDate}
