@@ -5,14 +5,15 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Divider } from "@material-ui/core";
+import { Divider, Tooltip } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Chip } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
+    [theme.breakpoints.up("sm")]: { maxWidth: "30rem" },
   },
   title: {
     fontSize: 14,
@@ -33,8 +34,13 @@ const useStyles = makeStyles({
   content: {
     fontSize: "0.75rem",
   },
-});
+}));
 
+/**
+ * 日報カードのコンポーネントです。
+ * @param {*} props
+ * @returns
+ */
 export default function ReportCard(props) {
   const classes = useStyles();
 
@@ -48,30 +54,21 @@ export default function ReportCard(props) {
         >
           {props.report.date.replaceAll("-", ".")}
         </Typography>
-        {/* <Typography variant="h5" component="h2">
-          タイトル
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography> */}
         <Typography variant="body1" component="h2">
           {props.report.report_items.map((reportItem, reportItemIndex) => {
             return (
               <div key={reportItemIndex} className={classes.reportItem}>
-                <div style={{ marginRight: "1rem" }}>
-                  <Chip
-                    label={reportItem.category}
-                    color="secondary"
-                    size="small"
-                    className={classes.categoryChip}
-                  />
-                  {reportItem.content}
-                </div>
+                <Tooltip title={reportItem.category} placement="top">
+                  <div style={{ marginRight: "1rem" }}>
+                    <Chip
+                      label={reportItem.category}
+                      color="secondary"
+                      size="small"
+                      className={classes.categoryChip}
+                    />
+                    {reportItem.content}
+                  </div>
+                </Tooltip>
                 <div className={classes.time}>
                   {reportItem.hour}:
                   {reportItem.minute >= 10

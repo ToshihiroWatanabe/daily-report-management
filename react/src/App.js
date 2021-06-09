@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
   rightColumn: { [theme.breakpoints.up("sm")]: { margin: theme.spacing(1) } },
   createReportButton: { margin: theme.spacing(1) },
+  reportCard: {
+    margin: theme.spacing(2),
+  },
 }));
 
 const DEFAULT_REPORT = {
@@ -92,7 +95,14 @@ const App = () => {
    * @param {*} event
    */
   const onCreateButtonClick = (event) => {
-    setDefaultReport(JSON.parse(JSON.stringify(DEFAULT_REPORT)));
+    setDefaultReport(
+      JSON.parse(
+        JSON.stringify({
+          ...DEFAULT_REPORT,
+          date: format(selectedDate, "yyyy-MM-dd"),
+        })
+      )
+    );
     setFormDialogOpen(true);
   };
 
@@ -101,11 +111,13 @@ const App = () => {
    * @param {*} date
    */
   const onEditButtonClick = (date) => {
+    console.log(date);
+    console.log(selectedDate);
     setDefaultReport(() => {
       let defaultReport = JSON.parse(
         JSON.stringify(
           reports.filter((report, index) => {
-            return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
+            return report.date.includes(date);
           })[0]
         )
       );
@@ -172,11 +184,13 @@ const App = () => {
               reports.map((report, index) => {
                 if (report.date.includes(format(selectedDate, "yyyy-MM-dd"))) {
                   return (
-                    <div key={index}>
+                    <div key={index} className={classes.reportCard}>
                       <ReportCard
                         report={report}
-                        onEditButtonClick={onEditButtonClick}
-                        onDeleteButtonClick={onDeleteButtonClick}
+                        onEditButtonClick={() => onEditButtonClick(report.date)}
+                        onDeleteButtonClick={() =>
+                          onDeleteButtonClick(report.date)
+                        }
                       />
                     </div>
                   );
@@ -191,20 +205,13 @@ const App = () => {
           return (
             <Fragment key={index}>
               {report.date.includes(calendarMonth) && (
-                <div>
-                  {report.date.replaceAll("-", ".")}
-                  {report.report_items.map((reportItem, reportItemIndex) => {
-                    return (
-                      <Fragment key={reportItemIndex}>
-                        <div>
-                          《{reportItem.category}》 {reportItem.content}{" "}
-                          {reportItem.hour}:{reportItem.minute}
-                        </div>
-                      </Fragment>
-                    );
-                  })}
-                  <Box fontSize="0.5rem">{report.content}</Box>
-                  <Divider />
+                <div className={classes.reportCard}>
+                  <ReportCard
+                    className={classes.reportCard}
+                    report={report}
+                    onEditButtonClick={onEditButtonClick}
+                    onDeleteButtonClick={onDeleteButtonClick}
+                  />
                 </div>
               )}
             </Fragment>
@@ -218,7 +225,6 @@ const App = () => {
       <ReportFormDialog
         open={formDialogOpen}
         setOpen={setFormDialogOpen}
-        selectedDate={selectedDate}
         onCreate={onCreateReport}
         defaultReport={defaultReport}
       />

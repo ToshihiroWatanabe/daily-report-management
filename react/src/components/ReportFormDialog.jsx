@@ -69,7 +69,7 @@ export default function FormDialog(props) {
     if (validate()) {
       props.setOpen(false);
       let input = {
-        date: format(props.selectedDate, "yyyy-MM-dd"),
+        date: props.defaultReport.date,
         content: report.content,
         report_items: report.report_items,
         updatedAt: Date.now(),
@@ -280,7 +280,7 @@ export default function FormDialog(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {props.selectedDate.toLocaleDateString()}
+            {props.defaultReport.date.replaceAll("-", ".")}
           </DialogContentText>
           {report.report_items.map((value, index) => {
             return (
