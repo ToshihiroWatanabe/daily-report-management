@@ -47,13 +47,17 @@ const App = () => {
   );
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [reports, setReports] = useState(localStorageGetItemReports);
+  // 日報入力ダイアログの初期値
   const [defaultReport, setDefaultReport] = useState(DEFAULT_REPORT);
 
+  // 確認用
   React.useEffect(() => {
     setInterval(() => {
-      console.log("reports[0].report_items[0]:");
-      console.log(reports[0].report_items[0]);
-      // console.log(defaultReport.report_items[0]);
+      if (reports.length > 0) {
+        console.log("reports[0].report_items[0]:");
+        console.log(reports[0].report_items[0]);
+        // console.log(defaultReport.report_items[0]);
+      }
     }, 1000);
   }, []);
 
@@ -62,6 +66,7 @@ const App = () => {
    * @param {*} input
    */
   const onCreateReport = (input) => {
+    console.log("setReports");
     setReports((reports) => {
       let newReports = [input, ...reports]
         // 重複を削除
@@ -121,10 +126,12 @@ const App = () => {
    * @param {*} date 削除する日報の日付
    */
   const onDeleteButtonClick = (date) => {
+    console.log("setReports");
     setReports((reports) => {
       let newReports = reports.filter((report) => {
         return report.date !== date;
       });
+      localStorage.setItem("reports", JSON.stringify(newReports));
       return newReports;
     });
   };
