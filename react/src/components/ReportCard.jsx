@@ -8,9 +8,12 @@ import {
   Divider,
   Tooltip,
   Chip,
+  IconButton,
+  Link,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import TwitterIcon from "@material-ui/icons/Twitter";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,17 +51,69 @@ const useStyles = makeStyles((theme) => ({
 export default function ReportCard(props) {
   const classes = useStyles();
 
+  /**
+   * ツイートするボタンがクリックされたときの処理です。
+   */
+  const onTweetButtonClick = () => {
+    let url =
+      "https://twitter.com/intent/tweet?text=🌟" +
+      props.report.date.replaceAll("-", ".") +
+      "%0A%0A💡やったこと%0A";
+    let totalMinute = 0;
+    for (let i = 0; i < props.report.report_items.length; i++) {
+      url +=
+        "《" +
+        props.report.report_items[i].category +
+        "》" +
+        props.report.report_items[i].content +
+        "%0A";
+      totalMinute +=
+        props.report.report_items[i].hour * 60 +
+        props.report.report_items[i].minute;
+    }
+    url +=
+      "%0A計: " +
+      Math.floor(totalMinute / 60) +
+      "時間" +
+      (totalMinute % 60) +
+      "分%0A%0A";
+    url += "✍️感想%0A" + props.report.content;
+    window.open(url);
+  };
+
   return (
     <Card className={classes.root}>
       <CardContent>
-        <div style={{ display: "flex" }}>
-          <div style={{ marginTop: "-2px" }}>
+        <div style={{ display: "flex", AlignItems: "center" }}>
+          <div style={{ marginTop: "-0.3rem" }}>
             <Typography
               className={classes.title}
               color="textSecondary"
               gutterBottom
             >
               {props.report.date.replaceAll("-", ".")}
+              {/* ツイートするボタン */}
+              {/* <Link
+                href={
+                  "https://twitter.com/intent/tweet?text=🌟" +
+                  props.report.date.replaceAll("-", ".") +
+                  "%0A%0A💡やったこと%0A"
+                }
+                target="_blank"
+                rel="noopener"
+              > */}
+              <IconButton
+                size="small"
+                onClick={() => onTweetButtonClick()}
+                style={{
+                  display: "inline-block",
+                  marginTop: "-0.2rem",
+                  marginLeft: "0.2rem",
+                }}
+              >
+                <TwitterIcon color="primary" />
+              </IconButton>
+              {/* </Link> */}
             </Typography>
           </div>
           <div style={{ marginLeft: "auto", marginTop: "-10px" }}>
