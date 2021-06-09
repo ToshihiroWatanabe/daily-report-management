@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
@@ -46,7 +46,7 @@ class ExtendedUtils extends DateFnsUtils {
  * 日付を選択するカレンダーのコンポーネントです。
  * @param props
  */
-export default function DatePicker(props) {
+const ReportDatePicker = memo((props) => {
   const classes = useStyles();
 
   /**
@@ -148,4 +148,6 @@ export default function DatePicker(props) {
       </Grid>
     </MuiPickersUtilsProvider>
   );
-}
+});
+
+export default ReportDatePicker;

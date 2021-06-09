@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -9,7 +9,6 @@ import {
   Tooltip,
   Chip,
   IconButton,
-  Link,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
  * @param {*} props
  * @returns
  */
-export default function ReportCard(props) {
+const ReportCard = memo((props) => {
   const classes = useStyles();
 
   /**
@@ -166,4 +165,6 @@ export default function ReportCard(props) {
       </CardContent>
     </Card>
   );
-}
+});
+
+export default ReportCard;

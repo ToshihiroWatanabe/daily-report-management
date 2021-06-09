@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -53,7 +53,7 @@ let isControlPressed = false;
  * 日報データを入力するダイアログのコンポーネントです。
  * @param {*} props
  */
-export default function FormDialog(props) {
+const ReportFormDialog = memo((props) => {
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
@@ -280,6 +280,7 @@ export default function FormDialog(props) {
     });
   };
 
+  /** オートコンプリートの選択肢 */
   const PopperMy = function (props) {
     return (
       <Popper {...props} style={{ width: "4rem" }} placement="bottom-start" />
@@ -494,4 +495,6 @@ export default function FormDialog(props) {
       </Dialog>
     </>
   );
-}
+});
+
+export default ReportFormDialog;

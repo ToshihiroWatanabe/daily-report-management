@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
+import ReportFormDialog from "./components/ReportFormDialog";
+import ReportCard from "./components/ReportCard";
 import format from "date-fns/format";
+import preval from "preval.macro";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -10,10 +13,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import ReportFormDialog from "./components/ReportFormDialog";
-import { Fragment } from "react";
-import ReportCard from "./components/ReportCard";
-import preval from "preval.macro";
 import GitHubIcon from "@material-ui/icons/GitHub";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   createReportButton: { margin: theme.spacing(1) },
   reportCard: {
     margin: theme.spacing(2),
+  },
+  reportsHeading: {
+    [theme.breakpoints.up("md")]: { margin: "0 1rem" },
   },
 }));
 
@@ -167,13 +169,14 @@ const App = () => {
 
   return (
     <>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", margin: "0 1rem" }}>
         <h1>日報管理</h1>
         <Typography
           variant="caption"
           style={{ margin: "0 1rem", marginTop: "0.5rem" }}
         >
-          ビルド時刻 {preval`module.exports = new Date().toLocaleString();`}
+          ビルド時刻{" "}
+          {format(preval`module.exports = Date.now();`, "yyyy/MM/dd HH:mm:ss")}
         </Typography>
         <Tooltip title="GitHubのリポジトリを見る">
           <Link
@@ -247,7 +250,9 @@ const App = () => {
               })}
           </div>
         </div>
-        <Typography variant="h5">日報一覧</Typography>
+        <Typography variant="h5" className={classes.reportsHeading}>
+          日報一覧
+        </Typography>
         {reports.map((report, index) => {
           return (
             <Fragment key={index}>

@@ -15,11 +15,11 @@ export const theme = createMuiTheme({
     fontFamily: [
       "Noto Sans JP",
       "メイリオ",
+      "ヒラギノ角ゴシック",
+      "Arial",
       "Meiryo",
-      "ＭＳ Ｐゴシック",
-      "MS PGothic",
       "sans-serif",
-    ].join(","),
+    ].join(", "),
   },
   palette: {
     // 水色
