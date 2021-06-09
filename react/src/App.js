@@ -48,7 +48,9 @@ const App = () => {
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [reports, setReports] = useState(localStorageGetItemReports);
   // 日報入力ダイアログの初期値
-  const [defaultReport, setDefaultReport] = useState(DEFAULT_REPORT);
+  const [defaultReport, setDefaultReport] = useState(
+    JSON.parse(JSON.stringify(DEFAULT_REPORT))
+  );
 
   /**
    * 日報を作成する処理です。
@@ -91,7 +93,7 @@ const App = () => {
    * @param {*} event
    */
   const onCreateButtonClick = (event) => {
-    setDefaultReport(DEFAULT_REPORT);
+    setDefaultReport(JSON.parse(JSON.stringify(DEFAULT_REPORT)));
     setFormDialogOpen(true);
   };
 
