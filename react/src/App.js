@@ -50,23 +50,11 @@ const App = () => {
   // 日報入力ダイアログの初期値
   const [defaultReport, setDefaultReport] = useState(DEFAULT_REPORT);
 
-  // 確認用
-  React.useEffect(() => {
-    setInterval(() => {
-      if (reports.length > 0) {
-        console.log("reports[0].report_items[0]:");
-        console.log(reports[0].report_items[0]);
-        // console.log(defaultReport.report_items[0]);
-      }
-    }, 1000);
-  }, []);
-
   /**
    * 日報を作成する処理です。
    * @param {*} input
    */
   const onCreateReport = (input) => {
-    console.log("setReports");
     setReports((reports) => {
       let newReports = [input, ...reports]
         // 重複を削除
@@ -112,11 +100,14 @@ const App = () => {
    * @param {*} date
    */
   const onEditButtonClick = (date) => {
-    // FIXME: 参照が同じ？
-    setDefaultReport((defaultReport) => {
-      defaultReport = reports.filter((report, index) => {
-        return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
-      })[0];
+    setDefaultReport(() => {
+      let defaultReport = JSON.parse(
+        JSON.stringify(
+          reports.filter((report, index) => {
+            return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
+          })[0]
+        )
+      );
       return defaultReport;
     });
     setFormDialogOpen(true);
@@ -127,7 +118,6 @@ const App = () => {
    * @param {*} date 削除する日報の日付
    */
   const onDeleteButtonClick = (date) => {
-    console.log("setReports");
     setReports((reports) => {
       let newReports = reports.filter((report) => {
         return report.date !== date;
