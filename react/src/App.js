@@ -173,7 +173,7 @@ const App = () => {
           variant="caption"
           style={{ margin: "0 1rem", marginTop: "0.5rem" }}
         >
-          ビルド時刻 {preval`module.exports = new Date().toLocaleString("ja");`}
+          ビルド時刻 {preval`module.exports = new Date().toLocaleString();`}
         </Typography>
         <Tooltip title="GitHubのリポジトリを見る">
           <Link
