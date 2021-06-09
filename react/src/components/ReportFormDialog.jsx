@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   IconButton,
   Popper,
@@ -19,6 +18,7 @@ import {
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,7 +61,9 @@ export default function FormDialog(props) {
   const [report, setReport] = useState(props.defaultReport);
 
   useEffect(() => {
-    setReport(props.defaultReport);
+    if (props.open) {
+      setReport(props.defaultReport);
+    }
   }, [props.open, props.defaultReport]);
 
   /**
