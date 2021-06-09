@@ -230,6 +230,10 @@ const App = () => {
             </Fragment>
           );
         })}
+        {/* その月の日報がないとき→「日報がありません」と表示 */}
+        {reports.filter((report, index) => {
+          return report.date.includes(calendarMonth);
+        }).length === 0 && <>日報がありません</>}
       </main>
       {formDialogOpen && (
         <FormDialog
