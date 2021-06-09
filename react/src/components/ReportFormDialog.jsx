@@ -186,6 +186,11 @@ export default function FormDialog(props) {
    * @param {*} target
    */
   const onHourTextChange = (index, target) => {
+    // 全角数字が含まれていたら半角数字に変換
+    target.value = target.value.replace(/[０-９]/g, (s) => {
+      return String.fromCharCode(s.charCodeAt(0) - 65248);
+    });
+    console.log(target.value);
     if (target.value.match(/.*\d.*/)) {
       setReport((report) => {
         report.report_items[index].hour =
@@ -233,6 +238,10 @@ export default function FormDialog(props) {
    * @param {*} target
    */
   const onMinuteTextChange = (index, target) => {
+    // 全角数字が含まれていたら半角数字に変換
+    target.value = target.value.replace(/[０-９]/g, (s) => {
+      return String.fromCharCode(s.charCodeAt(0) - 65248);
+    });
     if (target.value.match(/.*\d.*/)) {
       setReport((report) => {
         report.report_items[index].minute =
