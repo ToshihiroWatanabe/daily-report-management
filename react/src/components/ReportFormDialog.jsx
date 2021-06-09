@@ -135,11 +135,28 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * カテゴリーに変化があったときの処理です。
+   * カテゴリーの選択肢が選ばれたときの処理です。
+   * @param {*} index
+   * @param {*} value
+   */
+  const onCategoryChange = (index, value) => {
+    setReport((report) => {
+      report.report_items[index].category = value;
+      return {
+        date: report.date,
+        content: report.content,
+        report_items: report.report_items,
+        updatedAt: report.updatedAt,
+      };
+    });
+  };
+
+  /**
+   * カテゴリーの入力値に変化があったときの処理です。
    * @param {*} index
    * @param {*} target
    */
-  const onCategoryChange = (index, target) => {
+  const onCategoryTextChange = (index, target) => {
     setReport((report) => {
       report.report_items[index].category = target.value;
       return {
@@ -169,7 +186,7 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 時間に変化があったときの処理です。
+   * 時間の選択肢が選ばれたときの処理です。
    * @param {*} index
    * @param {*} value
    */
@@ -186,7 +203,7 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 時間の値に変化があったときの処理です。
+   * 時間の入力値に変化があったときの処理です。
    * @param {*} index
    * @param {*} target
    */
@@ -220,7 +237,7 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 分に変化があったときの処理です。
+   * 分の選択肢が選ばれたときの処理です。
    * @param {*} index
    * @param {*} value
    */
@@ -237,7 +254,7 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 分の値に変化があったときの処理です。
+   * 分の入力値に変化があったときの処理です。
    * @param {*} index
    * @param {*} target
    */
@@ -281,9 +298,14 @@ const ReportFormDialog = memo((props) => {
   };
 
   /** オートコンプリートの選択肢 */
-  const PopperMy = function (props) {
+  const Popper4rem = function (props) {
     return (
       <Popper {...props} style={{ width: "4rem" }} placement="bottom-start" />
+    );
+  };
+  const Popper8rem = function (props) {
+    return (
+      <Popper {...props} style={{ width: "8rem" }} placement="bottom-start" />
     );
   };
 
@@ -332,15 +354,37 @@ const ReportFormDialog = memo((props) => {
           {report.report_items.map((value, index) => {
             return (
               <div key={index} className={classes.reportItem}>
-                <TextField
-                  autoFocus
-                  label="カテゴリー"
-                  variant="outlined"
-                  margin="dense"
-                  value={value.category}
-                  onChange={(e, v) => onCategoryChange(index, e.target)}
-                  style={{ width: "8rem", marginRight: "4px" }}
-                  inputProps={{ maxLength: 45 }}
+                <Autocomplete
+                  freeSolo
+                  disableClearable
+                  PopperComponent={Popper8rem}
+                  options={props.categories}
+                  getOptionLabel={(option) => option.label}
+                  filterOptions={filterOptions}
+                  value={{
+                    label: value.category,
+                    value: value.category,
+                  }}
+                  onChange={(e, v) => onCategoryChange(index, v.value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      autoFocus
+                      label="カテゴリー"
+                      variant="outlined"
+                      margin="dense"
+                      onChange={(e, v) => onCategoryTextChange(index, e.target)}
+                      style={{ width: "8rem", marginRight: "4px" }}
+                      value={{
+                        label: value.category,
+                        value: value.category,
+                      }}
+                      inputProps={{
+                        ...params.inputProps,
+                        maxLength: 45,
+                      }}
+                    />
+                  )}
                 />
                 <TextField
                   label="内容"
@@ -356,7 +400,7 @@ const ReportFormDialog = memo((props) => {
                   <Autocomplete
                     freeSolo
                     disableClearable // バツマークを無効にする
-                    PopperComponent={PopperMy}
+                    PopperComponent={Popper4rem}
                     options={hours}
                     getOptionLabel={(option) => option.label}
                     filterOptions={filterOptions}
@@ -393,7 +437,7 @@ const ReportFormDialog = memo((props) => {
                   <Autocomplete
                     freeSolo
                     disableClearable // バツマークを無効にする
-                    PopperComponent={PopperMy}
+                    PopperComponent={Popper4rem}
                     options={minutes}
                     getOptionLabel={(option) => option.label}
                     filterOptions={filterOptions}

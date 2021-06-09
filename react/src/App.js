@@ -23,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
     },
   },
-  contents1: { [theme.breakpoints.up("md")]: { display: "flex" } },
+  contents1: {
+    [theme.breakpoints.up("md")]: { display: "flex" },
+  },
   leftColumn: {
     [theme.breakpoints.up("md")]: { margin: theme.spacing(1) },
   },
@@ -46,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   },
   reportsHeading: {
     [theme.breakpoints.up("md")]: { margin: "0 1rem" },
+  },
+  monthReportNotFound: {
+    [theme.breakpoints.up("md")]: { margin: "1rem" },
   },
 }));
 
@@ -82,6 +87,26 @@ const App = () => {
   const [defaultReport, setDefaultReport] = useState(
     JSON.parse(JSON.stringify(DEFAULT_REPORT))
   );
+  // カテゴリーの配列
+  const [categories, setCategories] = useState(() => {
+    let categories = [];
+    for (let i = 0; i < reports.length; i++) {
+      for (let j = 0; j < reports[i].report_items.length; j++) {
+        categories.push({
+          label: reports[i].report_items[j].category,
+          value: reports[i].report_items[j].category,
+        });
+      }
+    }
+    // 重複を削除
+    let newCategories = categories.filter((element, index, array) => {
+      return (
+        array.findIndex((element2) => element.label === element2.label) ===
+        index
+      );
+    });
+    return newCategories;
+  });
 
   /**
    * 日報を作成する処理です。
@@ -272,13 +297,16 @@ const App = () => {
         {/* その月の日報がないとき→「日報がありません」と表示 */}
         {reports.filter((report, index) => {
           return report.date.includes(calendarMonth);
-        }).length === 0 && <>日報がありません</>}
+        }).length === 0 && (
+          <div className={classes.monthReportNotFound}>日報がありません</div>
+        )}
       </main>
       <ReportFormDialog
         open={formDialogOpen}
         setOpen={setFormDialogOpen}
         onCreate={onCreateReport}
         defaultReport={defaultReport}
+        categories={categories}
       />
     </>
   );
