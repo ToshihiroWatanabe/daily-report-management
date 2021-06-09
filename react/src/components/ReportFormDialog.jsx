@@ -12,6 +12,7 @@ import {
   FormControl,
   IconButton,
   Popper,
+  Tooltip,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
@@ -45,6 +46,8 @@ for (let i = 0; i <= 59; i++) {
 const filterOptions = createFilterOptions({
   matchFrom: "start",
 });
+
+let isControlPressed = false;
 
 /**
  * 日報データを入力するダイアログのコンポーネントです。
@@ -190,7 +193,6 @@ export default function FormDialog(props) {
     target.value = target.value.replace(/[０-９]/g, (s) => {
       return String.fromCharCode(s.charCodeAt(0) - 65248);
     });
-    console.log(target.value);
     if (target.value.match(/.*\d.*/)) {
       setReport((report) => {
         report.report_items[index].hour =
@@ -282,11 +284,37 @@ export default function FormDialog(props) {
     );
   };
 
+  /**
+   * キーが押下されたときの処理です。
+   * @param {*} event
+   */
+  const onKeyDown = (event) => {
+    if (event.key === "Control") {
+      isControlPressed = true;
+    }
+    if (event.key === "Enter" && isControlPressed) {
+      isControlPressed = false;
+      onCreateButtonClick();
+    }
+  };
+
+  /**
+   * キーが離れたときの処理です。
+   * @param {*} event
+   */
+  const onKeyUp = (event) => {
+    if (event.key === "Control") {
+      isControlPressed = false;
+    }
+  };
+
   return (
     <>
       <Dialog
         fullScreen={fullScreen}
         open={props.open}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
         // 別の場所をクリックした時
         // onClose={handleClose}
         aria-labelledby="form-dialog-title"
@@ -317,7 +345,7 @@ export default function FormDialog(props) {
                   margin="dense"
                   value={value.content}
                   onChange={(e, v) => onItemContentChange(index, e.target)}
-                  style={{ width: "12rem", marginRight: "4px" }}
+                  style={{ width: "14rem", marginRight: "4px" }}
                   inputProps={{ maxLength: 45 }}
                 />
                 {/* 時間 */}
@@ -394,22 +422,41 @@ export default function FormDialog(props) {
                   />
                 </FormControl>
                 <div>分</div>
-                <IconButton
-                  style={{
-                    visibility: report.report_items.length > 16 ? "hidden" : "",
-                  }}
-                  onClick={onAddButtonClick}
+                <Tooltip
+                  title="追加"
+                  placement={
+                    index === report.report_items.length - 1 ? "bottom" : "top"
+                  }
                 >
-                  <AddCircleOutlineIcon />
-                </IconButton>
-                <IconButton
-                  style={{
-                    visibility: report.report_items.length < 2 ? "hidden" : "",
-                  }}
-                  onClick={(event) => onDeleteButtonClick(index)}
+                  <IconButton
+                    size="small"
+                    style={{
+                      visibility:
+                        report.report_items.length > 16 ? "hidden" : "",
+                      margin: "0 0.5rem",
+                    }}
+                    onClick={onAddButtonClick}
+                  >
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip
+                  title="削除"
+                  placement={
+                    index === report.report_items.length - 1 ? "bottom" : "top"
+                  }
                 >
-                  <DeleteIcon />
-                </IconButton>
+                  <IconButton
+                    size="small"
+                    style={{
+                      visibility:
+                        report.report_items.length < 2 ? "hidden" : "",
+                    }}
+                    onClick={(event) => onDeleteButtonClick(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
               </div>
             );
           })}
