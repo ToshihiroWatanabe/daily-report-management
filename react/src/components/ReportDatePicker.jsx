@@ -8,6 +8,7 @@ import {
 } from "@material-ui/pickers";
 import jaLocale from "date-fns/locale/ja";
 import format from "date-fns/format";
+import "./ReportDatePicker.css";
 
 const useStyles = makeStyles((theme) => ({
   red: {
