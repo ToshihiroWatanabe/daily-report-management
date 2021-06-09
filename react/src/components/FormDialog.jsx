@@ -51,6 +51,10 @@ export default function FormDialog(props) {
 
   const [report, setReport] = useState(props.defaultReport);
 
+  React.useEffect(() => {
+    console.log(report.report_items[0]);
+  }, [report]);
+
   /**
    * キャンセルボタンが押されたときの処理です。
    */

@@ -112,6 +112,7 @@ const App = () => {
    * @param {*} date
    */
   const onEditButtonClick = (date) => {
+    // FIXME: 参照が同じ？
     setDefaultReport((defaultReport) => {
       defaultReport = reports.filter((report, index) => {
         return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
