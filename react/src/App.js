@@ -5,9 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, Divider, Box } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import FormDialog from "./components/FormDialog";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { Fragment } from "react";
+import ReportCard from "./components/ReportCard";
 
 const useStyles = makeStyles((theme) => ({
   contents1: { [theme.breakpoints.up("sm")]: { display: "flex" } },
@@ -174,30 +173,11 @@ const App = () => {
                 if (report.date.includes(format(selectedDate, "yyyy-MM-dd"))) {
                   return (
                     <div key={index}>
-                      {report.date.replaceAll("-", ".")}
-                      {report.report_items.map(
-                        (reportItem, reportItemIndex) => {
-                          return (
-                            <div key={reportItemIndex}>
-                              《{reportItem.category}》 {reportItem.content}{" "}
-                              {reportItem.hour}:{reportItem.minute}
-                            </div>
-                          );
-                        }
-                      )}
-                      <Box fontSize="0.5rem">{report.content}</Box>
-                      <div>
-                        <Button onClick={() => onEditButtonClick(report.date)}>
-                          <EditIcon fontSize="inherit" />
-                          編集
-                        </Button>
-                        <Button
-                          onClick={() => onDeleteButtonClick(report.date)}
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                          削除
-                        </Button>
-                      </div>
+                      <ReportCard
+                        report={report}
+                        onEditButtonClick={onEditButtonClick}
+                        onDeleteButtonClick={onDeleteButtonClick}
+                      />
                     </div>
                   );
                 } else {
@@ -235,15 +215,13 @@ const App = () => {
           return report.date.includes(calendarMonth);
         }).length === 0 && <>日報がありません</>}
       </main>
-      {formDialogOpen && (
-        <FormDialog
-          open={formDialogOpen}
-          setOpen={setFormDialogOpen}
-          selectedDate={selectedDate}
-          onCreate={onCreateReport}
-          defaultReport={defaultReport}
-        />
-      )}
+      <FormDialog
+        open={formDialogOpen}
+        setOpen={setFormDialogOpen}
+        selectedDate={selectedDate}
+        onCreate={onCreateReport}
+        defaultReport={defaultReport}
+      />
     </>
   );
 };
