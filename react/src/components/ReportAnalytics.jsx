@@ -293,7 +293,7 @@ const ReportAnalytics = (props) => {
                   return index < 5;
                 })
                 .map((item, index) => (
-                  <Cell fill={COLORS[index % COLORS.length]} />
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
             </Pie>
             <Legend
