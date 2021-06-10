@@ -13,26 +13,30 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TwitterIcon from "@material-ui/icons/Twitter";
+import "./ReportCard.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     maxWidth: "30rem",
-    [theme.breakpoints.down("sm")]: { width: 500, maxWidth: "85vw" },
+    [theme.breakpoints.down("sm")]: {
+      width: 500,
+      maxWidth: "85vw",
+      marginBottom: "-12px",
+    },
     [theme.breakpoints.up("md")]: { width: "30rem" },
   },
   title: {
     fontSize: 14,
   },
-  pos: {
-    marginBottom: 12,
-  },
   reportItem: {
     display: "flex",
+    margin: "0.2rem 0",
   },
   categoryChip: {
     width: "5.1rem",
-    marginRight: "2px",
+    marginRight: "0.5rem",
+    marginTop: "-0.2rem",
   },
   time: {
     marginLeft: "auto",
