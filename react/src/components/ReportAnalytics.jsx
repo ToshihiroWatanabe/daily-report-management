@@ -145,6 +145,10 @@ const ReportAnalytics = (props) => {
     });
   }
   nonStateTotalHourPerYear = Math.floor(nonStateTotalMinutePerYear / 60);
+  // 時間の長い順に並べ替え
+  nonStateTotalMinuteByCategory.sort((a, b) => {
+    return b.uv - a.uv;
+  });
   for (let i = 0; i < nonStateTotalMinuteByCategory.length; i++) {
     nonStateTotalHourByCategory.push({
       category: nonStateTotalMinuteByCategory[i].category,
@@ -153,10 +157,6 @@ const ReportAnalytics = (props) => {
       amt: amt,
     });
   }
-  // 時間の長い順に並べ替え
-  nonStateTotalHourByCategory.sort((a, b) => {
-    return b.uv - a.uv;
-  });
 
   const [numberOfReportPerMonth] = useState(nonStateNumberOfReportPerMonth);
   const [totalHourPerMonth] = useState(nonStateTotalHourPerMonth);
@@ -243,28 +243,37 @@ const ReportAnalytics = (props) => {
         className={classes.categoryCard}
       >
         <div className={classes.leftColumn}>
-          <Typography variant="h5">
+          <Typography variant="h5" style={{ marginBottom: "1rem" }}>
             カテゴリー別学習比率{" "}
             <Typography variant="caption">(直近12ヶ月)</Typography>
           </Typography>
-          {totalHourByCategory.map((value, index) => (
-            <Fragment key={index}>
-              <div style={{ margin: "0.5rem" }}>
-                {index + 1}位
-                <Tooltip title={value.category} placement="top">
-                  <Chip
-                    label={value.category}
-                    color="secondary"
-                    size="small"
-                    className={classes.categoryChip}
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  />
-                </Tooltip>
-                {value.uv}時間({Math.floor((value.uv / totalHourPerYear) * 100)}
-                %)
-              </div>
-            </Fragment>
-          ))}
+          {totalHourByCategory
+            .filter((value, index) => {
+              return index < 5;
+            })
+            .map((value, index) => (
+              <Fragment key={index}>
+                <div style={{ margin: "0.5rem" }}>
+                  <Typography
+                    style={{ display: "inline-block", marginRight: "0.5rem" }}
+                  >
+                    {index + 1}位
+                  </Typography>
+                  <Tooltip title={value.category} placement="top">
+                    <Chip
+                      label={value.category}
+                      color="secondary"
+                      size="small"
+                      className={classes.categoryChip}
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                  </Tooltip>
+                  {value.uv}時間(
+                  {Math.floor((value.uv / totalHourPerYear) * 100)}
+                  %)
+                </div>
+              </Fragment>
+            ))}
         </div>
         <div className={classes.rightColumn}>
           <PieChart width={300} height={250}>
@@ -279,21 +288,29 @@ const ReportAnalytics = (props) => {
               startAngle={90}
               endAngle={-270}
             >
-              {totalHourByCategory.map((item, index) => (
-                <Cell fill={COLORS[index % COLORS.length]} />
-              ))}
+              {totalHourByCategory
+                .filter((value, index) => {
+                  return index < 5;
+                })
+                .map((item, index) => (
+                  <Cell fill={COLORS[index % COLORS.length]} />
+                ))}
             </Pie>
             <Legend
               layout="horizontal"
               verticalAlign="top"
               align="center"
-              height={36}
-              payload={totalHourByCategory.map((item, index) => ({
-                id: item.name,
-                type: "square",
-                value: `${item.category}`,
-                color: COLORS[index % COLORS.length],
-              }))}
+              height={50}
+              payload={totalHourByCategory
+                .filter((value, index) => {
+                  return index < 5;
+                })
+                .map((item, index) => ({
+                  id: item.name,
+                  type: "square",
+                  value: `${item.category}`,
+                  color: COLORS[index % COLORS.length],
+                }))}
               formatter={renderColorfulLegendText}
             />
           </PieChart>
