@@ -75,6 +75,8 @@ const ReportAnalytics = (props) => {
   let nonStateTotalMinuteByCategory = [];
   let nonStateTotalHourByCategory = [];
 
+  const [numberOfCategory, setNumberOfCategory] = useState(7);
+
   // 直近12ヶ月
   for (let i = 11; i >= 0; i--) {
     const now = new Date();
@@ -249,7 +251,7 @@ const ReportAnalytics = (props) => {
           </Typography>
           {totalHourByCategory
             .filter((value, index) => {
-              return index < 5;
+              return index < numberOfCategory;
             })
             .map((value, index) => (
               <Fragment key={index}>
@@ -290,7 +292,7 @@ const ReportAnalytics = (props) => {
             >
               {totalHourByCategory
                 .filter((value, index) => {
-                  return index < 5;
+                  return index < numberOfCategory;
                 })
                 .map((item, index) => (
                   <Cell key={index} fill={COLORS[index % COLORS.length]} />
@@ -303,7 +305,7 @@ const ReportAnalytics = (props) => {
               height={50}
               payload={totalHourByCategory
                 .filter((value, index) => {
-                  return index < 5;
+                  return index < numberOfCategory;
                 })
                 .map((item, index) => ({
                   id: item.name,
