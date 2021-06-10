@@ -4,7 +4,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import {
   AppBar,
-  CssBaseline,
   Divider,
   Drawer,
   Hidden,
@@ -72,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const ResponsiveDrawer = memo((props) => {
   const { window } = props;
+  const location = useLocation();
   /** Material-UIのスタイル */
   const classes = useStyles();
   /** Material-UIのテーマ */
@@ -100,36 +100,27 @@ const ResponsiveDrawer = memo((props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["日報管理", "分析レポート", "このアプリについて"].map(
-          (text, index) => (
-            <Link
-              key={text}
-              to={
-                text === "日報管理"
-                  ? "/"
-                  : text === "分析レポート"
-                  ? "/analytics"
-                  : "/about"
-              }
-              style={{ color: "inherit", textDecoration: "none" }}
+        {pages.map((page, index) => (
+          <Link
+            key={index}
+            to={page.path}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            <ListItem
+              button
+              onClick={() => handleListItemClick(index)}
+              data-num={index.toString()}
             >
-              <ListItem
-                button
-                key={text}
-                onClick={() => handleListItemClick(index)}
-                data-num={index.toString()}
-              >
-                <ListItemIcon>
-                  {/* ホーム */}
-                  {index === 0 ? <DescriptionIcon /> : ""}
-                  {index === 1 ? <AssessmentIcon /> : ""}
-                  {index === 2 ? <InfoIcon /> : ""}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </Link>
-          )
-        )}
+              <ListItemIcon>
+                {/* ホーム */}
+                {index === 0 ? <DescriptionIcon /> : ""}
+                {index === 1 ? <AssessmentIcon /> : ""}
+                {index === 2 ? <InfoIcon /> : ""}
+              </ListItemIcon>
+              <ListItemText primary={page.label} />
+            </ListItem>
+          </Link>
+        ))}
       </List>
     </div>
   );
@@ -156,9 +147,10 @@ const ResponsiveDrawer = memo((props) => {
             onClick={onHeaderTitleClick}
             noWrap
           >
-            {useLocation().pathname === "/" ? "日報管理" : ""}
-            {useLocation().pathname === "/analytics" ? "分析レポート" : ""}
-            {useLocation().pathname === "/about" ? "このアプリについて" : ""}
+            {pages.map(
+              (page, index) =>
+                location.pathname === page.path && <>{page.label}</>
+            )}
           </Typography>
         </Toolbar>
       </AppBar>
