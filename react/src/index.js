@@ -6,13 +6,16 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 import { theme } from "./theme";
+import { HashRouter } from "react-router-dom";
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <CssBaseline>
-      <App />
-    </CssBaseline>
-  </MuiThemeProvider>,
+  <HashRouter>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline>
+        <App />
+      </CssBaseline>
+    </MuiThemeProvider>
+  </HashRouter>,
   document.getElementById("root")
 );
 

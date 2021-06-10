@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import ResponsiveDrawer from "./components/ResponsiveDrawer";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -21,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       flexDirection: "column",
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: `calc(100% - ${DRAWER_WIDTH}px)`,
+      marginLeft: DRAWER_WIDTH,
     },
   },
   contents1: {
@@ -53,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: { margin: "1rem" },
   },
 }));
+
+/** ドロワーの横幅 */
+const DRAWER_WIDTH = "14rem";
 
 const DEFAULT_REPORT = {
   date: "",
@@ -194,6 +202,7 @@ const App = () => {
 
   return (
     <>
+      <ResponsiveDrawer></ResponsiveDrawer>
       <div style={{ display: "flex", alignItems: "center", margin: "0 1rem" }}>
         <h1>日報管理</h1>
         <Typography
