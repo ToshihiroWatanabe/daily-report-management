@@ -16,6 +16,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { Switch, Route } from "react-router-dom";
+import ReportAnalytics from "./components/ReportAnalytics";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -305,7 +306,7 @@ const App = () => {
             )}
           </Route>
           <Route exact path="/analytics">
-            分析レポート
+            <ReportAnalytics reports={reports} />
           </Route>
           <Route exact path="/about">
             <div
@@ -315,7 +316,7 @@ const App = () => {
                 margin: "0 1rem",
               }}
             >
-              <h1>日報管理</h1>
+              <h2>日報管理アプリ</h2>
               <Typography
                 variant="caption"
                 style={{ margin: "0 1rem", marginTop: "0.5rem" }}
