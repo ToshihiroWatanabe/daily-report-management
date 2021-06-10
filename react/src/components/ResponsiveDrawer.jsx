@@ -26,6 +26,12 @@ import InfoIcon from "@material-ui/icons/Info";
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
 
+const pages = [
+  { label: "日報管理", path: "/" },
+  { label: "分析レポート", path: "/analytics" },
+  { label: "このアプリについて", path: "/about" },
+];
+
 /** Material-UIのスタイル */
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,10 +86,9 @@ const ResponsiveDrawer = memo((props) => {
   /**
    * ヘッダーのタイトルがクリックされたときの処理です。
    */
-  const handleCoPomoClick = () => {
-    // props.setView("Home");
+  const onHeaderTitleClick = () => {
     // ページトップへ移動
-    // window.scrollTo(0, 0);
+    // window.scrollTo(0);
   };
 
   const handleDrawerToggle = () => {
@@ -134,7 +139,6 @@ const ResponsiveDrawer = memo((props) => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -149,7 +153,7 @@ const ResponsiveDrawer = memo((props) => {
           <Typography
             variant="h6"
             className={classes.title}
-            onClick={handleCoPomoClick}
+            onClick={onHeaderTitleClick}
             noWrap
           >
             {useLocation().pathname === "/" ? "日報管理" : ""}
