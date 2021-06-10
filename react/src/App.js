@@ -15,9 +15,11 @@ import {
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
+import { Switch, Route } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   main: {
+    marginTop: "5rem",
     [theme.breakpoints.down("sm")]: {
       display: "flex",
       alignItems: "center",
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /** ドロワーの横幅 */
-const DRAWER_WIDTH = "14rem";
+const DRAWER_WIDTH = "15rem";
 
 const DEFAULT_REPORT = {
   date: "",
@@ -202,114 +204,152 @@ const App = () => {
 
   return (
     <>
-      <ResponsiveDrawer></ResponsiveDrawer>
-      <div style={{ display: "flex", alignItems: "center", margin: "0 1rem" }}>
-        <h1>日報管理</h1>
-        <Typography
-          variant="caption"
-          style={{ margin: "0 1rem", marginTop: "0.5rem" }}
-        >
-          ビルド時刻{" "}
-          {format(preval`module.exports = Date.now();`, "yyyy/MM/dd HH:mm:ss")}
-        </Typography>
-        <Tooltip title="GitHubのリポジトリを見る">
-          <Link
-            href="https://github.com/ToshihiroWatanabe/daily-report-management"
-            target="_blank"
-            rel="noopener"
-          >
-            <IconButton size="small">
-              <GitHubIcon></GitHubIcon>
-            </IconButton>
-          </Link>
-        </Tooltip>
-      </div>
+      <ResponsiveDrawer />
       <main className={classes.main}>
-        <div className={classes.contents1}>
-          <div className={classes.leftColumn}>
-            {/* 日付選択カレンダー */}
-            <ReportDatePicker
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              onMonthChange={onMonthChange}
-              onDateChange={onDateChange}
-              reports={reports}
-            />
-          </div>
-          <div className={classes.rightColumn}>
-            <Typography
-              variant="h5"
-              className={classes.selectedDateReportHeading}
-            >
-              {format(selectedDate, "yyyy.MM.dd")}の日報
-            </Typography>
-            {/* 選択した日に日報がなかったとき */}
-            {reports.filter((report, index) => {
-              return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
-            }).length === 0 && (
-              <div className={classes.selectedDateReportNotFound}>
-                <Typography>日報はありません</Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="medium"
-                  className={classes.createReportButton}
-                  startIcon={<AddCircleOutlineIcon />}
-                  onClick={(event) => onCreateButtonClick(event)}
-                >
-                  日報作成
-                </Button>
+        {/* 画面切り替え */}
+        <Switch>
+          <Route exact path="/">
+            <div className={classes.contents1}>
+              <div className={classes.leftColumn}>
+                {/* 日付選択カレンダー */}
+                <ReportDatePicker
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  onMonthChange={onMonthChange}
+                  onDateChange={onDateChange}
+                  reports={reports}
+                />
               </div>
-            )}
-            {/* 選択した日に日報があったとき */}
-            {reports.filter((report, index) => {
-              return report.date.includes(format(selectedDate, "yyyy-MM-dd"));
-            }).length > 0 &&
-              reports.map((report, index) => {
-                if (report.date.includes(format(selectedDate, "yyyy-MM-dd"))) {
-                  return (
-                    <div key={index} className={classes.reportCard}>
+              <div className={classes.rightColumn}>
+                <Typography
+                  variant="h5"
+                  className={classes.selectedDateReportHeading}
+                >
+                  {format(selectedDate, "yyyy.MM.dd")}の日報
+                </Typography>
+                {/* 選択した日に日報がなかったとき */}
+                {reports.filter((report, index) => {
+                  return report.date.includes(
+                    format(selectedDate, "yyyy-MM-dd")
+                  );
+                }).length === 0 && (
+                  <div className={classes.selectedDateReportNotFound}>
+                    <Typography>日報はありません</Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="medium"
+                      className={classes.createReportButton}
+                      startIcon={<AddCircleOutlineIcon />}
+                      onClick={(event) => onCreateButtonClick(event)}
+                    >
+                      日報作成
+                    </Button>
+                  </div>
+                )}
+                {/* 選択した日に日報があったとき */}
+                {reports.filter((report, index) => {
+                  return report.date.includes(
+                    format(selectedDate, "yyyy-MM-dd")
+                  );
+                }).length > 0 &&
+                  reports.map((report, index) => {
+                    if (
+                      report.date.includes(format(selectedDate, "yyyy-MM-dd"))
+                    ) {
+                      return (
+                        <div key={index} className={classes.reportCard}>
+                          <ReportCard
+                            report={report}
+                            onEditButtonClick={() =>
+                              onEditButtonClick(report.date)
+                            }
+                            onDeleteButtonClick={() =>
+                              onDeleteButtonClick(report.date)
+                            }
+                          />
+                        </div>
+                      );
+                    } else {
+                      return <Fragment key={index}></Fragment>;
+                    }
+                  })}
+              </div>
+            </div>
+            <Typography variant="h5" className={classes.reportsHeading}>
+              日報一覧
+            </Typography>
+            {reports.map((report, index) => {
+              return (
+                <Fragment key={index}>
+                  {report.date.includes(calendarMonth) && (
+                    <div className={classes.reportCard}>
                       <ReportCard
+                        className={classes.reportCard}
                         report={report}
-                        onEditButtonClick={() => onEditButtonClick(report.date)}
-                        onDeleteButtonClick={() =>
-                          onDeleteButtonClick(report.date)
-                        }
+                        onEditButtonClick={onEditButtonClick}
+                        onDeleteButtonClick={onDeleteButtonClick}
                       />
                     </div>
-                  );
-                } else {
-                  return <Fragment key={index}></Fragment>;
-                }
-              })}
-          </div>
-        </div>
-        <Typography variant="h5" className={classes.reportsHeading}>
-          日報一覧
-        </Typography>
-        {reports.map((report, index) => {
-          return (
-            <Fragment key={index}>
-              {report.date.includes(calendarMonth) && (
-                <div className={classes.reportCard}>
-                  <ReportCard
-                    className={classes.reportCard}
-                    report={report}
-                    onEditButtonClick={onEditButtonClick}
-                    onDeleteButtonClick={onDeleteButtonClick}
-                  />
-                </div>
-              )}
-            </Fragment>
-          );
-        })}
-        {/* その月の日報がないとき→「日報がありません」と表示 */}
-        {reports.filter((report, index) => {
-          return report.date.includes(calendarMonth);
-        }).length === 0 && (
-          <div className={classes.monthReportNotFound}>日報がありません</div>
-        )}
+                  )}
+                </Fragment>
+              );
+            })}
+            {/* その月の日報がないとき→「日報がありません」と表示 */}
+            {reports.filter((report, index) => {
+              return report.date.includes(calendarMonth);
+            }).length === 0 && (
+              <div className={classes.monthReportNotFound}>
+                日報がありません
+              </div>
+            )}
+          </Route>
+          <Route exact path="/analytics">
+            分析レポート
+          </Route>
+          <Route exact path="/about">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                margin: "0 1rem",
+              }}
+            >
+              <h1>日報管理</h1>
+              <Typography
+                variant="caption"
+                style={{ margin: "0 1rem", marginTop: "0.5rem" }}
+              >
+                ビルド時刻{" "}
+                {format(
+                  preval`module.exports = Date.now();`,
+                  "yyyy/MM/dd HH:mm:ss"
+                )}
+              </Typography>
+              <Tooltip title="GitHubのリポジトリを見る">
+                <Link
+                  href="https://github.com/ToshihiroWatanabe/daily-report-management"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <IconButton size="small">
+                    <GitHubIcon></GitHubIcon>
+                  </IconButton>
+                </Link>
+              </Tooltip>
+            </div>
+            <Typography
+              component="p"
+              style={{
+                margin: "0 1rem",
+              }}
+            >
+              Copyright © 2021 ワタナベトシヒロ All Rights Reserved.
+            </Typography>
+          </Route>
+        </Switch>
       </main>
+      {/* 日報入力ダイアログ */}
       <ReportFormDialog
         open={formDialogOpen}
         setOpen={setFormDialogOpen}

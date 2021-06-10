@@ -21,9 +21,10 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import DescriptionIcon from "@material-ui/icons/Description";
 import AssessmentIcon from "@material-ui/icons/Assessment";
+import InfoIcon from "@material-ui/icons/Info";
 
 /** ドロワーの横幅 */
-const DRAWER_WIDTH = "14rem";
+const DRAWER_WIDTH = "15rem";
 
 /** Material-UIのスタイル */
 const useStyles = makeStyles((theme) => ({
@@ -94,27 +95,36 @@ const ResponsiveDrawer = memo((props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["日報管理", "分析レポート"].map((text, index) => (
-          <Link
-            key={text}
-            to={text === "日報管理" ? "/" : "/analytics"}
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <ListItem
-              button
+        {["日報管理", "分析レポート", "このアプリについて"].map(
+          (text, index) => (
+            <Link
               key={text}
-              onClick={() => handleListItemClick(index)}
-              data-num={index.toString()}
+              to={
+                text === "日報管理"
+                  ? "/"
+                  : text === "分析レポート"
+                  ? "/analytics"
+                  : "/about"
+              }
+              style={{ color: "inherit", textDecoration: "none" }}
             >
-              <ListItemIcon>
-                {/* ホーム */}
-                {index === 0 ? <DescriptionIcon /> : ""}
-                {index === 1 ? <AssessmentIcon /> : ""}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          </Link>
-        ))}
+              <ListItem
+                button
+                key={text}
+                onClick={() => handleListItemClick(index)}
+                data-num={index.toString()}
+              >
+                <ListItemIcon>
+                  {/* ホーム */}
+                  {index === 0 ? <DescriptionIcon /> : ""}
+                  {index === 1 ? <AssessmentIcon /> : ""}
+                  {index === 2 ? <InfoIcon /> : ""}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </Link>
+          )
+        )}
       </List>
     </div>
   );
@@ -143,8 +153,8 @@ const ResponsiveDrawer = memo((props) => {
             noWrap
           >
             {useLocation().pathname === "/" ? "日報管理" : ""}
-            {useLocation().pathname === "/reports" ? "日報管理" : ""}
             {useLocation().pathname === "/analytics" ? "分析レポート" : ""}
+            {useLocation().pathname === "/about" ? "このアプリについて" : ""}
           </Typography>
         </Toolbar>
       </AppBar>
