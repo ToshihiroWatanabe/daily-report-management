@@ -7,22 +7,58 @@ import {
   ResponsiveContainer,
   CartesianGrid,
   LabelList,
+  PieChart,
+  Pie,
+  Legend,
+  Cell,
 } from "recharts";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Card, Chip, Tooltip, Typography } from "@material-ui/core";
 import format from "date-fns/format";
 import { Fragment } from "react";
 
+const COLORS = [
+  "#e57373", // Red 300
+  "#ffa726", // Orange 400
+  "#fdd835", // Yellow 600
+  "#d4e157", // Lime 400
+  "#66bb6a", // Green 400
+  "#42a5f5", // Blue 400
+  "#7986cb", // Indigo 300
+  "#ab47bc", // Purple 400
+];
+
 const pv = 2400;
 const amt = 2400;
 
 const useStyles = makeStyles((theme) => ({
+  categoryCard: {
+    [theme.breakpoints.up("sm")]: {
+      display: "flex",
+    },
+  },
+  leftColumn: {},
+  rightColumn: {
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+  },
   categoryChip: {
     width: "5.1rem",
     marginRight: "2px",
   },
 }));
 
+const renderColorfulLegendText = (value, entry) => {
+  return <span style={{ color: "#000" }}>{value}</span>;
+};
+
+/**
+ * 日報の分析レポートのコンポーネントです。
+ * @param {*} props
+ * @returns
+ */
 const ReportAnalytics = (props) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -204,27 +240,64 @@ const ReportAnalytics = (props) => {
           padding: "1rem",
           marginLeft: "1rem",
         }}
+        className={classes.categoryCard}
       >
-        <Typography variant="h5">
-          カテゴリー別学習比率{" "}
-          <Typography variant="caption">(直近12ヶ月)</Typography>
-        </Typography>
-        {totalHourByCategory.map((value, index) => (
-          <Fragment key={index}>
-            <div>
-              {index + 1}位
-              <Tooltip title={value.category} placement="top">
-                <Chip
-                  label={value.category}
-                  color="secondary"
-                  size="small"
-                  className={classes.categoryChip}
-                />
-              </Tooltip>
-              {value.uv}時間({(value.uv / totalHourPerYear) * 100}%)
-            </div>
-          </Fragment>
-        ))}
+        <div className={classes.leftColumn}>
+          <Typography variant="h5">
+            カテゴリー別学習比率{" "}
+            <Typography variant="caption">(直近12ヶ月)</Typography>
+          </Typography>
+          {totalHourByCategory.map((value, index) => (
+            <Fragment key={index}>
+              <div style={{ margin: "0.5rem" }}>
+                {index + 1}位
+                <Tooltip title={value.category} placement="top">
+                  <Chip
+                    label={value.category}
+                    color="secondary"
+                    size="small"
+                    className={classes.categoryChip}
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  />
+                </Tooltip>
+                {value.uv}時間({Math.floor((value.uv / totalHourPerYear) * 100)}
+                %)
+              </div>
+            </Fragment>
+          ))}
+        </div>
+        <div className={classes.rightColumn}>
+          <PieChart width={300} height={250}>
+            <Pie
+              data={totalHourByCategory}
+              dataKey="uv"
+              nameKey="vategory"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              fill="#8884d8"
+              startAngle={90}
+              endAngle={-270}
+            >
+              {totalHourByCategory.map((item, index) => (
+                <Cell fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Legend
+              layout="horizontal"
+              verticalAlign="top"
+              align="center"
+              height={36}
+              payload={totalHourByCategory.map((item, index) => ({
+                id: item.name,
+                type: "square",
+                value: `${item.category}`,
+                color: COLORS[index % COLORS.length],
+              }))}
+              formatter={renderColorfulLegendText}
+            />
+          </PieChart>
+        </div>
       </Card>
     </>
   );
