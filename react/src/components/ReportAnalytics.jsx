@@ -6,18 +6,22 @@ import {
   YAxis,
   ResponsiveContainer,
   CartesianGrid,
-  Label,
   LabelList,
 } from "recharts";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Card, Typography } from "@material-ui/core";
+import { Card, Chip, Tooltip, Typography } from "@material-ui/core";
 import format from "date-fns/format";
-import { nextWednesday } from "date-fns";
+import { Fragment } from "react";
 
 const pv = 2400;
 const amt = 2400;
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  categoryChip: {
+    width: "5.1rem",
+    marginRight: "2px",
+  },
+}));
 
 const ReportAnalytics = (props) => {
   const classes = useStyles();
@@ -31,6 +35,9 @@ const ReportAnalytics = (props) => {
   /** 総合学習時間 */
   let nonStateTotalMinutePerYear = 0;
   let nonStateTotalHourPerYear = 0;
+  /** カテゴリー別の学習時間 */
+  let nonStateTotalMinuteByCategory = [];
+  let nonStateTotalHourByCategory = [];
 
   // 直近12ヶ月
   for (let i = 11; i >= 0; i--) {
@@ -47,6 +54,33 @@ const ReportAnalytics = (props) => {
           localTotalMinute +=
             props.reports[j].report_items[k].hour * 60 +
             props.reports[j].report_items[k].minute;
+          // 新しいカテゴリーであれば追加、既存のカテゴリーであれば加算
+          let isCategoryAlreadyExist = false;
+          for (let n = 0; n < nonStateTotalMinuteByCategory.length; n++) {
+            if (
+              props.reports[j].report_items[k].category ===
+              nonStateTotalMinuteByCategory[n].category
+            ) {
+              isCategoryAlreadyExist = true;
+              nonStateTotalMinuteByCategory[n].uv +=
+                props.reports[j].report_items[k].hour * 60 +
+                props.reports[j].report_items[k].minute;
+            }
+            if (isCategoryAlreadyExist === true) {
+              break;
+            }
+          }
+          // 新しいカテゴリーの場合
+          if (!isCategoryAlreadyExist) {
+            nonStateTotalMinuteByCategory.push({
+              category: props.reports[j].report_items[k].category,
+              uv:
+                props.reports[j].report_items[k].hour * 60 +
+                props.reports[j].report_items[k].minute,
+              pv: pv,
+              amt: amt,
+            });
+          }
         }
       }
     }
@@ -75,16 +109,23 @@ const ReportAnalytics = (props) => {
     });
   }
   nonStateTotalHourPerYear = Math.floor(nonStateTotalMinutePerYear / 60);
+  for (let i = 0; i < nonStateTotalMinuteByCategory.length; i++) {
+    nonStateTotalHourByCategory.push({
+      category: nonStateTotalMinuteByCategory[i].category,
+      uv: Math.floor(nonStateTotalMinuteByCategory[i].uv / 60),
+      pv: pv,
+      amt: amt,
+    });
+  }
+  // 時間の長い順に並べ替え
+  nonStateTotalHourByCategory.sort((a, b) => {
+    return b.uv - a.uv;
+  });
 
-  const [numberOfReportPerMonth, setNumberOfReportPerMonth] = useState(
-    nonStateNumberOfReportPerMonth
-  );
-  const [totalHourPerMonth, setTotalHourPerMonth] = useState(
-    nonStateTotalHourPerMonth
-  );
-  const [totalHourPerYear, setTotalHourPerYear] = useState(
-    nonStateTotalHourPerYear
-  );
+  const [numberOfReportPerMonth] = useState(nonStateNumberOfReportPerMonth);
+  const [totalHourPerMonth] = useState(nonStateTotalHourPerMonth);
+  const [totalHourPerYear] = useState(nonStateTotalHourPerYear);
+  const [totalHourByCategory] = useState(nonStateTotalHourByCategory);
 
   return (
     <>
@@ -124,6 +165,7 @@ const ReportAnalytics = (props) => {
           width: "95%",
           padding: "1rem",
           marginLeft: "1rem",
+          marginBottom: "1rem",
         }}
       >
         <Typography variant="h5" style={{ marginBottom: "8px" }}>
@@ -152,8 +194,37 @@ const ReportAnalytics = (props) => {
           variant="h5"
           style={{ textAlign: "center", marginTop: "1rem" }}
         >
-          年間学習時間: {totalHourPerYear}時間
+          総合学習時間: {totalHourPerYear}時間
+          <Typography variant="caption">(直近12ヶ月)</Typography>
         </Typography>
+      </Card>
+      <Card
+        style={{
+          width: "95%",
+          padding: "1rem",
+          marginLeft: "1rem",
+        }}
+      >
+        <Typography variant="h5">
+          カテゴリー別学習比率{" "}
+          <Typography variant="caption">(直近12ヶ月)</Typography>
+        </Typography>
+        {totalHourByCategory.map((value, index) => (
+          <Fragment key={index}>
+            <div>
+              {index + 1}位
+              <Tooltip title={value.category} placement="top">
+                <Chip
+                  label={value.category}
+                  color="secondary"
+                  size="small"
+                  className={classes.categoryChip}
+                />
+              </Tooltip>
+              {value.uv}時間({(value.uv / totalHourPerYear) * 100}%)
+            </div>
+          </Fragment>
+        ))}
       </Card>
     </>
   );
