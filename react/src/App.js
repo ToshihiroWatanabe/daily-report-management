@@ -133,7 +133,7 @@ const App = () => {
         )
         // 並べ替え
         .sort((a, b) => {
-          return a.date.replaceAll("-", "") - b.date.replaceAll("-", "");
+          return b.date.replaceAll("-", "") - a.date.replaceAll("-", "");
         });
       localStorage.setItem("reports", JSON.stringify(newReports));
       return newReports;
