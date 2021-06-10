@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     fontSize: "0.75rem",
+    whiteSpace: "pre-line",
   },
 }));
 
@@ -159,6 +160,7 @@ const ReportCard = memo((props) => {
           })}
         </Typography>
         <Divider style={{ margin: "0.5rem 0" }} />
+        {/* 感想 */}
         <Typography variant="body2" component="p" className={classes.content}>
           {props.report.content}
         </Typography>
