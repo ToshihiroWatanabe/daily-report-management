@@ -74,6 +74,9 @@ const ReportAnalytics = (props) => {
   /** カテゴリー別の学習時間 */
   let nonStateTotalMinuteByCategory = [];
   let nonStateTotalHourByCategory = [];
+  /** 月別のカテゴリー別の学習時間 */
+  let nonStateTotalMinutePerMonthByCategory = [];
+  let nonStateTotalHourPerMonthByCategory = [];
 
   const [numberOfCategory, setNumberOfCategory] = useState(7);
 
@@ -119,6 +122,41 @@ const ReportAnalytics = (props) => {
               amt: amt,
             });
           }
+          // 月別のカテゴリー別の学習時間
+          isCategoryAlreadyExist = false;
+          for (
+            let n = 0;
+            n < nonStateTotalMinutePerMonthByCategory.length;
+            n++
+          ) {
+            if (
+              props.reports[j].report_items[k].category ===
+                nonStateTotalMinutePerMonthByCategory[n].category &&
+              props.reports[j].date.includes(
+                nonStateTotalMinutePerMonthByCategory[n].month
+              )
+            ) {
+              isCategoryAlreadyExist = true;
+              nonStateTotalMinutePerMonthByCategory[n].uv +=
+                props.reports[j].report_items[k].hour * 60 +
+                props.reports[j].report_items[k].minute;
+            }
+            if (isCategoryAlreadyExist === true) {
+              break;
+            }
+          }
+          // 新しいカテゴリーの場合
+          if (!isCategoryAlreadyExist) {
+            nonStateTotalMinutePerMonthByCategory.push({
+              month: month,
+              category: props.reports[j].report_items[k].category,
+              uv:
+                props.reports[j].report_items[k].hour * 60 +
+                props.reports[j].report_items[k].minute,
+              pv: pv,
+              amt: amt,
+            });
+          }
         }
       }
     }
@@ -137,6 +175,13 @@ const ReportAnalytics = (props) => {
     });
     nonStateTotalMinutePerYear += localTotalMinute;
   }
+  // 時間の長い順に並べ替え
+  nonStateTotalMinuteByCategory.sort((a, b) => {
+    return b.uv - a.uv;
+  });
+  nonStateTotalMinutePerMonthByCategory.sort((a, b) => {
+    return b.uv - a.uv;
+  });
   // 分から時に変換
   for (let i = 0; i < nonStateTotalMinutePerMonth.length; i++) {
     nonStateTotalHourPerMonth.push({
@@ -147,10 +192,6 @@ const ReportAnalytics = (props) => {
     });
   }
   nonStateTotalHourPerYear = Math.floor(nonStateTotalMinutePerYear / 60);
-  // 時間の長い順に並べ替え
-  nonStateTotalMinuteByCategory.sort((a, b) => {
-    return b.uv - a.uv;
-  });
   for (let i = 0; i < nonStateTotalMinuteByCategory.length; i++) {
     nonStateTotalHourByCategory.push({
       category: nonStateTotalMinuteByCategory[i].category,
@@ -159,11 +200,25 @@ const ReportAnalytics = (props) => {
       amt: amt,
     });
   }
+  for (let i = 0; i < nonStateTotalMinutePerMonthByCategory.length; i++) {
+    nonStateTotalHourPerMonthByCategory.push({
+      month: nonStateTotalMinutePerMonthByCategory[i].month,
+      category: nonStateTotalMinutePerMonthByCategory[i].category,
+      uv: Math.floor(nonStateTotalMinuteByCategory[i].uv / 60),
+      pv: pv,
+      amt: amt,
+    });
+  }
+
+  console.log(nonStateTotalHourPerMonthByCategory);
 
   const [numberOfReportPerMonth] = useState(nonStateNumberOfReportPerMonth);
   const [totalHourPerMonth] = useState(nonStateTotalHourPerMonth);
   const [totalHourPerYear] = useState(nonStateTotalHourPerYear);
   const [totalHourByCategory] = useState(nonStateTotalHourByCategory);
+  const [totalHourPerMonthByCategory] = useState(
+    nonStateTotalHourPerMonthByCategory
+  );
 
   return (
     <>

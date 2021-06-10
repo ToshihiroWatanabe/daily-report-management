@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -149,7 +149,9 @@ const ResponsiveDrawer = memo((props) => {
           >
             {pages.map(
               (page, index) =>
-                location.pathname === page.path && <>{page.label}</>
+                location.pathname === page.path && (
+                  <Fragment key={index}>{page.label}</Fragment>
+                )
             )}
           </Typography>
         </Toolbar>
