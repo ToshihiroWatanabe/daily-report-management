@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -14,12 +14,14 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
+  Select,
 } from "@material-ui/core";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
+import "./ReportFormDialog.css";
 
 const useStyles = makeStyles((theme) => ({
   reportItem: {
@@ -56,7 +58,7 @@ let isControlPressed = false;
 const ReportFormDialog = memo((props) => {
   const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
+  const isBreakPointsDownXs = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [report, setReport] = useState(props.defaultReport);
 
@@ -336,7 +338,7 @@ const ReportFormDialog = memo((props) => {
   return (
     <>
       <Dialog
-        fullScreen={fullScreen}
+        fullScreen={isBreakPointsDownXs}
         open={props.open}
         onKeyDown={onKeyDown}
         onKeyUp={onKeyUp}
@@ -397,76 +399,118 @@ const ReportFormDialog = memo((props) => {
                 />
                 {/* 時間 */}
                 <FormControl>
-                  <Autocomplete
-                    freeSolo
-                    disableClearable // バツマークを無効にする
-                    PopperComponent={Popper4rem}
-                    options={hours}
-                    getOptionLabel={(option) => option.label}
-                    filterOptions={filterOptions}
-                    value={{
-                      label: value.hour.toString(),
-                      value: value.hour,
-                    }}
-                    onChange={(e, v) => onHourChange(index, v.value)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        margin="dense"
-                        style={{
-                          width: "2rem",
-                          marginRight: "4px",
-                        }}
-                        onChange={(e, v) => onHourTextChange(index, e.target)}
-                        value={{
-                          label: value.hour.toString(),
-                          value: value.hour,
-                        }}
-                        inputProps={{
-                          ...params.inputProps,
-                          maxLength: 2,
-                          style: { textAlign: "right" },
-                        }}
-                      />
-                    )}
-                  />
+                  {!isBreakPointsDownXs && (
+                    <Autocomplete
+                      freeSolo
+                      disableClearable // バツマークを無効にする
+                      PopperComponent={Popper4rem}
+                      options={hours}
+                      getOptionLabel={(option) => option.label}
+                      filterOptions={filterOptions}
+                      value={{
+                        label: value.hour.toString(),
+                        value: value.hour,
+                      }}
+                      onChange={(e, v) => onHourChange(index, v.value)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          margin="dense"
+                          style={{
+                            width: "2rem",
+                            marginRight: "4px",
+                          }}
+                          onChange={(e, v) => onHourTextChange(index, e.target)}
+                          value={{
+                            label: value.hour.toString(),
+                            value: value.hour,
+                          }}
+                          inputProps={{
+                            ...params.inputProps,
+                            maxLength: 2,
+                            style: { textAlign: "right" },
+                          }}
+                        />
+                      )}
+                    />
+                  )}
+                  {isBreakPointsDownXs && (
+                    <Select
+                      native
+                      value={value.hour}
+                      IconComponent={() => <></>}
+                      onChange={(e) => {
+                        onHourTextChange(index, e.target);
+                      }}
+                    >
+                      {hours.map((value, index) => {
+                        return (
+                          <option key={index} value={value.value}>
+                            {value.label}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  )}
                 </FormControl>
                 <div>時間</div>
                 {/* 分 */}
                 <FormControl>
-                  <Autocomplete
-                    freeSolo
-                    disableClearable // バツマークを無効にする
-                    PopperComponent={Popper4rem}
-                    options={minutes}
-                    getOptionLabel={(option) => option.label}
-                    filterOptions={filterOptions}
-                    value={{
-                      label: report.report_items[index].minute.toString(),
-                      value: report.report_items[index].minute,
-                    }}
-                    onChange={(e, v) => onMinuteChange(index, v.value)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        margin="dense"
-                        style={{
-                          width: "2rem",
-                          marginRight: "4px",
-                        }}
-                        onChange={(e, v) => onMinuteTextChange(index, e.target)}
-                        value={{
-                          label: value.minute.toString(),
-                          value: value.minute,
-                        }}
-                        inputProps={{
-                          ...params.inputProps,
-                          maxLength: 2,
-                          style: { textAlign: "right" },
-                        }}
-                      />
-                    )}
-                  />
+                  {!isBreakPointsDownXs && (
+                    <Autocomplete
+                      freeSolo
+                      disableClearable // バツマークを無効にする
+                      PopperComponent={Popper4rem}
+                      options={minutes}
+                      getOptionLabel={(option) => option.label}
+                      filterOptions={filterOptions}
+                      value={{
+                        label: report.report_items[index].minute.toString(),
+                        value: report.report_items[index].minute,
+                      }}
+                      onChange={(e, v) => onMinuteChange(index, v.value)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          margin="dense"
+                          style={{
+                            width: "2rem",
+                            marginRight: "4px",
+                          }}
+                          onChange={(e, v) =>
+                            onMinuteTextChange(index, e.target)
+                          }
+                          value={{
+                            label: value.minute.toString(),
+                            value: value.minute,
+                          }}
+                          inputProps={{
+                            ...params.inputProps,
+                            maxLength: 2,
+                            style: { textAlign: "right" },
+                          }}
+                        />
+                      )}
+                    />
+                  )}
+                  {isBreakPointsDownXs && (
+                    <Select
+                      native
+                      value={value.minute}
+                      IconComponent={() => <></>}
+                      onChange={(e) => {
+                        onMinuteTextChange(index, e.target);
+                      }}
+                    >
+                      {minutes.map((value, index) => {
+                        return (
+                          <option key={index} value={value.value}>
+                            {value.label}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  )}
                 </FormControl>
                 <div>分</div>
                 <Tooltip
