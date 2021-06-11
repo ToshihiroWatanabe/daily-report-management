@@ -79,7 +79,6 @@ const ResponsiveDrawer = memo((props) => {
   /** Material-UIのテーマ */
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [filePopoverOpen, setFilePopoverOpen] = useState(false);
 
   // リストの項目が押されたときの処理です。
   const handleListItemClick = (index) => {
@@ -97,11 +96,6 @@ const ResponsiveDrawer = memo((props) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  /**
-   * データ移行のファイルアイコンがクリックされたときの処理です。
-   */
-  const onFileIconClick = () => {};
 
   const drawer = (
     <div>
