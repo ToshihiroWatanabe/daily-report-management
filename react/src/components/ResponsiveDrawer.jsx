@@ -15,13 +15,14 @@ import {
   Toolbar,
   Typography,
   SwipeableDrawer,
+  Tooltip,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
 import DescriptionIcon from "@material-ui/icons/Description";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import InfoIcon from "@material-ui/icons/Info";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
+import FilePopover from "./FilePopover.jsx";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -78,6 +79,7 @@ const ResponsiveDrawer = memo((props) => {
   /** Material-UIのテーマ */
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [filePopoverOpen, setFilePopoverOpen] = useState(false);
 
   // リストの項目が押されたときの処理です。
   const handleListItemClick = (index) => {
@@ -95,6 +97,11 @@ const ResponsiveDrawer = memo((props) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  /**
+   * データ移行のファイルアイコンがクリックされたときの処理です。
+   */
+  const onFileIconClick = () => {};
 
   const drawer = (
     <div>
@@ -154,6 +161,8 @@ const ResponsiveDrawer = memo((props) => {
                 )
             )}
           </Typography>
+          <span style={{ flexGrow: 1 }}></span>
+          <FilePopover />
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
