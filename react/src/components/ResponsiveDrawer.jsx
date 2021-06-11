@@ -85,16 +85,6 @@ const ResponsiveDrawer = memo((props) => {
     setMobileOpen(false);
   };
 
-  /**
-   * ヘッダーのタイトルがクリックされたときの処理です。
-   */
-  const onHeaderTitleClick = (event) => {
-    // TODO:App.jsに関数を移動する
-    // event.target.scrollIntoView({ behavior: "smooth", block: "end" });
-    // ページトップへ移動
-    // window.scrollTo(0);
-  };
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -147,7 +137,7 @@ const ResponsiveDrawer = memo((props) => {
           <Typography
             variant="h6"
             className={classes.title}
-            onClick={onHeaderTitleClick}
+            onClick={props.onHeaderTitleClick}
             noWrap
           >
             {pages.map(

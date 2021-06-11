@@ -129,6 +129,14 @@ const App = () => {
   });
 
   /**
+   * ヘッダーのタイトルがクリックされたときの処理です。
+   */
+  const onHeaderTitleClick = () => {
+    // ページトップへ移動
+    window.scrollTo(0, 0);
+  };
+
+  /**
    * 日報を作成する処理です。
    * @param {*} input
    */
@@ -273,6 +281,7 @@ const App = () => {
       {/* ドロワー */}
       <ResponsiveDrawer
         importReportsFromJson={importReportsFromJson}
+        onHeaderTitleClick={onHeaderTitleClick}
         onExportReportsToTxtButtonClick={() =>
           onExportReportsToTxtButtonClick()
         }
