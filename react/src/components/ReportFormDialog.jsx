@@ -203,11 +203,11 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 時間の入力値に変化があったときの処理です。
+   * 時間の選択肢が閉じられたときの処理です。
    * @param {*} index
    * @param {*} target
    */
-  const onHourTextChange = (index, target) => {
+  const onHourClose = (index, target) => {
     // 全角数字が含まれていたら半角数字に変換
     target.value = target.value.replace(/[０-９]/g, (s) => {
       return String.fromCharCode(s.charCodeAt(0) - 65248);
@@ -254,11 +254,11 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 分の入力値に変化があったときの処理です。
+   * 分の選択肢が閉じられたときの処理です。
    * @param {*} index
    * @param {*} target
    */
-  const onMinuteTextChange = (index, target) => {
+  const onMinuteClose = (index, target) => {
     // 全角数字が含まれていたら半角数字に変換
     target.value = target.value.replace(/[０-９]/g, (s) => {
       return String.fromCharCode(s.charCodeAt(0) - 65248);
@@ -409,11 +409,11 @@ const ReportFormDialog = memo((props) => {
                       value: value.hour,
                     }}
                     onChange={(e, v) => onHourChange(index, v.value)}
+                    onClose={(e, v) => onHourClose(index, e.target)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         margin="dense"
-                        onChange={(e, v) => onHourTextChange(index, e.target)}
                         style={{
                           width: "2rem",
                           marginRight: "4px",
@@ -446,11 +446,11 @@ const ReportFormDialog = memo((props) => {
                       value: report.report_items[index].minute,
                     }}
                     onChange={(e, v) => onMinuteChange(index, v.value)}
+                    onClose={(e, v) => onMinuteClose(index, e.target)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         margin="dense"
-                        onChange={(e, v) => onMinuteTextChange(index, e.target)}
                         style={{
                           width: "2rem",
                           marginRight: "4px",
