@@ -21,6 +21,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import DescriptionIcon from "@material-ui/icons/Description";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import InfoIcon from "@material-ui/icons/Info";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -112,10 +113,9 @@ const ResponsiveDrawer = memo((props) => {
               data-num={index.toString()}
             >
               <ListItemIcon>
-                {/* ホーム */}
-                {index === 0 ? <DescriptionIcon /> : ""}
-                {index === 1 ? <AssessmentIcon /> : ""}
-                {index === 2 ? <InfoIcon /> : ""}
+                {page.label === "日報管理" ? <DescriptionIcon /> : ""}
+                {page.label === "分析レポート" ? <AssessmentIcon /> : ""}
+                {page.label === "このアプリについて" ? <InfoIcon /> : ""}
               </ListItemIcon>
               <ListItemText primary={page.label} />
             </ListItem>
