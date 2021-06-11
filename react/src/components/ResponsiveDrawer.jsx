@@ -156,7 +156,7 @@ const ResponsiveDrawer = memo((props) => {
             )}
           </Typography>
           <span style={{ flexGrow: 1 }}></span>
-          <FilePopover />
+          <FilePopover importReportsFromJson={props.importReportsFromJson} />
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

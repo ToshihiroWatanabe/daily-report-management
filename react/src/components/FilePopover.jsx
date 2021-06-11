@@ -12,6 +12,7 @@ import {
 import "./FilePopover.css";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { DropzoneArea } from "material-ui-dropzone";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 
 /** Material-UIのスタイル */
 const useStyles = makeStyles((theme) => ({}));
@@ -80,15 +81,15 @@ const FilePopover = memo((props) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
 
-      reader.onabort = () => console.log("ファイルの読み込みが中止されました");
-      reader.onerror = () => console.log("ファイルの読み込みに失敗しました");
+      reader.onabort = () =>
+        console.error("ファイルの読み込みが中止されました");
+      reader.onerror = () => console.error("ファイルの読み込みに失敗しました");
       reader.onload = () => {
         // Do whatever you want with the file contents
         const binaryStr = reader.result;
-        console.log(binaryStr);
-        let text = new Buffer(binaryStr, "base64");
-        console.log(text);
-        console.log(JSON.parse(text));
+        const text = new Buffer(binaryStr, "base64");
+        props.importReportsFromJson(JSON.parse(text));
+        setAnchorEl(null);
       };
       reader.readAsArrayBuffer(file);
     });
@@ -127,6 +128,14 @@ const FilePopover = memo((props) => {
           getFileAddedMessage={customGetFileAddedMessage}
           getFileRemovedMessage={customGetFileRemovedMessage}
           getDropRejectMessage={customGetDropRejectMessage}
+          showPreviewsInDropzone={false}
+          Icon={() => {
+            return (
+              <>
+                <AttachFileIcon />
+              </>
+            );
+          }}
         />
       </Popover>
     </>

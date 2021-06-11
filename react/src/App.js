@@ -203,9 +203,17 @@ const App = () => {
     });
   };
 
+  /**
+   * JSONファイルから日報をインポートする処理です。
+   * @param {*} data
+   */
+  const importReportsFromJson = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
-      <ResponsiveDrawer />
+      <ResponsiveDrawer importReportsFromJson={importReportsFromJson} />
       <main className={classes.main}>
         {/* 画面切り替え */}
         <Switch>
