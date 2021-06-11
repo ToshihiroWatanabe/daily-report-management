@@ -204,7 +204,7 @@ const ReportAnalytics = (props) => {
     nonStateTotalHourPerMonthByCategory.push({
       month: nonStateTotalMinutePerMonthByCategory[i].month.replace("-", "/"),
       category: nonStateTotalMinutePerMonthByCategory[i].category,
-      uv: Math.floor(nonStateTotalMinuteByCategory[i].uv / 60),
+      uv: Math.floor(nonStateTotalMinutePerMonthByCategory[i].uv / 60),
       pv: pv,
       amt: amt,
     });

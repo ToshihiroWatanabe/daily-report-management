@@ -208,7 +208,41 @@ const App = () => {
    * @param {*} data
    */
   const importReportsFromJson = (data) => {
+    // TODO: データのフォーマットが正しいか検証する処理を入れる
     console.log(data);
+    let additionalReports = [];
+    // データの数だけ繰り返す
+    for (let i = 0; i < data.length; i++) {
+      let additionalReportItems = [];
+      for (let j = 0; j < data[i].report_items.length; j++) {
+        additionalReportItems.push({
+          category: data[i].report_items[j].category,
+          content: data[i].report_items[j].content,
+          hour: data[i].report_items[j].hour,
+          minute: data[i].report_items[j].minute,
+        });
+      }
+      additionalReports.push({
+        date: data[i].date,
+        report_items: additionalReportItems,
+        content: data[i].content,
+        updatedAt: Date.now(),
+      });
+    }
+    setReports((reports) => {
+      let newReports = [...additionalReports, ...reports]
+        // 重複を削除
+        .filter(
+          (element, index, array) =>
+            array.findIndex((e) => e.date === element.date) === index
+        )
+        // 並べ替え
+        .sort((a, b) => {
+          return b.date.replaceAll("-", "") - a.date.replaceAll("-", "");
+        });
+      localStorage.setItem("reports", JSON.stringify(newReports));
+      return newReports;
+    });
   };
 
   return (
