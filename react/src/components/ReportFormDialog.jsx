@@ -152,11 +152,11 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * カテゴリーの入力値に変化があったときの処理です。
+   * カテゴリーの選択肢が閉じられたときの処理です。
    * @param {*} index
    * @param {*} target
    */
-  const onCategoryTextChange = (index, target) => {
+  const onCategoryClose = (index, target) => {
     setReport((report) => {
       report.report_items[index].category = target.value;
       return {
@@ -366,6 +366,7 @@ const ReportFormDialog = memo((props) => {
                     value: value.category,
                   }}
                   onChange={(e, v) => onCategoryChange(index, v.value)}
+                  onClose={(e, v) => onCategoryClose(index, e.target)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -373,7 +374,6 @@ const ReportFormDialog = memo((props) => {
                       label="カテゴリー"
                       variant="outlined"
                       margin="dense"
-                      onChange={(e, v) => onCategoryTextChange(index, e.target)}
                       style={{ width: "8rem", marginRight: "4px" }}
                       value={{
                         label: value.category,
