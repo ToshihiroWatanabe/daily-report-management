@@ -88,7 +88,9 @@ const ResponsiveDrawer = memo((props) => {
   /**
    * ヘッダーのタイトルがクリックされたときの処理です。
    */
-  const onHeaderTitleClick = () => {
+  const onHeaderTitleClick = (event) => {
+    // TODO:App.jsに関数を移動する
+    // event.target.scrollIntoView({ behavior: "smooth", block: "end" });
     // ページトップへ移動
     // window.scrollTo(0);
   };
@@ -98,7 +100,7 @@ const ResponsiveDrawer = memo((props) => {
   };
 
   const drawer = (
-    <div>
+    <>
       <div className={classes.toolbar} />
       <Divider />
       <List>
@@ -123,7 +125,7 @@ const ResponsiveDrawer = memo((props) => {
           </Link>
         ))}
       </List>
-    </div>
+    </>
   );
 
   const container =
