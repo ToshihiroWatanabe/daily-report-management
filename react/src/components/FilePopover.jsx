@@ -1,13 +1,9 @@
 import React, { useState, memo, useCallback } from "react";
 import {
-  ListItemText,
   makeStyles,
   Popover,
   IconButton,
-  Avatar,
-  Typography,
   Tooltip,
-  Box,
   Button,
   Snackbar,
 } from "@material-ui/core";
@@ -15,6 +11,11 @@ import "./FilePopover.css";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { DropzoneArea } from "material-ui-dropzone";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 /** Material-UIのスタイル */
 const useStyles = makeStyles((theme) => ({}));
@@ -28,6 +29,8 @@ const FilePopover = memo((props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+
   /**
    * アイコンがクリックされたときの処理です。
    * @param {*} event
@@ -37,6 +40,13 @@ const FilePopover = memo((props) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSuccessSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccessSnackbarOpen(false);
   };
 
   /**
@@ -54,6 +64,7 @@ const FilePopover = memo((props) => {
         const binaryStr = reader.result;
         const text = new Buffer(binaryStr, "base64");
         props.importReportsFromJson(JSON.parse(text));
+        setSuccessSnackbarOpen(true);
         // Popoverを閉じる
         setAnchorEl(null);
       };
@@ -115,6 +126,19 @@ const FilePopover = memo((props) => {
           JSON形式でエクスポート
         </Button>
       </Popover>
+      <Snackbar
+        open={successSnackbarOpen}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={5000}
+        onClose={(event, reason) => handleSuccessSnackbarClose(event, reason)}
+      >
+        <Alert
+          onClose={(event, reason) => handleSuccessSnackbarClose(event, reason)}
+          severity="success"
+        >
+          日報データをインポートしました！
+        </Alert>
+      </Snackbar>
     </>
   );
 });
