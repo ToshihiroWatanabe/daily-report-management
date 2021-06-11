@@ -17,6 +17,36 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { Switch, Route } from "react-router-dom";
 import ReportAnalytics from "./components/ReportAnalytics";
+import { exportReportsToTxt, exportReportsToJson } from "./utils/export";
+
+/** ドロワーの横幅 */
+const DRAWER_WIDTH = "15rem";
+
+// 開発中はページタイトルを変更
+if (
+  process.env.NODE_ENV === "development" &&
+  !document.title.match(/.*開発中.*/)
+) {
+  document.title += "(開発中)";
+}
+
+const DEFAULT_REPORT = {
+  date: "",
+  content: "",
+  report_items: [
+    {
+      category: "",
+      content: "",
+      hour: 1,
+      minute: 0,
+    },
+  ],
+  updatedAt: 0,
+};
+
+const localStorageGetItemReports = localStorage.getItem("reports")
+  ? JSON.parse(localStorage.getItem("reports"))
+  : [];
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -62,29 +92,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/** ドロワーの横幅 */
-const DRAWER_WIDTH = "15rem";
-
-const DEFAULT_REPORT = {
-  date: "",
-  content: "",
-  report_items: [
-    {
-      category: "",
-      content: "",
-      hour: 1,
-      minute: 0,
-    },
-  ],
-  updatedAt: 0,
-};
-
-const localStorageGetItemReports = localStorage.getItem("reports")
-  ? JSON.parse(localStorage.getItem("reports"))
-  : [];
-
 /**
- * コンポーネントです。
+ * Appコンポーネントです。
  */
 const App = () => {
   const classes = useStyles();
@@ -208,7 +217,7 @@ const App = () => {
    * @param {*} data
    */
   const importReportsFromJson = (data) => {
-    // TODO: データのフォーマットが正しいか検証する処理を入れる
+    // TODO: データのフォーマットが正しいか検証する処理を入れる？
     console.log(data);
     let additionalReports = [];
     // データの数だけ繰り返す
@@ -226,7 +235,7 @@ const App = () => {
         date: data[i].date,
         report_items: additionalReportItems,
         content: data[i].content,
-        updatedAt: Date.now(),
+        updatedAt: data[i].updatedAt,
       });
     }
     setReports((reports) => {
@@ -245,9 +254,32 @@ const App = () => {
     });
   };
 
+  /**
+   * テキスト形式でエクスポートするボタンが押されたときの処理です。
+   */
+  const onExportReportsToTxtButtonClick = () => {
+    exportReportsToTxt(reports);
+  };
+
+  /**
+   * JSON形式でエクスポートするボタンが押されたときの処理です。
+   */
+  const onExportReportsToJsonButtonClick = () => {
+    exportReportsToJson(reports);
+  };
+
   return (
     <>
-      <ResponsiveDrawer importReportsFromJson={importReportsFromJson} />
+      {/* ドロワー */}
+      <ResponsiveDrawer
+        importReportsFromJson={importReportsFromJson}
+        onExportReportsToTxtButtonClick={() =>
+          onExportReportsToTxtButtonClick()
+        }
+        onExportReportsToJsonButtonClick={() =>
+          onExportReportsToJsonButtonClick()
+        }
+      />
       <main className={classes.main}>
         {/* 画面切り替え */}
         <Switch>

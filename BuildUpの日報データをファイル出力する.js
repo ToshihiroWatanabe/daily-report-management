@@ -177,8 +177,10 @@ function outputFile() {
   link.href = "data:text/plain," + encodeURIComponent(JSON.stringify(reports));
   // 保存するJSONファイルの名前をリンクに設定する
   link.download =
-    "build-up-reports" +
-    new Date().toISOString().replace(/[^\d]/g, "").slice(0, 11) +
+    "buildup_reports_" +
+    new Date().toLocaleDateString().replaceAll("/", "-") +
+    "_" +
+    new Date().toLocaleTimeString().replaceAll(":", "-") +
     ".json";
   // リンクをクリックさせる
   link.click();
@@ -223,8 +225,10 @@ function outputFile() {
   textLink.href = "data:text/plain," + encodeURIComponent(text);
   // 保存するJSONファイルの名前をリンクに設定する
   textLink.download =
-    "build-up-reports" +
-    new Date().toISOString().replace(/[^\d]/g, "").slice(0, 11) +
+    "buildup_reports_" +
+    new Date().toLocaleDateString().replaceAll("/", "-") +
+    "_" +
+    new Date().toLocaleTimeString().replaceAll(":", "-") +
     ".txt";
   // リンクをクリックさせる
   textLink.click();

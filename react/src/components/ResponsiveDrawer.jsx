@@ -156,7 +156,16 @@ const ResponsiveDrawer = memo((props) => {
             )}
           </Typography>
           <span style={{ flexGrow: 1 }}></span>
-          <FilePopover importReportsFromJson={props.importReportsFromJson} />
+          {/* データ移行のファイルアイコン */}
+          <FilePopover
+            importReportsFromJson={props.importReportsFromJson}
+            onExportReportsToTxtButtonClick={
+              props.onExportReportsToTxtButtonClick
+            }
+            onExportReportsToJsonButtonClick={
+              props.onExportReportsToJsonButtonClick
+            }
+          />
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

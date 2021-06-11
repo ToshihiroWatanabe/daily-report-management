@@ -8,6 +8,8 @@ import {
   Typography,
   Tooltip,
   Box,
+  Button,
+  Snackbar,
 } from "@material-ui/core";
 import "./FilePopover.css";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
@@ -37,46 +39,9 @@ const FilePopover = memo((props) => {
     setAnchorEl(null);
   };
 
-  const customGetFileLimitExceedMessage = (filesLimit) => {
-    return "ファイルの最大数は" + filesLimit + "つまでです。";
-  };
-
-  const customGetFileAddedMessage = (fileName) => {
-    return fileName + "が追加されました。";
-  };
-
-  const customGetFileRemovedMessage = (fileName) => {
-    return fileName + "が削除されました。";
-  };
-
-  const convertBytesToMbsOrKbs = (filesize) => {
-    let size = "";
-    if (filesize >= 1048576) {
-      size = filesize / 1048576 + "MB";
-    } else if (filesize >= 1024) {
-      size = filesize / 1024 + "KB";
-    } else {
-      size = filesize + "バイト";
-    }
-    return size;
-  };
-
-  const customGetDropRejectMessage = (
-    rejectedFile,
-    acceptedFiles,
-    maxFileSize
-  ) => {
-    let message = `${rejectedFile.name}はアップロードできません。`;
-    if (!acceptedFiles.includes(rejectedFile.type)) {
-      message += "この拡張子はサポートされていません。";
-    }
-    if (rejectedFile.size > maxFileSize) {
-      message +=
-        "サイズは最大" + convertBytesToMbsOrKbs(maxFileSize) + "までです。";
-    }
-    return message;
-  };
-
+  /**
+   * ドロップゾーンのファイルに変更があったときの処理です。
+   */
   const onDropzoneChange = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
@@ -89,6 +54,7 @@ const FilePopover = memo((props) => {
         const binaryStr = reader.result;
         const text = new Buffer(binaryStr, "base64");
         props.importReportsFromJson(JSON.parse(text));
+        // Popoverを閉じる
         setAnchorEl(null);
       };
       reader.readAsArrayBuffer(file);
@@ -123,11 +89,8 @@ const FilePopover = memo((props) => {
           acceptedFiles={(["text/*"], ["application/json"])}
           onChange={(files) => onDropzoneChange(files)}
           maxFileSize={10_485_760}
-          dropzoneText="ファイルから日報をインポート"
-          getFileLimitExceedMessage={customGetFileLimitExceedMessage}
-          getFileAddedMessage={customGetFileAddedMessage}
-          getFileRemovedMessage={customGetFileRemovedMessage}
-          getDropRejectMessage={customGetDropRejectMessage}
+          dropzoneText="JSONファイルから日報をインポート"
+          showAlerts={false}
           showPreviewsInDropzone={false}
           Icon={() => {
             return (
@@ -137,6 +100,20 @@ const FilePopover = memo((props) => {
             );
           }}
         />
+        <Button
+          onClick={props.onExportReportsToTxtButtonClick}
+          variant="outlined"
+          style={{ marginTop: "0.5rem" }}
+        >
+          テキスト形式でエクスポート
+        </Button>
+        <Button
+          onClick={props.onExportReportsToJsonButtonClick}
+          variant="outlined"
+          style={{ marginTop: "0.5rem" }}
+        >
+          JSON形式でエクスポート
+        </Button>
       </Popover>
     </>
   );
