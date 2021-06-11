@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useCallback } from "react";
 import {
   ListItemText,
   makeStyles,
@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import "./FilePopover.css";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
+import { DropzoneArea } from "material-ui-dropzone";
 
 /** Material-UIのスタイル */
 const useStyles = makeStyles((theme) => ({}));
@@ -35,6 +36,64 @@ const FilePopover = memo((props) => {
     setAnchorEl(null);
   };
 
+  const customGetFileLimitExceedMessage = (filesLimit) => {
+    return "ファイルの最大数は" + filesLimit + "つまでです。";
+  };
+
+  const customGetFileAddedMessage = (fileName) => {
+    return fileName + "が追加されました。";
+  };
+
+  const customGetFileRemovedMessage = (fileName) => {
+    return fileName + "が削除されました。";
+  };
+
+  const convertBytesToMbsOrKbs = (filesize) => {
+    let size = "";
+    if (filesize >= 1048576) {
+      size = filesize / 1048576 + "MB";
+    } else if (filesize >= 1024) {
+      size = filesize / 1024 + "KB";
+    } else {
+      size = filesize + "バイト";
+    }
+    return size;
+  };
+
+  const customGetDropRejectMessage = (
+    rejectedFile,
+    acceptedFiles,
+    maxFileSize
+  ) => {
+    let message = `${rejectedFile.name}はアップロードできません。`;
+    if (!acceptedFiles.includes(rejectedFile.type)) {
+      message += "この拡張子はサポートされていません。";
+    }
+    if (rejectedFile.size > maxFileSize) {
+      message +=
+        "サイズは最大" + convertBytesToMbsOrKbs(maxFileSize) + "までです。";
+    }
+    return message;
+  };
+
+  const onDropzoneChange = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onabort = () => console.log("ファイルの読み込みが中止されました");
+      reader.onerror = () => console.log("ファイルの読み込みに失敗しました");
+      reader.onload = () => {
+        // Do whatever you want with the file contents
+        const binaryStr = reader.result;
+        console.log(binaryStr);
+        let text = new Buffer(binaryStr, "base64");
+        console.log(text);
+        console.log(JSON.parse(text));
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  }, []);
+
   return (
     <>
       <Tooltip title="データの移行">
@@ -44,7 +103,7 @@ const FilePopover = memo((props) => {
       </Tooltip>
       <Popover
         disableScrollLock={true}
-        id="accountPopover"
+        id="filePopover"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -58,7 +117,17 @@ const FilePopover = memo((props) => {
         }}
         getContentAnchorEl={null}
       >
-        <Box m={2}></Box>
+        <DropzoneArea
+          filesLimit={1}
+          acceptedFiles={(["text/*"], ["application/json"])}
+          onChange={(files) => onDropzoneChange(files)}
+          maxFileSize={10_485_760}
+          dropzoneText="ファイルから日報をインポート"
+          getFileLimitExceedMessage={customGetFileLimitExceedMessage}
+          getFileAddedMessage={customGetFileAddedMessage}
+          getFileRemovedMessage={customGetFileRemovedMessage}
+          getDropRejectMessage={customGetDropRejectMessage}
+        />
       </Popover>
     </>
   );
