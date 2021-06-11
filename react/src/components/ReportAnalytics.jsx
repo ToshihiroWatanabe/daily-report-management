@@ -202,7 +202,7 @@ const ReportAnalytics = (props) => {
   }
   for (let i = 0; i < nonStateTotalMinutePerMonthByCategory.length; i++) {
     nonStateTotalHourPerMonthByCategory.push({
-      month: nonStateTotalMinutePerMonthByCategory[i].month,
+      month: nonStateTotalMinutePerMonthByCategory[i].month.replace("-", "/"),
       category: nonStateTotalMinutePerMonthByCategory[i].category,
       uv: Math.floor(nonStateTotalMinuteByCategory[i].uv / 60),
       pv: pv,
@@ -210,7 +210,7 @@ const ReportAnalytics = (props) => {
     });
   }
 
-  console.log(nonStateTotalHourPerMonthByCategory);
+  // console.log(nonStateTotalHourPerMonthByCategory);
 
   const [numberOfReportPerMonth] = useState(nonStateNumberOfReportPerMonth);
   const [totalHourPerMonth] = useState(nonStateTotalHourPerMonth);
@@ -269,6 +269,7 @@ const ReportAnalytics = (props) => {
             width={600}
             height={300}
             data={totalHourPerMonth}
+            // data={totalHourPerMonthByCategory}
             margin={{ top: 30 }}
           >
             {/* <CartesianGrid stroke="#eee" strokeDasharray="5 5" /> */}
@@ -281,6 +282,18 @@ const ReportAnalytics = (props) => {
             <Bar dataKey="uv" barSize={30} fill={theme.palette.primary.main}>
               <LabelList dataKey="uv" position="top" />
             </Bar>
+            {/* {totalHourPerMonthByCategory.map((value, index) => {
+              <Fragment key={index}>
+            <Bar
+              dataKey="uv"
+              stackId="a"
+              barSize={30}
+              fill={COLORS[index % COLORS.length]}
+            >
+              <LabelList dataKey="uv" position="top" />
+            </Bar>
+            </Fragment>;
+            })} */}
           </BarChart>
         </ResponsiveContainer>
         <Typography
