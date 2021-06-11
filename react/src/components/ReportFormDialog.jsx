@@ -203,11 +203,11 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 時間の選択肢が閉じられたときの処理です。
+   * 時間のキーボード入力の処理です。
    * @param {*} index
    * @param {*} target
    */
-  const onHourClose = (index, target) => {
+  const onHourTextChange = (index, target) => {
     // 全角数字が含まれていたら半角数字に変換
     target.value = target.value.replace(/[０-９]/g, (s) => {
       return String.fromCharCode(s.charCodeAt(0) - 65248);
@@ -254,11 +254,11 @@ const ReportFormDialog = memo((props) => {
   };
 
   /**
-   * 分の選択肢が閉じられたときの処理です。
+   * 分のキーボード入力の処理です。
    * @param {*} index
    * @param {*} target
    */
-  const onMinuteClose = (index, target) => {
+  const onMinuteTextChange = (index, target) => {
     // 全角数字が含まれていたら半角数字に変換
     target.value = target.value.replace(/[０-９]/g, (s) => {
       return String.fromCharCode(s.charCodeAt(0) - 65248);
@@ -409,7 +409,6 @@ const ReportFormDialog = memo((props) => {
                       value: value.hour,
                     }}
                     onChange={(e, v) => onHourChange(index, v.value)}
-                    onClose={(e, v) => onHourClose(index, e.target)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -418,6 +417,7 @@ const ReportFormDialog = memo((props) => {
                           width: "2rem",
                           marginRight: "4px",
                         }}
+                        onChange={(e, v) => onHourTextChange(index, e.target)}
                         value={{
                           label: value.hour.toString(),
                           value: value.hour,
@@ -446,7 +446,6 @@ const ReportFormDialog = memo((props) => {
                       value: report.report_items[index].minute,
                     }}
                     onChange={(e, v) => onMinuteChange(index, v.value)}
-                    onClose={(e, v) => onMinuteClose(index, e.target)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -455,6 +454,7 @@ const ReportFormDialog = memo((props) => {
                           width: "2rem",
                           marginRight: "4px",
                         }}
+                        onChange={(e, v) => onMinuteTextChange(index, e.target)}
                         value={{
                           label: value.minute.toString(),
                           value: value.minute,
