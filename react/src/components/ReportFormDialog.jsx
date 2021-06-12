@@ -142,6 +142,9 @@ const ReportFormDialog = memo((props) => {
    * @param {*} value
    */
   const onCategoryChange = (index, value, reason) => {
+    if (value === undefined) {
+      document.activeElement.blur();
+    }
     if (reason === "select-option") {
       setReport((report) => {
         report.report_items[index].category = value;
@@ -161,8 +164,6 @@ const ReportFormDialog = memo((props) => {
    * @param {*} event
    */
   const onCategoryClose = (index, event, reason) => {
-    console.log(event);
-    console.log(reason);
     // カーソルが外れて選択肢が閉じられた場合
     if (reason === "blur") {
       setReport((report) => {
