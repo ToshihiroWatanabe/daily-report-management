@@ -363,6 +363,10 @@ const ReportFormDialog = memo((props) => {
                   options={props.categories}
                   getOptionLabel={(option) => option.label}
                   filterOptions={filterOptions}
+                  value={{
+                    label: value.category,
+                    value: value.category,
+                  }}
                   onChange={(e, v) => onCategoryChange(index, v.value)}
                   onClose={(e, v) => onCategoryClose(index, e.target)}
                   renderInput={(params) => (
@@ -373,10 +377,6 @@ const ReportFormDialog = memo((props) => {
                       variant="outlined"
                       margin="dense"
                       style={{ width: "8rem", marginRight: "4px" }}
-                      value={{
-                        label: value.category,
-                        value: value.category,
-                      }}
                       inputProps={{
                         ...params.inputProps,
                         maxLength: 45,
