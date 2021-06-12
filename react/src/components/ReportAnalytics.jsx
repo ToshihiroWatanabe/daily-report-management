@@ -82,18 +82,6 @@ const ReportAnalytics = (props) => {
   let nonStateTotalMinutePerMonthByCategory = [];
   /** 月別のカテゴリー別の学習時間(時間) */
   let nonStateTotalHourPerMonthByCategory = [];
-  /** 直近7日分の総合学習時間(分) */
-  let nonStateTotalMinuteLastWeek = 0;
-  /** 直近7日分の総合学習時間(時間) */
-  let nonStateTotalHourLastWeek = 0;
-  /** 直近7日分のカテゴリー別の学習時間(分) */
-  let nonStateTotalMinuteLastWeekByCategory = [];
-  /** 直近7日分のカテゴリー別の学習時間(時間) */
-  let nonStateTotalHourLastWeekByCategory = [];
-  /** 直近7日分のタスク別の学習時間(分) */
-  let nonStateTotalMinuteLastWeekByTask = [];
-  /** 直近7日分のタスク別の学習時間(時間) */
-  let nonStateTotalHourLastWeekByTask = [];
 
   // カテゴリー別学習比率で何位まで集計するか
   const [numberOfCategory, setNumberOfCategory] = useState(7);
@@ -193,6 +181,7 @@ const ReportAnalytics = (props) => {
     });
     nonStateTotalMinutePerYear += localTotalMinute;
   }
+
   // 時間の長い順に並べ替え
   nonStateTotalMinuteByCategory.sort((a, b) => {
     return b.uv - a.uv;
@@ -227,6 +216,103 @@ const ReportAnalytics = (props) => {
       amt: amt,
     });
   }
+
+  /** 直近7日分の総合学習時間(分) */
+  let nonStateTotalMinuteLastWeek = 0;
+  /** 直近7日分の総合学習時間(時間) */
+  let nonStateTotalHourLastWeek = 0;
+  /** 直近7日分のカテゴリー別の学習時間(分) */
+  // {category: , uv: }
+  let nonStateTotalMinuteLastWeekByCategory = [];
+  /** 直近7日分のカテゴリー別の学習時間(時間) */
+  let nonStateTotalHourLastWeekByCategory = [];
+  /** 直近7日分のタスク別の学習時間(分) */
+  // {taskName: , uv: }
+  let nonStateTotalMinuteLastWeekByTask = [];
+  /** 直近7日分のタスク別の学習時間(時間) */
+  let nonStateTotalHourLastWeekByTask = [];
+  /** 何日分集計するか */
+  const NUMBER_OF_DAYS = 7;
+
+  // 直近の日報を集計する
+  for (let i = 0; i < NUMBER_OF_DAYS; i++) {
+    // console.log(props.reports[i].date);
+    // タスク数だけ繰り返す
+    for (let j = 0; j < props.reports[i].report_items.length; j++) {
+      // console.log(props.reports[i].report_items[j]);
+      // 新しいカテゴリーなら追加、既存のカテゴリーなら加算
+      let isCategoryAlreadyExist = false;
+      for (let k = 0; k < nonStateTotalMinuteLastWeekByCategory.length; k++) {
+        if (
+          props.reports[i].report_items[j].category ===
+          nonStateTotalMinuteLastWeekByCategory[k].category
+        ) {
+          isCategoryAlreadyExist = true;
+          nonStateTotalMinuteLastWeekByCategory[k].uv +=
+            props.reports[i].report_items[j].hour * 60 +
+            props.reports[i].report_items[j].minute;
+        }
+        if (isCategoryAlreadyExist === true) {
+          break;
+        }
+      }
+      // 新しいカテゴリーの場合
+      if (!isCategoryAlreadyExist) {
+        nonStateTotalMinuteLastWeekByCategory.push({
+          category: props.reports[i].report_items[j].category,
+          uv:
+            props.reports[i].report_items[j].hour * 60 +
+            props.reports[i].report_items[j].minute,
+          pv: pv,
+          amt: amt,
+        });
+      }
+      // 新しいタスク名なら追加、既存のタスク名なら加算
+      let isTaskAlreadyExist = false;
+      for (let k = 0; k < nonStateTotalMinuteLastWeekByTask.length; k++) {
+        if (
+          props.reports[i].report_items[j].content ===
+          nonStateTotalMinuteLastWeekByTask[k].content
+        ) {
+          isTaskAlreadyExist = true;
+          nonStateTotalMinuteLastWeekByTask[k].uv +=
+            props.reports[i].report_items[j].hour * 60 +
+            props.reports[i].report_items[j].minute;
+        }
+        if (isTaskAlreadyExist === true) {
+          break;
+        }
+      }
+      // 新しいタスク名の場合
+      if (!isTaskAlreadyExist) {
+        nonStateTotalMinuteLastWeekByTask.push({
+          content: props.reports[i].report_items[j].content,
+          uv:
+            props.reports[i].report_items[j].hour * 60 +
+            props.reports[i].report_items[j].minute,
+          pv: pv,
+          amt: amt,
+        });
+      }
+      // 総合学習時間に加算する
+      nonStateTotalMinuteLastWeek +=
+        props.reports[i].report_items[j].hour * 60 +
+        props.reports[i].report_items[j].minute;
+    }
+  }
+
+  console.log(
+    "直近" +
+      NUMBER_OF_DAYS +
+      "日間の学習時間は " +
+      Math.floor(nonStateTotalMinuteLastWeek / 60) +
+      "時間" +
+      Math.floor(nonStateTotalMinuteLastWeek % 60) +
+      "分です。"
+  );
+
+  console.log(nonStateTotalMinuteLastWeekByCategory);
+  console.log(nonStateTotalMinuteLastWeekByTask);
 
   // console.log(nonStateTotalHourPerMonthByCategory);
 
