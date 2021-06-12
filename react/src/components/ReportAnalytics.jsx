@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/** 凡例のテキストを描画します。 */
 const renderColorfulLegendText = (value, entry) => {
   return <span style={{ color: "#000" }}>{value}</span>;
 };
@@ -65,19 +66,36 @@ const ReportAnalytics = (props) => {
 
   /** 月ごとの日報登録日数 */
   let nonStateNumberOfReportPerMonth = [];
-  /** 月ごとの総合学習時間 */
+  /** 月ごとの総合学習時間(分) */
   let nonStateTotalMinutePerMonth = [];
+  /** 月ごとの総合学習時間(時間) */
   let nonStateTotalHourPerMonth = [];
-  /** 総合学習時間 */
+  /** 総合学習時間(分) */
   let nonStateTotalMinutePerYear = 0;
+  /** 総合学習時間(時間) */
   let nonStateTotalHourPerYear = 0;
-  /** カテゴリー別の学習時間 */
+  /** カテゴリー別の学習時間(分) */
   let nonStateTotalMinuteByCategory = [];
+  /** カテゴリー別の学習時間(時間) */
   let nonStateTotalHourByCategory = [];
-  /** 月別のカテゴリー別の学習時間 */
+  /** 月別のカテゴリー別の学習時間(分) */
   let nonStateTotalMinutePerMonthByCategory = [];
+  /** 月別のカテゴリー別の学習時間(時間) */
   let nonStateTotalHourPerMonthByCategory = [];
+  /** 直近7日分の総合学習時間(分) */
+  let nonStateTotalMinuteLastWeek = 0;
+  /** 直近7日分の総合学習時間(時間) */
+  let nonStateTotalHourLastWeek = 0;
+  /** 直近7日分のカテゴリー別の学習時間(分) */
+  let nonStateTotalMinuteLastWeekByCategory = [];
+  /** 直近7日分のカテゴリー別の学習時間(時間) */
+  let nonStateTotalHourLastWeekByCategory = [];
+  /** 直近7日分のタスク別の学習時間(分) */
+  let nonStateTotalMinuteLastWeekByTask = [];
+  /** 直近7日分のタスク別の学習時間(時間) */
+  let nonStateTotalHourLastWeekByTask = [];
 
+  // カテゴリー別学習比率で何位まで集計するか
   const [numberOfCategory, setNumberOfCategory] = useState(7);
 
   // 直近12ヶ月
@@ -282,6 +300,7 @@ const ReportAnalytics = (props) => {
             <Bar dataKey="uv" barSize={30} fill={theme.palette.primary.main}>
               <LabelList dataKey="uv" position="top" />
             </Bar>
+            {/* TODO: 積み上げ棒グラフを実装する */}
             {/* {totalHourPerMonthByCategory.map((value, index) => {
               <Fragment key={index}>
             <Bar
