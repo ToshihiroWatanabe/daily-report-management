@@ -141,33 +141,40 @@ const ReportFormDialog = memo((props) => {
    * @param {*} index
    * @param {*} value
    */
-  const onCategoryChange = (index, value) => {
-    setReport((report) => {
-      report.report_items[index].category = value;
-      return {
-        date: report.date,
-        content: report.content,
-        report_items: report.report_items,
-        updatedAt: report.updatedAt,
-      };
-    });
+  const onCategoryChange = (index, value, reason) => {
+    if (reason === "select-option") {
+      setReport((report) => {
+        report.report_items[index].category = value;
+        return {
+          date: report.date,
+          content: report.content,
+          report_items: report.report_items,
+          updatedAt: report.updatedAt,
+        };
+      });
+    }
   };
 
   /**
    * カテゴリーの選択肢が閉じられたときの処理です。
    * @param {*} index
-   * @param {*} target
+   * @param {*} event
    */
-  const onCategoryClose = (index, target) => {
-    setReport((report) => {
-      report.report_items[index].category = target.innerText;
-      return {
-        date: report.date,
-        content: report.content,
-        report_items: report.report_items,
-        updatedAt: report.updatedAt,
-      };
-    });
+  const onCategoryClose = (index, event, reason) => {
+    console.log(event);
+    console.log(reason);
+    // カーソルが外れて選択肢が閉じられた場合
+    if (reason === "blur") {
+      setReport((report) => {
+        report.report_items[index].category = event.target.value;
+        return {
+          date: report.date,
+          content: report.content,
+          report_items: report.report_items,
+          updatedAt: report.updatedAt,
+        };
+      });
+    }
   };
 
   /**
@@ -320,6 +327,7 @@ const ReportFormDialog = memo((props) => {
       isControlPressed = true;
     }
     if (event.key === "Enter" && isControlPressed) {
+      document.activeElement.blur();
       isControlPressed = false;
       onCreateButtonClick();
     }
@@ -367,8 +375,8 @@ const ReportFormDialog = memo((props) => {
                     label: value.category,
                     value: value.category,
                   }}
-                  onChange={(e, v) => onCategoryChange(index, v.value)}
-                  onClose={(e, v) => onCategoryClose(index, e.target)}
+                  onChange={(e, v, r) => onCategoryChange(index, v.value, r)}
+                  onClose={(e, r) => onCategoryClose(index, e, r)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
