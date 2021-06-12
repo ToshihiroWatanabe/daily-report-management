@@ -346,14 +346,14 @@ const ReportAnalytics = (props) => {
             ))}
         </div>
         <div className={classes.rightColumn}>
-          <PieChart width={300} height={250}>
+          <PieChart width={300} height={300}>
             <Pie
               data={totalHourByCategory}
               dataKey="uv"
               nameKey="vategory"
               cx="50%"
               cy="50%"
-              outerRadius={100}
+              outerRadius={120}
               fill="#8884d8"
               startAngle={90}
               endAngle={-270}
@@ -363,7 +363,9 @@ const ReportAnalytics = (props) => {
                   return index < numberOfCategory;
                 })
                 .map((item, index) => (
-                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                  <Fragment key={index}>
+                    <Cell fill={COLORS[index % COLORS.length]} />
+                  </Fragment>
                 ))}
             </Pie>
             <Legend
