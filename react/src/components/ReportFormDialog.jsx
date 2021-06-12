@@ -160,7 +160,7 @@ const ReportFormDialog = memo((props) => {
    */
   const onCategoryClose = (index, target) => {
     setReport((report) => {
-      report.report_items[index].category = target.value;
+      report.report_items[index].category = target.innerText;
       return {
         date: report.date,
         content: report.content,
@@ -363,10 +363,6 @@ const ReportFormDialog = memo((props) => {
                   options={props.categories}
                   getOptionLabel={(option) => option.label}
                   filterOptions={filterOptions}
-                  value={{
-                    label: value.category,
-                    value: value.category,
-                  }}
                   onChange={(e, v) => onCategoryChange(index, v.value)}
                   onClose={(e, v) => onCategoryClose(index, e.target)}
                   renderInput={(params) => (
