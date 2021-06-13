@@ -13,11 +13,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Icon,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import "./ReportCard.css";
+import slackMark from "../slackMark.svg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   content: {
     fontSize: "0.75rem",
     whiteSpace: "pre-line",
+  },
+  imageIcon: {
+    height: "150%",
+    transform: "translate(-17.5%, -17.5%)",
   },
 }));
 
@@ -112,15 +118,6 @@ const ReportCard = memo((props) => {
               >
                 {props.report.date.replaceAll("-", ".")}
                 {/* ツイートするボタン */}
-                {/* <Link
-                href={
-                  "https://twitter.com/intent/tweet?text=🌟" +
-                  props.report.date.replaceAll("-", ".") +
-                  "%0A%0A💡やったこと%0A"
-                }
-                target="_blank"
-                rel="noopener"
-              > */}
                 <IconButton
                   size="small"
                   onClick={() => onTweetButtonClick()}
@@ -132,7 +129,16 @@ const ReportCard = memo((props) => {
                 >
                   <TwitterIcon color="primary" />
                 </IconButton>
-                {/* </Link> */}
+                {/* Slack投稿ボタン */}
+                <IconButton size="small">
+                  <Icon>
+                    <img
+                      alt="slack"
+                      src={slackMark}
+                      className={classes.imageIcon}
+                    />
+                  </Icon>
+                </IconButton>
               </Typography>
             </div>
             <div style={{ marginLeft: "auto", marginTop: "-10px" }}>

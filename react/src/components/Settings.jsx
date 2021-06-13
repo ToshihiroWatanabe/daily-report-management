@@ -1,7 +1,15 @@
 import React from "react";
-import { Card, Typography } from "@material-ui/core";
+import { Card, makeStyles, TextField, Typography } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+}));
 
 const Settings = () => {
+  const classes = useStyles();
   return (
     <Card
       style={{
@@ -12,9 +20,19 @@ const Settings = () => {
       }}
     >
       Slack連携設定
-      <Typography>Slack ユーザー名</Typography>
-      <Typography>Slack チャンネル名</Typography>
-      <Typography>Slack アクセストークン</Typography>
+      <div className={classes.form}>
+        <TextField label="Slack ユーザー名" variant="outlined" size="small" />
+      </div>
+      <div className={classes.form}>
+        <TextField label="Slack チャンネル名" variant="outlined" size="small" />
+      </div>
+      <div className={classes.form}>
+        <TextField
+          label="Slack アクセストークン"
+          variant="outlined"
+          size="small"
+        />
+      </div>
     </Card>
   );
 };
