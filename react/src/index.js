@@ -7,14 +7,17 @@ import reportWebVitals from "./reportWebVitals";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 import { theme } from "./theme";
 import { HashRouter } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 ReactDOM.render(
   <HashRouter>
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline>
-        <App />
-      </CssBaseline>
-    </MuiThemeProvider>
+    <ErrorBoundary>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline>
+          <App />
+        </CssBaseline>
+      </MuiThemeProvider>
+    </ErrorBoundary>
   </HashRouter>,
   document.getElementById("root")
 );
