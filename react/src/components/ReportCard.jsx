@@ -95,6 +95,9 @@ const ReportCard = memo((props) => {
     window.open(url);
   };
 
+  /** Slackアイコンがクリックされたときの処理です。 */
+  const onSlackIconClick = () => {};
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -130,7 +133,12 @@ const ReportCard = memo((props) => {
                   <TwitterIcon color="primary" />
                 </IconButton>
                 {/* Slack投稿ボタン */}
-                <IconButton size="small">
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    onSlackIconClick();
+                  }}
+                >
                   <Icon>
                     <img
                       alt="slack"
