@@ -225,7 +225,7 @@ const App = () => {
    * @param {*} data
    */
   const importReportsFromJson = (data) => {
-    // TODO: データのフォーマットが正しいか検証する処理を入れる？
+    // TODO: データのフォーマットが正しいか検証する処理を入れる？例外処理
     console.log(data);
     let additionalReports = [];
     // データの数だけ繰り返す
