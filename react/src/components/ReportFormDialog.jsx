@@ -51,6 +51,13 @@ const filterOptions = createFilterOptions({
 
 let isControlPressed = false;
 
+/** カテゴリーの文字数制限 */
+const REPORT_ITEMS_CATEGORY_LIMIT = 45;
+/** 内容の文字数制限 */
+const REPORT_ITEMS_CONTENT_LIMIT = 45;
+/** 感想の文字数制限 */
+const REPORT_CONTENT_LIMIT = 304;
+
 /**
  * 日報データを入力するダイアログのコンポーネントです。
  * @param {*} props
@@ -97,8 +104,12 @@ const ReportFormDialog = memo((props) => {
   const validate = () => {
     for (let i = 0; i < report.report_items.length; i++) {
       let category = report.report_items[i].category.trim();
-      if (category.length > 45) {
-        console.error("カテゴリーは45文字以内で入力してください");
+      if (category.length > REPORT_ITEMS_CATEGORY_LIMIT) {
+        console.error(
+          "カテゴリーは" +
+            REPORT_ITEMS_CATEGORY_LIMIT +
+            "文字以内で入力してください"
+        );
       } else if (category.length === 0) {
         console.error("カテゴリーを入力してください");
       }
@@ -388,7 +399,7 @@ const ReportFormDialog = memo((props) => {
                       style={{ width: "8rem", marginRight: "4px" }}
                       inputProps={{
                         ...params.inputProps,
-                        maxLength: 45,
+                        maxLength: REPORT_ITEMS_CATEGORY_LIMIT,
                       }}
                     />
                   )}
@@ -400,7 +411,7 @@ const ReportFormDialog = memo((props) => {
                   value={value.content}
                   onChange={(e, v) => onItemContentChange(index, e.target)}
                   style={{ width: "14rem", marginRight: "4px" }}
-                  inputProps={{ maxLength: 45 }}
+                  inputProps={{ maxLength: REPORT_ITEMS_CONTENT_LIMIT }}
                 />
                 {/* 時間 */}
                 <FormControl>
@@ -570,8 +581,13 @@ const ReportFormDialog = memo((props) => {
             fullWidth
             value={report.content}
             onChange={onContentChange}
-            inputProps={{ maxLength: 140 }}
+            inputProps={{ maxLength: REPORT_CONTENT_LIMIT }}
           />
+          {report.content.length >= REPORT_CONTENT_LIMIT ? (
+            <>感想は{REPORT_CONTENT_LIMIT}字までです</>
+          ) : (
+            ""
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancelButtonClick} color="primary">
