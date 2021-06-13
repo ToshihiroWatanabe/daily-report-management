@@ -54,8 +54,10 @@ const ReportDatePicker = memo((props) => {
    * 日を描画します。
    */
   const renderDay = (day, selectedDate, dayInCurrentMonth, dayComponent) => {
+    /** 日付の切り替わりは午前4時 */
+    let today = new Date().setHours(new Date().getHours() - 4);
     // 日曜日
-    if (day.getDay() === 0 && day < new Date() && dayInCurrentMonth) {
+    if (day.getDay() === 0 && day < today && dayInCurrentMonth) {
       if (
         props.reports.filter((report, index) => {
           return report.date.includes(format(day, "yyyy-MM-dd"));
@@ -80,7 +82,7 @@ const ReportDatePicker = memo((props) => {
         </>
       );
       // 土曜日
-    } else if (day.getDay() === 6 && day < new Date() && dayInCurrentMonth) {
+    } else if (day.getDay() === 6 && day < today && dayInCurrentMonth) {
       if (
         props.reports.filter((report, index) => {
           return report.date.includes(format(day, "yyyy-MM-dd"));
@@ -142,7 +144,7 @@ const ReportDatePicker = memo((props) => {
           KeyboardButtonProps={{
             "aria-label": "change date",
           }}
-          maxDate={new Date()}
+          maxDate={new Date().setHours(new Date().getHours() - 4)}
           minDate={new Date("2020-01-01")}
           renderDay={renderDay}
         />
