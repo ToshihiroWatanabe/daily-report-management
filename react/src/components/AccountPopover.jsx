@@ -1,7 +1,18 @@
 import React, { memo, useState } from "react";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { IconButton, Popover, Tooltip } from "@material-ui/core";
+import {
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Popover,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import "./AccountPopover.css";
+import SettingsIcon from "@material-ui/icons/Settings";
+import { Link } from "react-router-dom";
 
 const AccountPopover = memo(() => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,7 +51,23 @@ const AccountPopover = memo(() => {
         }}
         getContentAnchorEl={null}
       >
-        ログインしていません
+        <Typography style={{ padding: "1rem 1rem 0 1rem" }}>
+          ログインしていません
+        </Typography>
+        <List>
+          <Link
+            onClick={handleClose}
+            to="/settings"
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            <ListItem button>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="設定" />
+            </ListItem>
+          </Link>
+        </List>
       </Popover>
     </>
   );

@@ -23,6 +23,7 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 import InfoIcon from "@material-ui/icons/Info";
 import FilePopover from "./FilePopover";
 import AccountPopover from "./AccountPopover";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -30,6 +31,7 @@ const DRAWER_WIDTH = "15rem";
 const pages = [
   { label: "日報管理", path: "/" },
   { label: "分析レポート", path: "/analytics" },
+  { label: "設定", path: "/settings" },
   { label: "このアプリについて", path: "/about" },
 ];
 
@@ -108,6 +110,7 @@ const ResponsiveDrawer = memo((props) => {
               <ListItemIcon>
                 {page.label === "日報管理" ? <DescriptionIcon /> : ""}
                 {page.label === "分析レポート" ? <AssessmentIcon /> : ""}
+                {page.label === "設定" ? <SettingsIcon /> : ""}
                 {page.label === "このアプリについて" ? <InfoIcon /> : ""}
               </ListItemIcon>
               <ListItemText primary={page.label} />

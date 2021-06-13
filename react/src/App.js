@@ -7,6 +7,7 @@ import preval from "preval.macro";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
+  Card,
   IconButton,
   Link,
   Tooltip,
@@ -18,6 +19,7 @@ import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { Switch, Route } from "react-router-dom";
 import ReportAnalytics from "./components/ReportAnalytics";
 import { exportReportsToTxt, exportReportsToJson } from "./utils/export";
+import Settings from "./components/Settings";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -448,6 +450,9 @@ const App = () => {
             >
               Copyright © 2021 ワタナベトシヒロ All Rights Reserved.
             </Typography>
+          </Route>
+          <Route exact path="/settings">
+            <Settings />
           </Route>
         </Switch>
       </main>
