@@ -106,7 +106,7 @@ const ReportCard = memo((props) => {
       const result = await axios.request({
         headers: {
           authorization: `Bearer ${state.slackAccessToken}`,
-          // "Content-Type": "application/json;charset=utf-8",
+          "Content-Type": "application/json;charset=utf-8",
           // "Access-Control-Allow-Origin": "*",
         },
         url,
