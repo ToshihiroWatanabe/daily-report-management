@@ -146,6 +146,11 @@ const App = () => {
    * @param {*} input
    */
   const onCreateReport = (input) => {
+    // 先端・末尾の空白スペースを削除
+    for (let i = 0; i < input.report_items.length; i++) {
+      input.report_items[i].category = input.report_items[i].category.trim();
+      input.report_items[i].content = input.report_items[i].content.trim();
+    }
     setReports((reports) => {
       let newReports = [input, ...reports]
         // 重複を削除
