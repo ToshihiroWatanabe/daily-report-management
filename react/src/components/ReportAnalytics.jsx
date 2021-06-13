@@ -234,6 +234,8 @@ const ReportAnalytics = (props) => {
   /** 何日分集計するか */
   const NUMBER_OF_DAYS = 7;
 
+  let lastWeekOutput = "";
+
   // 直近の日報を集計する
   for (let i = 0; i < NUMBER_OF_DAYS; i++) {
     // console.log(props.reports[i].date);
@@ -299,20 +301,59 @@ const ReportAnalytics = (props) => {
         props.reports[i].report_items[j].hour * 60 +
         props.reports[i].report_items[j].minute;
     }
+    if (i === 0) {
+      lastWeekOutput += props.reports[i].date;
+    } else if (i === NUMBER_OF_DAYS - 1) {
+      lastWeekOutput = props.reports[i].date + " ~ " + lastWeekOutput;
+    }
   }
-
-  console.log(
-    "直近" +
-      NUMBER_OF_DAYS +
-      "日間の学習時間は " +
-      Math.floor(nonStateTotalMinuteLastWeek / 60) +
-      "時間" +
-      Math.floor(nonStateTotalMinuteLastWeek % 60) +
-      "分です。"
-  );
 
   console.log(nonStateTotalMinuteLastWeekByCategory);
   console.log(nonStateTotalMinuteLastWeekByTask);
+
+  lastWeekOutput += "\n";
+  nonStateTotalMinuteLastWeekByTask
+    .sort((a, b) => {
+      return b.uv - a.uv;
+    })
+    .map((value, index) => {
+      lastWeekOutput +=
+        "\n" +
+        value.content +
+        "\t" +
+        Math.floor(value.uv / 60) +
+        ":" +
+        (Math.floor(value.uv % 60) < 10
+          ? "0" + Math.floor(value.uv % 60)
+          : Math.floor(value.uv % 60));
+    });
+  lastWeekOutput +=
+    "\n\n計\t" +
+    Math.floor(nonStateTotalMinuteLastWeek / 60) +
+    ":" +
+    Math.floor(nonStateTotalMinuteLastWeek % 60);
+
+  lastWeekOutput += "\n\n【カテゴリー別学習比率】\n";
+  nonStateTotalMinuteLastWeekByCategory
+    .sort((a, b) => {
+      return b.uv - a.uv;
+    })
+    .map((value, index) => {
+      lastWeekOutput +=
+        "\n" +
+        value.category +
+        "\t" +
+        Math.floor(value.uv / 60) +
+        ":" +
+        (Math.floor(value.uv % 60) < 10
+          ? "0" + Math.floor(value.uv % 60)
+          : Math.floor(value.uv % 60)) +
+        "\t(" +
+        Math.floor((value.uv / nonStateTotalMinuteLastWeek) * 100) +
+        "%)";
+    });
+
+  console.log(lastWeekOutput);
 
   // console.log(nonStateTotalHourPerMonthByCategory);
 
