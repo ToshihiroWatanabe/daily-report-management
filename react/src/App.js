@@ -337,10 +337,13 @@ const App = () => {
                     format(selectedDate, "yyyy-MM-dd")
                   );
                 }).length > 0 &&
-                  reports.map((report, index) => {
-                    if (
-                      report.date.includes(format(selectedDate, "yyyy-MM-dd"))
-                    ) {
+                  reports
+                    .filter((report, index) => {
+                      return report.date.includes(
+                        format(selectedDate, "yyyy-MM-dd")
+                      );
+                    })
+                    .map((report, index) => {
                       return (
                         <div key={index} className={classes.reportCard}>
                           <ReportCard
@@ -354,10 +357,7 @@ const App = () => {
                           />
                         </div>
                       );
-                    } else {
-                      return <Fragment key={index}></Fragment>;
-                    }
-                  })}
+                    })}
               </div>
             </div>
             <Typography variant="h5" className={classes.reportsHeading}>
