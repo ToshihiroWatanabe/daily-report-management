@@ -105,9 +105,13 @@ const ReportCard = memo((props) => {
       const url = "https://slack.com/api/chat.postMessage";
       const result = await axios.request({
         headers: {
-          authorization: `Bearer ${state.slackAccessToken}`,
+          Authorization: `Bearer ${state.slackAccessToken}`,
           "Content-Type": "application/json;charset=utf-8",
-          // "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST,GET,PUT,DELETE",
+          "Access-Control-Allow-Headers":
+            "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization",
+          "Access-Control-Allow-Credentials": "true",
         },
         url,
         method: "POST",
