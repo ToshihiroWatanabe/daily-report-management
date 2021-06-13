@@ -15,14 +15,14 @@ import {
   Toolbar,
   Typography,
   SwipeableDrawer,
-  Tooltip,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
 import DescriptionIcon from "@material-ui/icons/Description";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import InfoIcon from "@material-ui/icons/Info";
-import FilePopover from "./FilePopover.jsx";
+import FilePopover from "./FilePopover";
+import AccountPopover from "./AccountPopover";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -158,6 +158,7 @@ const ResponsiveDrawer = memo((props) => {
               props.onExportReportsToJsonButtonClick
             }
           />
+          <AccountPopover />
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

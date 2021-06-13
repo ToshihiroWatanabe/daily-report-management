@@ -236,75 +236,77 @@ const ReportAnalytics = (props) => {
 
   let lastWeekOutput = "";
 
-  // 直近の日報を集計する
-  for (let i = 0; i < NUMBER_OF_DAYS; i++) {
-    // console.log(props.reports[i].date);
-    // タスク数だけ繰り返す
-    for (let j = 0; j < props.reports[i].report_items.length; j++) {
-      // console.log(props.reports[i].report_items[j]);
-      // 新しいカテゴリーなら追加、既存のカテゴリーなら加算
-      let isCategoryAlreadyExist = false;
-      for (let k = 0; k < nonStateTotalMinuteLastWeekByCategory.length; k++) {
-        if (
-          props.reports[i].report_items[j].category ===
-          nonStateTotalMinuteLastWeekByCategory[k].category
-        ) {
-          isCategoryAlreadyExist = true;
-          nonStateTotalMinuteLastWeekByCategory[k].uv +=
-            props.reports[i].report_items[j].hour * 60 +
-            props.reports[i].report_items[j].minute;
+  if (props.reports.length > 0) {
+    // 直近の日報を集計する
+    for (let i = 0; i < NUMBER_OF_DAYS; i++) {
+      // console.log(props.reports[i].date);
+      // タスク数だけ繰り返す
+      for (let j = 0; j < props.reports[i].report_items.length; j++) {
+        // console.log(props.reports[i].report_items[j]);
+        // 新しいカテゴリーなら追加、既存のカテゴリーなら加算
+        let isCategoryAlreadyExist = false;
+        for (let k = 0; k < nonStateTotalMinuteLastWeekByCategory.length; k++) {
+          if (
+            props.reports[i].report_items[j].category ===
+            nonStateTotalMinuteLastWeekByCategory[k].category
+          ) {
+            isCategoryAlreadyExist = true;
+            nonStateTotalMinuteLastWeekByCategory[k].uv +=
+              props.reports[i].report_items[j].hour * 60 +
+              props.reports[i].report_items[j].minute;
+          }
+          if (isCategoryAlreadyExist === true) {
+            break;
+          }
         }
-        if (isCategoryAlreadyExist === true) {
-          break;
+        // 新しいカテゴリーの場合
+        if (!isCategoryAlreadyExist) {
+          nonStateTotalMinuteLastWeekByCategory.push({
+            category: props.reports[i].report_items[j].category,
+            uv:
+              props.reports[i].report_items[j].hour * 60 +
+              props.reports[i].report_items[j].minute,
+            pv: pv,
+            amt: amt,
+          });
         }
-      }
-      // 新しいカテゴリーの場合
-      if (!isCategoryAlreadyExist) {
-        nonStateTotalMinuteLastWeekByCategory.push({
-          category: props.reports[i].report_items[j].category,
-          uv:
-            props.reports[i].report_items[j].hour * 60 +
-            props.reports[i].report_items[j].minute,
-          pv: pv,
-          amt: amt,
-        });
-      }
-      // 新しいタスク名なら追加、既存のタスク名なら加算
-      let isTaskAlreadyExist = false;
-      for (let k = 0; k < nonStateTotalMinuteLastWeekByTask.length; k++) {
-        if (
-          props.reports[i].report_items[j].content ===
-          nonStateTotalMinuteLastWeekByTask[k].content
-        ) {
-          isTaskAlreadyExist = true;
-          nonStateTotalMinuteLastWeekByTask[k].uv +=
-            props.reports[i].report_items[j].hour * 60 +
-            props.reports[i].report_items[j].minute;
+        // 新しいタスク名なら追加、既存のタスク名なら加算
+        let isTaskAlreadyExist = false;
+        for (let k = 0; k < nonStateTotalMinuteLastWeekByTask.length; k++) {
+          if (
+            props.reports[i].report_items[j].content ===
+            nonStateTotalMinuteLastWeekByTask[k].content
+          ) {
+            isTaskAlreadyExist = true;
+            nonStateTotalMinuteLastWeekByTask[k].uv +=
+              props.reports[i].report_items[j].hour * 60 +
+              props.reports[i].report_items[j].minute;
+          }
+          if (isTaskAlreadyExist === true) {
+            break;
+          }
         }
-        if (isTaskAlreadyExist === true) {
-          break;
+        // 新しいタスク名の場合
+        if (!isTaskAlreadyExist) {
+          nonStateTotalMinuteLastWeekByTask.push({
+            content: props.reports[i].report_items[j].content,
+            uv:
+              props.reports[i].report_items[j].hour * 60 +
+              props.reports[i].report_items[j].minute,
+            pv: pv,
+            amt: amt,
+          });
         }
+        // 総合学習時間に加算する
+        nonStateTotalMinuteLastWeek +=
+          props.reports[i].report_items[j].hour * 60 +
+          props.reports[i].report_items[j].minute;
       }
-      // 新しいタスク名の場合
-      if (!isTaskAlreadyExist) {
-        nonStateTotalMinuteLastWeekByTask.push({
-          content: props.reports[i].report_items[j].content,
-          uv:
-            props.reports[i].report_items[j].hour * 60 +
-            props.reports[i].report_items[j].minute,
-          pv: pv,
-          amt: amt,
-        });
+      if (i === 0) {
+        lastWeekOutput += props.reports[i].date;
+      } else if (i === NUMBER_OF_DAYS - 1) {
+        lastWeekOutput = props.reports[i].date + " ~ " + lastWeekOutput;
       }
-      // 総合学習時間に加算する
-      nonStateTotalMinuteLastWeek +=
-        props.reports[i].report_items[j].hour * 60 +
-        props.reports[i].report_items[j].minute;
-    }
-    if (i === 0) {
-      lastWeekOutput += props.reports[i].date;
-    } else if (i === NUMBER_OF_DAYS - 1) {
-      lastWeekOutput = props.reports[i].date + " ~ " + lastWeekOutput;
     }
   }
 
