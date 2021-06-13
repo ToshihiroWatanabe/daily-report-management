@@ -80,7 +80,12 @@ const useStyles = makeStyles((theme) => ({
       textAlign: "center",
     },
   },
-  createReportButton: { margin: theme.spacing(1) },
+  createReportButton: {
+    margin: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: theme.spacing(4),
+    },
+  },
   reportCard: {
     margin: theme.spacing(2),
   },
