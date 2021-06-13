@@ -333,7 +333,9 @@ const ReportAnalytics = (props) => {
     "\n\n計\t" +
     Math.floor(nonStateTotalMinuteLastWeek / 60) +
     ":" +
-    Math.floor(nonStateTotalMinuteLastWeek % 60);
+    (Math.floor(nonStateTotalMinuteLastWeek % 60) < 10
+      ? "0" + Math.floor(nonStateTotalMinuteLastWeek % 60)
+      : Math.floor(nonStateTotalMinuteLastWeek % 60));
 
   lastWeekOutput += "\n\n【カテゴリー別学習比率】\n";
   nonStateTotalMinuteLastWeekByCategory
