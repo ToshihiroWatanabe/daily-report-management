@@ -368,10 +368,13 @@ const App = () => {
             <Typography variant="h5" className={classes.reportsHeading}>
               日報一覧
             </Typography>
-            {reports.map((report, index) => {
-              return (
-                <Fragment key={index}>
-                  {report.date.includes(calendarMonth) && (
+            {reports
+              .filter((report, index) => {
+                return report.date.includes(calendarMonth);
+              })
+              .map((report, index) => {
+                return (
+                  <Fragment key={index}>
                     <div className={classes.reportCard}>
                       <ReportCard
                         className={classes.reportCard}
@@ -380,10 +383,9 @@ const App = () => {
                         onDeleteButtonClick={onDeleteButtonClick}
                       />
                     </div>
-                  )}
-                </Fragment>
-              );
-            })}
+                  </Fragment>
+                );
+              })}
             {/* その月の日報がないとき→「日報がありません」と表示 */}
             {reports.filter((report, index) => {
               return report.date.includes(calendarMonth);
