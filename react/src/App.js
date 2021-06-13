@@ -327,7 +327,7 @@ const App = () => {
                       startIcon={<AddCircleOutlineIcon />}
                       onClick={(event) => onCreateButtonClick(event)}
                     >
-                      日報作成
+                      日報を作成する
                     </Button>
                   </div>
                 )}
