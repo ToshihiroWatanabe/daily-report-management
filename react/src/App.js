@@ -67,13 +67,20 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: { display: "flex" },
   },
   leftColumn: {
-    [theme.breakpoints.up("md")]: { margin: theme.spacing(1) },
+    [theme.breakpoints.up("md")]: {
+      margin: theme.spacing(1),
+      marginLeft: theme.spacing(2),
+    },
   },
   rightColumn: { [theme.breakpoints.up("md")]: { margin: theme.spacing(1) } },
   selectedDateReportHeading: {
     [theme.breakpoints.down("sm")]: {
       textAlign: "center",
       marginTop: "0.5rem",
+    },
+    [theme.breakpoints.up("md")]: {
+      margin: theme.spacing(1),
+      marginLeft: theme.spacing(2),
     },
   },
   selectedDateReportNotFound: {
