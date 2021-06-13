@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -20,6 +20,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import "./ReportCard.css";
 import slackMark from "../slackMark.svg";
+import axios from "axios";
+import { Context } from "../contexts/Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const ReportCard = memo((props) => {
   const classes = useStyles();
+  const [state, setState] = useContext(Context);
 
   /**
    * ツイートするボタンがクリックされたときの処理です。
@@ -96,7 +99,37 @@ const ReportCard = memo((props) => {
   };
 
   /** Slackアイコンがクリックされたときの処理です。 */
-  const onSlackIconClick = () => {};
+  const onSlackIconClick = () => {
+    (async () => {
+      const token = `${process.env.REACT_APP_SLACK_ACCESS_TOKEN}`;
+      const url = "https://slack.com/api/chat.postMessage";
+      const result = await axios.request({
+        headers: {
+          authorization: `Bearer ${state.slackAccessToken}`,
+          // "Content-Type": "application/json;charset=utf-8",
+          // "Access-Control-Allow-Origin": "*",
+        },
+        url,
+        method: "POST",
+        data: {
+          channel: state.slackChannelName,
+          text: "Hello, World!",
+        },
+      });
+      console.log(result.data);
+    })();
+    // axios
+    //   .get(
+    //     "https://slack.com/api/chat.postMessage?channel=%23general&text=po&pretty=1",
+    //     {
+    //       params: {
+    //         Authorization: `Bearer ${process.env.REACT_APP_SLACK_ACCESS_TOKEN}`,
+    //       },
+    //     }
+    //   )
+    //   .then((e) => console.log(e));
+    // {error: "not_authed" ok: false}
+  };
 
   const [open, setOpen] = React.useState(false);
 
@@ -133,20 +166,23 @@ const ReportCard = memo((props) => {
                   <TwitterIcon color="primary" />
                 </IconButton>
                 {/* Slack投稿ボタン */}
-                <IconButton
-                  size="small"
-                  onClick={() => {
-                    onSlackIconClick();
-                  }}
-                >
-                  <Icon>
-                    <img
-                      alt="slack"
-                      src={slackMark}
-                      className={classes.imageIcon}
-                    />
-                  </Icon>
-                </IconButton>
+                {state.slackAccessToken !== "" &&
+                  state.slackChannelName !== "" && (
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        onSlackIconClick();
+                      }}
+                    >
+                      <Icon>
+                        <img
+                          alt="slack"
+                          src={slackMark}
+                          className={classes.imageIcon}
+                        />
+                      </Icon>
+                    </IconButton>
+                  )}
               </Typography>
             </div>
             <div style={{ marginLeft: "auto", marginTop: "-10px" }}>
