@@ -253,12 +253,18 @@ const App = () => {
     }
     setReports((reports) => {
       let newReports = [...additionalReports, ...reports]
+        // 更新日が新しい順に並べ替え
+        .sort((a, b) => {
+          if (a.updatedAt === undefined) a.updatedAt = 0;
+          if (b.updatedAt === undefined) b.updatedAt = 0;
+          return b.updatedAt - a.updatedAt;
+        })
         // 重複を削除
         .filter(
           (element, index, array) =>
             array.findIndex((e) => e.date === element.date) === index
         )
-        // 並べ替え
+        // 日付が新しい順に並べ替え
         .sort((a, b) => {
           return b.date.replaceAll("-", "") - a.date.replaceAll("-", "");
         });
