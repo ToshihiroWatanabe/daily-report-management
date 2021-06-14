@@ -236,7 +236,7 @@ const ReportAnalytics = (props) => {
 
   let lastWeekOutput = "";
 
-  if (props.reports.length > 0) {
+  if (props.reports.length >= NUMBER_OF_DAYS) {
     // 直近の日報を集計する
     for (let i = 0; i < NUMBER_OF_DAYS; i++) {
       // console.log(props.reports[i].date);
