@@ -101,56 +101,11 @@ const ReportCard = memo((props) => {
   /** Slackアイコンがクリックされたときの処理です。 */
   const onSlackIconClick = () => {
     axios
-      .post(
-        "https://slack.com/api/chat.postMessage",
-        `payload={
-          "token": "${process.env.REACT_APP_SLACK_ACCESS_TOKEN}",
-          "channel": "#general",
-          "username": "testUser",
-          "text": "testText",
-        }`,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          },
-        }
+      .get(
+        "http://localhost:8150/api/slack/get/%23general/text/" +
+          process.env.REACT_APP_SLACK_ACCESS_TOKEN
       )
       .then((e) => console.log(e));
-    //   (async () => {
-    //     const token = `${process.env.REACT_APP_SLACK_ACCESS_TOKEN}`;
-    //     const url = "https://slack.com/api/chat.postMessage";
-    //     const result = await axios.request({
-    //       headers: {
-    //         // Authorization: `Bearer ${state.slackAccessToken}`,
-    //         // "Content-Type": "application/json;charset=utf-8",
-    //         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    //         // "Access-Control-Allow-Origin": "*",
-    //         // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-    //         // "Access-Control-Allow-Headers":
-    //         //   "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization",
-    //         // "Access-Control-Allow-Credentials": "true",
-    //       },
-    //       url,
-    //       method: "POST",
-    //       data: JSON.stringify({
-    //         token: state.slackAccessToken,
-    //         channel: state.slackChannelName,
-    //         text: "Hello, World!",
-    //       }),
-    //     });
-    //     console.log(result.data);
-    //   })();
-    //   // axios
-    //   //   .get(
-    //   //     "https://slack.com/api/chat.postMessage?channel=%23general&text=po&pretty=1",
-    //   //     {
-    //   //       params: {
-    //   //         Authorization: `Bearer ${process.env.REACT_APP_SLACK_ACCESS_TOKEN}`,
-    //   //       },
-    //   //     }
-    //   //   )
-    //   //   .then((e) => console.log(e));
-    //   // {error: "not_authed" ok: false}
   };
 
   const [open, setOpen] = React.useState(false);
