@@ -1,10 +1,11 @@
 package com.example.demo.controller;
 
-import java.util.Map;
+import java.io.IOException;
 
-import com.example.demo.client.SlackApiClient;
+import com.ullink.slack.simpleslackapi.SlackChannel;
+import com.ullink.slack.simpleslackapi.SlackSession;
+import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/slack")
 public class SlackApiController {
 
-    private final SlackApiClient slackApiClient;
-
-    @Autowired
-    public SlackApiController(SlackApiClient slackApiClient) {
-        this.slackApiClient = slackApiClient;
-    }
-
     @PostMapping("/postmessage")
     public boolean postMessage() {
         System.out.println("postMessage");
@@ -30,9 +24,18 @@ public class SlackApiController {
 
     @GetMapping("/get/{channel}/{text}/{token}")
     public boolean get(@PathVariable("channel") String channel, @PathVariable("text") String text,
-            @PathVariable("token") String token) {
+            @PathVariable("token") String token) throws IOException {
         System.out.println(channel + " " + text + " " + token);
-        slackApiClient.sendMessage(channel, text);
+        // BotのAPI Tokenを設定
+        SlackSession session = SlackSessionFactory.createWebSocketSlackSession(token);
+
+        session.connect();
+
+        SlackChannel slackChannel = session.findChannelByName(channel);
+        String message = "Hello World!";
+        session.sendMessage(slackChannel, message);
+
+        session.disconnect();
         return true;
     }
 }
