@@ -190,7 +190,7 @@ const ReportCard = memo((props) => {
               >
                 {props.report.date.replaceAll("-", ".")}
                 {/* ツイートするボタン */}
-                <Tooltip title="ツイートする">
+                <Tooltip title="ツイートする" placement="top">
                   <IconButton
                     size="small"
                     onClick={() => onTweetButtonClick()}
@@ -205,7 +205,7 @@ const ReportCard = memo((props) => {
                 </Tooltip>
                 {/* Slack投稿ボタン */}
                 {state.slackWebhookUrl !== "" && (
-                  <Tooltip title="Slackに投稿する">
+                  <Tooltip title="Slackに投稿する" placement="top">
                     <IconButton
                       size="small"
                       onClick={() => {
