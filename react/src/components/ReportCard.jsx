@@ -100,10 +100,18 @@ const ReportCard = memo((props) => {
 
   /** Slackアイコンがクリックされたときの処理です。 */
   const onSlackIconClick = () => {
+    console.log(process.env.REACT_APP_SLACK_WEBHOOK_URL);
     axios
-      .get(
-        "http://localhost:8150/api/slack/get/%23general/text/" +
-          process.env.REACT_APP_SLACK_ACCESS_TOKEN
+      .post(
+        process.env.REACT_APP_SLACK_WEBHOOK_URL,
+        JSON.stringify({
+          text: "Hello, World!",
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          },
+        }
       )
       .then((e) => console.log(e));
   };
