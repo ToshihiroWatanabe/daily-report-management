@@ -13,8 +13,7 @@ export function ContextProvider(props) {
   /** グローバルstate */
   const [state, setState] = useState({
     slackUserName: "",
-    slackChannelName: "",
-    slackAccessToken: "",
+    slackWebhookUrl: "",
   });
 
   return (

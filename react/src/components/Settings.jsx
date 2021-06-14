@@ -35,23 +35,13 @@ const Settings = () => {
       </div>
       <div className={classes.form}>
         <TextField
-          label="Slack チャンネル名"
+          label="Slack Webhook URL"
           variant="outlined"
           size="small"
-          value={state.slackChannelName}
+          fullWidth
+          value={state.slackWebhookUrl}
           onChange={(e) =>
-            setState({ ...state, slackChannelName: e.target.value })
-          }
-        />
-      </div>
-      <div className={classes.form}>
-        <TextField
-          label="Slack アクセストークン"
-          variant="outlined"
-          size="small"
-          value={state.slackAccessToken}
-          onChange={(e) =>
-            setState({ ...state, slackAccessToken: e.target.value })
+            setState({ ...state, slackWebhookUrl: e.target.value })
           }
         />
       </div>

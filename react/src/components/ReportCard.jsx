@@ -1,4 +1,4 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -14,6 +14,7 @@ import {
   DialogContentText,
   DialogActions,
   Icon,
+  Snackbar,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -22,6 +23,7 @@ import "./ReportCard.css";
 import slackMark from "../slackMark.svg";
 import axios from "axios";
 import { Context } from "../contexts/Context";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,6 +70,12 @@ const ReportCard = memo((props) => {
   const classes = useStyles();
   const [state, setState] = useContext(Context);
 
+  const [open, setOpen] = React.useState(false);
+
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   /**
    * ツイートするボタンがクリックされたときの処理です。
    */
@@ -100,12 +108,41 @@ const ReportCard = memo((props) => {
 
   /** Slackアイコンがクリックされたときの処理です。 */
   const onSlackIconClick = () => {
-    console.log(process.env.REACT_APP_SLACK_WEBHOOK_URL);
+    let text = state.slackUserName + "\n\n";
+    text +=
+      "🌟*" + props.report.date.replaceAll("-", ".") + "*\n\n💡*やったこと*\n";
+    let totalMinute = 0;
+    for (let i = 0; i < props.report.report_items.length; i++) {
+      text +=
+        "《" +
+        props.report.report_items[i].category +
+        "》" +
+        props.report.report_items[i].content +
+        "\n";
+      totalMinute +=
+        props.report.report_items[i].hour * 60 +
+        props.report.report_items[i].minute;
+    }
+    text +=
+      "\n*計: " +
+      Math.floor(totalMinute / 60) +
+      "時間" +
+      (totalMinute % 60) +
+      "分*\n\n";
+    text += "✍️*感想*\n" + props.report.content;
     axios
       .post(
-        process.env.REACT_APP_SLACK_WEBHOOK_URL,
+        state.slackWebhookUrl,
         JSON.stringify({
-          text: "Hello, World!",
+          blocks: [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: text,
+              },
+            },
+          ],
         }),
         {
           headers: {
@@ -113,10 +150,17 @@ const ReportCard = memo((props) => {
           },
         }
       )
-      .then((e) => console.log(e));
+      .then(() => {
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Slackに投稿しました");
+        setSuccessSnackbarOpen(true);
+      })
+      .catch(() => {
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Slackへの投稿に失敗しました");
+        setSuccessSnackbarOpen(true);
+      });
   };
-
-  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -124,6 +168,13 @@ const ReportCard = memo((props) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSuccessSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccessSnackbarOpen(false);
   };
 
   return (
@@ -151,23 +202,22 @@ const ReportCard = memo((props) => {
                   <TwitterIcon color="primary" />
                 </IconButton>
                 {/* Slack投稿ボタン */}
-                {state.slackAccessToken !== "" &&
-                  state.slackChannelName !== "" && (
-                    <IconButton
-                      size="small"
-                      onClick={() => {
-                        onSlackIconClick();
-                      }}
-                    >
-                      <Icon>
-                        <img
-                          alt="slack"
-                          src={slackMark}
-                          className={classes.imageIcon}
-                        />
-                      </Icon>
-                    </IconButton>
-                  )}
+                {state.slackWebhookUrl !== "" && (
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      onSlackIconClick();
+                    }}
+                  >
+                    <Icon>
+                      <img
+                        alt="slack"
+                        src={slackMark}
+                        className={classes.imageIcon}
+                      />
+                    </Icon>
+                  </IconButton>
+                )}
               </Typography>
             </div>
             <div style={{ marginLeft: "auto", marginTop: "-10px" }}>
@@ -246,6 +296,19 @@ const ReportCard = memo((props) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={successSnackbarOpen}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={5000}
+        onClose={(event, reason) => handleSuccessSnackbarClose(event, reason)}
+      >
+        <Alert
+          onClose={(event, reason) => handleSuccessSnackbarClose(event, reason)}
+          severity={snackbarSeverity}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 });
