@@ -190,33 +190,38 @@ const ReportCard = memo((props) => {
               >
                 {props.report.date.replaceAll("-", ".")}
                 {/* ツイートするボタン */}
-                <IconButton
-                  size="small"
-                  onClick={() => onTweetButtonClick()}
-                  style={{
-                    display: "inline-block",
-                    marginTop: "-0.2rem",
-                    marginLeft: "0.2rem",
-                  }}
-                >
-                  <TwitterIcon color="primary" />
-                </IconButton>
-                {/* Slack投稿ボタン */}
-                {state.slackWebhookUrl !== "" && (
+                <Tooltip title="ツイートする">
                   <IconButton
                     size="small"
-                    onClick={() => {
-                      onSlackIconClick();
+                    onClick={() => onTweetButtonClick()}
+                    style={{
+                      display: "inline-block",
+                      marginTop: "-0.2rem",
+                      marginLeft: "0.2rem",
                     }}
                   >
-                    <Icon>
-                      <img
-                        alt="slack"
-                        src={slackMark}
-                        className={classes.imageIcon}
-                      />
-                    </Icon>
+                    <TwitterIcon color="primary" />
                   </IconButton>
+                </Tooltip>
+                {/* Slack投稿ボタン */}
+                {state.slackWebhookUrl !== "" && (
+                  <Tooltip title="Slackに投稿する">
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        onSlackIconClick();
+                      }}
+                      style={{ marginBottom: "0.2rem" }}
+                    >
+                      <Icon>
+                        <img
+                          alt="slack"
+                          src={slackMark}
+                          className={classes.imageIcon}
+                        />
+                      </Icon>
+                    </IconButton>
+                  </Tooltip>
                 )}
               </Typography>
             </div>
