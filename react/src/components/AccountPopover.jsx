@@ -65,7 +65,7 @@ const AccountPopover = memo(() => {
         getContentAnchorEl={null}
       >
         <Typography style={{ padding: "1rem 1rem 0 1rem" }}>
-          ログインしていません
+          ログインしていません(開発中)
         </Typography>
         <Link onClick={handleClose} to="/login" className={classes.link}>
           <Button className={classes.button} variant="outlined" size="small">
