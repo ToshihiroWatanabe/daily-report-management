@@ -149,6 +149,8 @@ const ResponsiveDrawer = memo((props) => {
                   <Fragment key={index}>{page.label}</Fragment>
                 )
             )}
+            {location.pathname === "/login" && <>ログイン</>}
+            {location.pathname === "/signup" && <>新規登録</>}
           </Typography>
           <span style={{ flexGrow: 1 }}></span>
           {/* データ移行のファイルアイコン */}

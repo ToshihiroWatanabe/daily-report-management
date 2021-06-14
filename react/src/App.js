@@ -20,6 +20,8 @@ import { Switch, Route } from "react-router-dom";
 import ReportAnalytics from "./components/ReportAnalytics";
 import { exportReportsToTxt, exportReportsToJson } from "./utils/export";
 import Settings from "./components/Settings";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -455,11 +457,18 @@ const App = () => {
                 margin: "0 1rem",
               }}
             >
-              Copyright © 2021 ワタナベトシヒロ All Rights Reserved.
+              Copyright © {new Date().getFullYear()} ワタナベトシヒロ All Rights
+              Reserved.
             </Typography>
           </Route>
           <Route exact path="/settings">
             <Settings />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/signup">
+            <Signup />
           </Route>
         </Switch>
       </main>

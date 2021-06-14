@@ -1,11 +1,13 @@
 import React, { memo, useState } from "react";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
+  Button,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  makeStyles,
   Popover,
   Tooltip,
   Typography,
@@ -14,7 +16,18 @@ import "./AccountPopover.css";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: "0.5rem 1rem",
+  },
+  link: {
+    color: "inherit",
+    textDecoration: "none",
+  },
+}));
+
 const AccountPopover = memo(() => {
+  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -54,18 +67,22 @@ const AccountPopover = memo(() => {
         <Typography style={{ padding: "1rem 1rem 0 1rem" }}>
           ログインしていません
         </Typography>
+        <Link onClick={handleClose} to="/login" className={classes.link}>
+          <Button className={classes.button} variant="outlined" size="small">
+            <ListItemText primary="ログイン" />
+          </Button>
+        </Link>
+        <Link onClick={handleClose} to="/signup" className={classes.link}>
+          <Button className={classes.button} variant="outlined" size="small">
+            <ListItemText primary="新規登録" />
+          </Button>
+        </Link>
         <List>
-          <Link
-            onClick={handleClose}
-            to="/settings"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <ListItem button>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
+          <Link onClick={handleClose} to="/settings" className={classes.link}>
+            <Button className={classes.button} variant="outlined" size="small">
+              <SettingsIcon />
               <ListItemText primary="設定" />
-            </ListItem>
+            </Button>
           </Link>
         </List>
       </Popover>
