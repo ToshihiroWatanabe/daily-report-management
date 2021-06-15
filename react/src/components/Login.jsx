@@ -16,6 +16,11 @@ import { IconButton, InputAdornment } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
+const USER_ID_LENGTH_MIN = 5;
+const USER_ID_LENGTH_MAX = 32;
+const PASSWORD_LENGTH_MIN = 12;
+const PASSWORD_LENGTH_MAX = 100;
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -64,11 +69,11 @@ export default function Login() {
 
   const onUserIdBlur = (event) => {
     let helperText = "";
-    if (event.target.value.length < 5) {
-      helperText = "5文字以上にしてください";
+    if (event.target.value.length < USER_ID_LENGTH_MIN) {
+      helperText = USER_ID_LENGTH_MIN + "文字以上にしてください";
     }
-    if (event.target.value.length > 32) {
-      helperText = "32文字以内にしてください";
+    if (event.target.value.length > USER_ID_LENGTH_MAX) {
+      helperText = USER_ID_LENGTH_MAX + "文字以内にしてください";
     }
     if (!event.target.value.match(/^[a-zA-Z0-9_-]*$/)) {
       helperText = "使用できるのは半角英数字とハイフンとアンダーバーだけです。";
@@ -87,11 +92,11 @@ export default function Login() {
 
   const onPasswordBlur = (event) => {
     let helperText = "";
-    if (event.target.value.length < 12) {
-      helperText = "12文字以上にしてください";
+    if (event.target.value.length < PASSWORD_LENGTH_MIN) {
+      helperText = PASSWORD_LENGTH_MIN + "文字以上にしてください";
     }
-    if (event.target.value.length > 64) {
-      helperText = "64文字以内にしてください";
+    if (event.target.value.length > PASSWORD_LENGTH_MAX) {
+      helperText = PASSWORD_LENGTH_MAX + "文字以内にしてください";
     }
     if (
       !event.target.value.match(/^[a-zA-Z0-9!"#$%&'(){}+;@`:/?.>,<^~|*_\\-]*$/)
