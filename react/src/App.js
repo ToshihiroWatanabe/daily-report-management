@@ -90,9 +90,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       textAlign: "center",
     },
+    [theme.breakpoints.up("md")]: {
+      margin: theme.spacing(1),
+      marginLeft: theme.spacing(2),
+    },
   },
   createReportButton: {
     margin: theme.spacing(1),
+    marginLeft: "0",
     [theme.breakpoints.down("sm")]: {
       marginBottom: theme.spacing(4),
     },
