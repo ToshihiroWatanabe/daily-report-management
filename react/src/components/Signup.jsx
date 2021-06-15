@@ -15,6 +15,7 @@ import Container from "@material-ui/core/Container";
 import { IconButton, InputAdornment } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import AuthService from "../service/auth.service";
 
 const USER_ID_LENGTH_MIN = 5;
 const USER_ID_LENGTH_MAX = 32;
@@ -108,6 +109,20 @@ export default function Signup() {
     }
     setPasswordHelperText(helperText);
     setFormValue({ ...formValue, password: event.target.value });
+  };
+
+  const onSignupButtonClick = (e) => {
+    e.preventDefault();
+    if (
+      formValue.userId !== "" &&
+      userIdHelperText === "" &&
+      formValue.password !== "" &&
+      passwordHelperText === ""
+    ) {
+      AuthService.signup(formValue.userId, formValue.password).then(
+        (response) => console.log(response)
+      );
+    }
   };
 
   return (
@@ -209,6 +224,7 @@ export default function Signup() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={onSignupButtonClick}
           >
             新規登録
           </Button>
