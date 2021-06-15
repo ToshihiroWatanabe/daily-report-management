@@ -15,6 +15,9 @@ import {
   DialogActions,
   Icon,
   Snackbar,
+  useMediaQuery,
+  useTheme,
+  DialogTitle,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -68,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
  */
 const ReportCard = memo((props) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const [state, setState] = useContext(Context);
 
   const [open, setOpen] = React.useState(false);
@@ -75,6 +80,30 @@ const ReportCard = memo((props) => {
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [slackDialogOpen, setSlackDialogOpen] = useState(false);
+
+  let text = state.slackUserName !== "" ? state.slackUserName + "\n\n" : "";
+  text +=
+    "🌟*" + props.report.date.replaceAll("-", ".") + "*\n\n💡*やったこと*\n";
+  let totalMinute = 0;
+  for (let i = 0; i < props.report.report_items.length; i++) {
+    text +=
+      "《" +
+      props.report.report_items[i].category +
+      "》" +
+      props.report.report_items[i].content +
+      "\n";
+    totalMinute +=
+      props.report.report_items[i].hour * 60 +
+      props.report.report_items[i].minute;
+  }
+  text +=
+    "\n*計: " +
+    Math.floor(totalMinute / 60) +
+    "時間" +
+    (totalMinute % 60) +
+    "分*\n\n";
+  text += "✍️*感想*\n" + props.report.content;
 
   /**
    * ツイートするボタンがクリックされたときの処理です。
@@ -106,30 +135,8 @@ const ReportCard = memo((props) => {
     window.open(url);
   };
 
-  /** Slackアイコンがクリックされたときの処理です。 */
-  const onSlackIconClick = () => {
-    let text = state.slackUserName + "\n\n";
-    text +=
-      "🌟*" + props.report.date.replaceAll("-", ".") + "*\n\n💡*やったこと*\n";
-    let totalMinute = 0;
-    for (let i = 0; i < props.report.report_items.length; i++) {
-      text +=
-        "《" +
-        props.report.report_items[i].category +
-        "》" +
-        props.report.report_items[i].content +
-        "\n";
-      totalMinute +=
-        props.report.report_items[i].hour * 60 +
-        props.report.report_items[i].minute;
-    }
-    text +=
-      "\n*計: " +
-      Math.floor(totalMinute / 60) +
-      "時間" +
-      (totalMinute % 60) +
-      "分*\n\n";
-    text += "✍️*感想*\n" + props.report.content;
+  /** Slackに投稿する処理です。 */
+  const sendToSlack = () => {
     axios
       .post(
         state.slackWebhookUrl,
@@ -177,6 +184,10 @@ const ReportCard = memo((props) => {
     setSuccessSnackbarOpen(false);
   };
 
+  const onSlackDialogClose = () => {
+    setSlackDialogOpen(false);
+  };
+
   return (
     <>
       <Card className={classes.root}>
@@ -209,7 +220,7 @@ const ReportCard = memo((props) => {
                     <IconButton
                       size="small"
                       onClick={() => {
-                        onSlackIconClick();
+                        setSlackDialogOpen(true);
                       }}
                       style={{ marginBottom: "0.2rem" }}
                     >
@@ -294,10 +305,51 @@ const ReportCard = memo((props) => {
               props.onDeleteButtonClick(props.report.date);
               handleClose();
             }}
-            color="primary"
             autoFocus
+            style={{ color: "red" }}
           >
             削除する
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={slackDialogOpen}
+        onClose={onSlackDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullScreen={fullScreen}
+      >
+        <DialogTitle>
+          <Icon>
+            <img
+              alt="slack"
+              src={slackMark}
+              style={{ width: "2rem", transform: "translate(10%, 25%)" }}
+            />
+          </Icon>
+          Slackに投稿しますか？
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span style={{ whiteSpace: "pre-wrap", marginTop: "-5rem" }}>
+              {text}
+            </span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onSlackDialogClose} color="primary">
+            キャンセル
+          </Button>
+          <Button
+            onClick={() => {
+              sendToSlack();
+              onSlackDialogClose();
+            }}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
+            投稿する
           </Button>
         </DialogActions>
       </Dialog>
