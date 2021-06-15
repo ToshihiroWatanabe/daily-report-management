@@ -53,6 +53,57 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
+  const [formValue, setFormValue] = useState({ userId: "", password: "" });
+  const [userIdHelperText, setUserIdHelperText] = useState("");
+  const [passwordHelperText, setPasswordHelperText] = useState("");
+
+  /** ユーザーIDの入力値に変化があったときの処理です。 */
+  const onUserIdChange = (event) => {
+    setFormValue({ ...formValue, userId: event.target.value });
+  };
+
+  const onUserIdBlur = (event) => {
+    let helperText = "";
+    if (event.target.value.length < 5) {
+      helperText = "5文字以上にしてください";
+    }
+    if (event.target.value.length > 32) {
+      helperText = "32文字以内にしてください";
+    }
+    if (!event.target.value.match(/^[a-zA-Z0-9_-]*$/)) {
+      helperText = "使用できるのは半角英数字とハイフンとアンダーバーだけです。";
+    }
+    if (event.target.value === "") {
+      helperText = "";
+    }
+    setUserIdHelperText(helperText);
+    setFormValue({ ...formValue, userId: event.target.value });
+  };
+
+  /** パスワードの入力値に変化があったときの処理です。 */
+  const onPasswordChange = (event) => {
+    setFormValue({ ...formValue, password: event.target.value });
+  };
+
+  const onPasswordBlur = (event) => {
+    let helperText = "";
+    if (event.target.value.length < 12) {
+      helperText = "12文字以上にしてください";
+    }
+    if (event.target.value.length > 64) {
+      helperText = "64文字以内にしてください";
+    }
+    if (
+      !event.target.value.match(/^[a-zA-Z0-9!"#$%&'(){}+;@`:/?.>,<^~|*_\\-]*$/)
+    ) {
+      helperText = "使用できるのは半角英数字記号だけです。";
+    }
+    if (event.target.value === "") {
+      helperText = "";
+    }
+    setPasswordHelperText(helperText);
+    setFormValue({ ...formValue, password: event.target.value });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -91,6 +142,8 @@ export default function Signup() {
             </Grid> */}
             <Grid item xs={12}>
               <TextField
+                error={userIdHelperText !== ""}
+                helperText={userIdHelperText}
                 variant="outlined"
                 required
                 fullWidth
@@ -98,10 +151,16 @@ export default function Signup() {
                 label="ユーザーID"
                 name="userId"
                 autoComplete="userId"
+                value={formValue.userId}
+                onChange={onUserIdChange}
+                onBlur={onUserIdBlur}
+                autoFocus
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={passwordHelperText !== ""}
+                helperText={passwordHelperText}
                 variant="outlined"
                 required
                 fullWidth
@@ -110,13 +169,16 @@ export default function Signup() {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
+                value={formValue.password}
+                onChange={onPasswordChange}
+                onBlur={onPasswordBlur}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        // onMouseDown={handleMouseDownPassword}
                       >
                         {showPassword ? (
                           <VisibilityIcon />
