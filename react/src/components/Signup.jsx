@@ -120,7 +120,12 @@ export default function Signup() {
       passwordHelperText === ""
     ) {
       AuthService.signup(formValue.userId, formValue.password).then(
-        (response) => console.log(response)
+        (response) => {
+          console.log(response);
+          if (response.data === "already") {
+            setUserIdHelperText("そのユーザーIDは既に登録されています");
+          }
+        }
       );
     }
   };

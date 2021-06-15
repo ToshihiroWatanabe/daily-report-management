@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.AuthMapper">
+
+    <select id="findAll" resultType="User">
+        SELECT * FROM users;
+    </select>
+
+    <insert id="create" parameterType="User">
+        INSERT INTO users(
+            user_id, password, report_id)
+            VALUES(
+                #{userId}, #{password}, #{reportId}
+            )
+    </insert>
+
+</mapper>
