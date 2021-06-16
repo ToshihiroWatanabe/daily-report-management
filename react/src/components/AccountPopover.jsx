@@ -16,6 +16,7 @@ import "./AccountPopover.css";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
 import { Context } from "../contexts/Context";
+import SyncIcon from "@material-ui/icons/Sync";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -105,7 +106,8 @@ const AccountPopover = memo((props) => {
               variant="outlined"
               onClick={props.onSyncButtonClick}
             >
-              日報データを同期
+              <SyncIcon />
+              日報をサーバーと同期
             </Button>
             <Button
               className={classes.button}
