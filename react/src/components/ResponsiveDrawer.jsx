@@ -163,7 +163,7 @@ const ResponsiveDrawer = memo((props) => {
               props.onExportReportsToJsonButtonClick
             }
           />
-          <AccountPopover />
+          <AccountPopover onSyncButtonClick={props.onSyncButtonClick} />
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

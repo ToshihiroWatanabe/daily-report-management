@@ -14,6 +14,8 @@ export function ContextProvider(props) {
   const [state, setState] = useState({
     slackUserName: "",
     slackWebhookUrl: "",
+    userId: "",
+    password: "",
   });
 
   return (

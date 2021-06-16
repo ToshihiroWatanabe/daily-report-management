@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
   Button,
@@ -15,6 +15,7 @@ import {
 import "./AccountPopover.css";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
+import { Context } from "../contexts/Context";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -26,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AccountPopover = memo(() => {
+const AccountPopover = memo((props) => {
   const classes = useStyles();
+  const [state, setState] = useContext(Context);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -45,7 +47,10 @@ const AccountPopover = memo(() => {
   return (
     <>
       <Tooltip title="アカウントメニュー">
-        <IconButton onClick={handleClick} color="inherit">
+        <IconButton
+          onClick={handleClick}
+          color={state.userId !== "" ? "inherit" : "default"}
+        >
           <AccountCircleIcon />
         </IconButton>
       </Tooltip>
@@ -64,19 +69,36 @@ const AccountPopover = memo(() => {
         }}
         getContentAnchorEl={null}
       >
-        <Typography style={{ padding: "1rem 1rem 0 1rem" }}>
-          ログインしていません(未実装)
-        </Typography>
-        <Link onClick={handleClose} to="/login" className={classes.link}>
-          <Button className={classes.button} variant="outlined" size="small">
-            <ListItemText primary="ログイン" />
-          </Button>
-        </Link>
-        <Link onClick={handleClose} to="/signup" className={classes.link}>
-          <Button className={classes.button} variant="outlined" size="small">
-            <ListItemText primary="新規登録" />
-          </Button>
-        </Link>
+        {state.userId === "" && (
+          <>
+            <Typography style={{ padding: "1rem 1rem 0 1rem" }}>
+              ログインしていません(未実装)
+            </Typography>
+            <Link onClick={handleClose} to="/login" className={classes.link}>
+              <Button
+                className={classes.button}
+                variant="outlined"
+                size="small"
+              >
+                <ListItemText primary="ログイン" />
+              </Button>
+            </Link>
+            <Link onClick={handleClose} to="/signup" className={classes.link}>
+              <Button
+                className={classes.button}
+                variant="outlined"
+                size="small"
+              >
+                <ListItemText primary="新規登録" />
+              </Button>
+            </Link>
+          </>
+        )}
+        {state.userId !== "" && (
+          <>
+            <Button onClick={props.onSyncButtonClick}>同期</Button>
+          </>
+        )}
         <List>
           <Link onClick={handleClose} to="/settings" className={classes.link}>
             <Button className={classes.button} variant="outlined" size="small">

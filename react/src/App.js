@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import ReportDatePicker from "./components/ReportDatePicker";
 import ReportFormDialog from "./components/ReportFormDialog";
 import ReportCard from "./components/ReportCard";
@@ -16,12 +16,14 @@ import {
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Router } from "react-router-dom";
 import ReportAnalytics from "./components/ReportAnalytics";
 import { exportReportsToTxt, exportReportsToJson } from "./utils/export";
 import Settings from "./components/Settings";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import ReportService from "./service/report.service";
+import { Context } from "./contexts/Context";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -118,6 +120,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const App = () => {
   const classes = useStyles();
+  const [state, setState] = useContext(Context);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [calendarMonth, setCalendarMonth] = useState(
     format(new Date(), "yyyy-MM")
@@ -308,6 +311,15 @@ const App = () => {
     exportReportsToJson(reports);
   };
 
+  /**
+   * 同期ボタンが押されたときの処理です。
+   */
+  const onSyncButtonClick = () => {
+    ReportService.sync(state.userId, state.password, reports).then((response) =>
+      console.log(response)
+    );
+  };
+
   return (
     <>
       {/* ドロワー */}
@@ -320,6 +332,7 @@ const App = () => {
         onExportReportsToJsonButtonClick={() =>
           onExportReportsToJsonButtonClick()
         }
+        onSyncButtonClick={onSyncButtonClick}
       />
       <main className={classes.main}>
         {/* 画面切り替え */}

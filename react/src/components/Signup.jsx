@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -16,6 +15,8 @@ import { IconButton, InputAdornment } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import AuthService from "../service/auth.service";
+import { Context } from "../contexts/Context";
+import { Link } from "react-router-dom";
 
 const USER_ID_LENGTH_MIN = 5;
 const USER_ID_LENGTH_MAX = 32;
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Signup() {
   const classes = useStyles();
 
+  const [state, setState] = useContext(Context);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -124,6 +126,14 @@ export default function Signup() {
           console.log(response);
           if (response.data === "already") {
             setUserIdHelperText("そのユーザーIDは既に登録されています");
+          }
+          if (response.data === true) {
+            setState({
+              ...state,
+              userId: formValue.userId,
+              password: formValue.password,
+            });
+            document.getElementById("linkToHome").click();
           }
         }
       );
@@ -235,14 +245,15 @@ export default function Signup() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/#/login" variant="body2">
-                ログインはこちら
-              </Link>
+              <Link to="/login">ログインはこちら</Link>
             </Grid>
           </Grid>
         </form>
       </div>
       <Box mt={5}>{/* <Copyright /> */}</Box>
+      <Link to="/" id="linkToHome">
+        ホームに戻る
+      </Link>
     </Container>
   );
 }
