@@ -25,6 +25,7 @@ import Signup from "./components/Signup";
 import ReportService from "./service/report.service";
 import { Context } from "./contexts/Context";
 import Portfolio from "./components/Portfolio";
+import PortfolioSettings from "./components/PortfolioSettings";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -337,7 +338,7 @@ const App = () => {
 
   return (
     <>
-      {!window.location.href.match(/.*portfolio.*/) && (
+      {!window.location.href.match(/.*\/portfolio\/.*/) && (
         <>
           {/* ドロワー */}
           <ResponsiveDrawer
@@ -455,6 +456,7 @@ const App = () => {
               <Route exact path="/analytics">
                 <ReportAnalytics reports={reports} />
               </Route>
+              {/* TODO: Aboutコンポーネント分割 */}
               <Route exact path="/about">
                 <div
                   style={{
@@ -496,6 +498,9 @@ const App = () => {
                   Rights Reserved.
                 </Typography>
               </Route>
+              <Route exact path="/portfolio">
+                <PortfolioSettings />
+              </Route>
               <Route exact path="/settings">
                 <Settings />
               </Route>
@@ -517,7 +522,7 @@ const App = () => {
           />
         </>
       )}
-      {window.location.href.match(/.*portfolio.*/) && (
+      {window.location.href.match(/.*\/portfolio\/.*/) && (
         <>
           <Portfolio />
         </>
