@@ -1,7 +1,16 @@
-import { Card, Typography } from "@material-ui/core";
-import React from "react";
+import {
+  Card,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import React, { useContext } from "react";
+import { Context } from "../contexts/Context";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 
 const PortfolioSettings = () => {
+  const [state, setState] = useContext(Context);
   return (
     <>
       <Card
@@ -25,6 +34,25 @@ const PortfolioSettings = () => {
         }}
       >
         <Typography>ポートフォリオ公開URL</Typography>
+        <TextField
+          variant="outlined"
+          fullWidth
+          value={state.reportId}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton
+                  onClick={() => {
+                    // state.reportId.select();
+                    document.execCommand("copy");
+                  }}
+                >
+                  <AttachFileIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
       </Card>
     </>
   );

@@ -127,11 +127,12 @@ export default function Signup() {
           if (response.data === "already") {
             setUserIdHelperText("そのユーザーIDは既に登録されています");
           }
-          if (response.data === true) {
+          if (response.data.match(/true: .*/)) {
             setState({
               ...state,
               userId: formValue.userId,
               password: formValue.password,
+              reportId: response.data.split("true: ")[1],
             });
             document.getElementById("linkToHome").click();
           }

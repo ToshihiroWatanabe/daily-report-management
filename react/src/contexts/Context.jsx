@@ -16,6 +16,7 @@ export function ContextProvider(props) {
     slackWebhookUrl: "",
     userId: "",
     password: "",
+    reportId: "",
   });
 
   return (

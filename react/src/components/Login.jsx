@@ -125,11 +125,12 @@ export default function Login() {
       AuthService.login(formValue.userId, formValue.password).then(
         (response) => {
           console.log(response);
-          if (response === true) {
+          if (response.match(/true: .*/)) {
             setState({
               ...state,
               userId: formValue.userId,
               password: formValue.password,
+              reportId: response.split("true: ")[1],
             });
             document.getElementById("linkToHome").click();
           }

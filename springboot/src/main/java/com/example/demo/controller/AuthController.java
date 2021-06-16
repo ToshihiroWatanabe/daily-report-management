@@ -2,14 +2,12 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import com.example.demo.jwt.JwtUtils;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.service.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,7 +47,7 @@ public class AuthController {
                 String.valueOf(chars.charAt((int) (chars.length() * Math.random())))));
         System.out.println("signup: " + signupRequest.getUserId() + ", " + signupRequest.getPassword() + ", "
                 + user.getReportId());
-        return String.valueOf(authService.create(user));
+        return String.valueOf(authService.create(user)) + ": " + user.getReportId();
     }
 
     @PostMapping("/login")
@@ -64,7 +62,7 @@ public class AuthController {
                 System.out.println("ユーザーIDが見つかりました。");
                 if (encoder.matches(loginRequest.getPassword(), userList.get(i).getPassword())) {
                     System.out.println("パスワードが一致しました。");
-                    return "true";
+                    return "true: " + userList.get(i).getReportId();
                 }
             }
         }
