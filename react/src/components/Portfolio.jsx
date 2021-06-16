@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReportService from "../service/report.service";
+import ReportAnalytics from "./ReportAnalytics";
 
 const Portfolio = () => {
   const [reports, setReports] = useState([]);
@@ -16,8 +17,7 @@ const Portfolio = () => {
 
   return (
     <>
-      ポートフォリオのページです！
-      <div>{JSON.stringify(reports)}</div>
+      <ReportAnalytics reports={reports} />
     </>
   );
 };
