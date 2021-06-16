@@ -15,6 +15,7 @@ import Container from "@material-ui/core/Container";
 import { IconButton, InputAdornment } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import AuthService from "../service/auth.service";
 
 const USER_ID_LENGTH_MIN = 5;
 const USER_ID_LENGTH_MAX = 32;
@@ -110,6 +111,22 @@ export default function Login() {
     setFormValue({ ...formValue, password: event.target.value });
   };
 
+  const onLoginButtonClick = (e) => {
+    e.preventDefault();
+    if (
+      formValue.userId !== "" &&
+      userIdHelperText === "" &&
+      formValue.password !== "" &&
+      passwordHelperText === ""
+    ) {
+      AuthService.login(formValue.userId, formValue.password).then(
+        (response) => {
+          console.log(response);
+        }
+      );
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -176,6 +193,7 @@ export default function Login() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={onLoginButtonClick}
           >
             ログイン
           </Button>
