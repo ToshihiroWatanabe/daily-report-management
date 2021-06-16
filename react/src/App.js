@@ -315,9 +315,11 @@ const App = () => {
    * 同期ボタンが押されたときの処理です。
    */
   const onSyncButtonClick = () => {
-    ReportService.sync(state.userId, state.password, reports).then((response) =>
-      console.log(response)
-    );
+    ReportService.sync(
+      state.userId,
+      state.password,
+      JSON.stringify(reports)
+    ).then((response) => console.log(response));
   };
 
   return (

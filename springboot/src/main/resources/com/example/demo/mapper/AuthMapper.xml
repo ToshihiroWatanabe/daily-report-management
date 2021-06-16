@@ -3,7 +3,12 @@
 <mapper namespace="com.example.demo.mapper.AuthMapper">
 
     <select id="findAll" resultType="User">
-        SELECT * FROM users;
+        SELECT * FROM users
+    </select>
+
+    <select id="findByUserId" resultType="User">
+        SELECT * FROM users
+        WHERE user_id = #{userId}
     </select>
 
     <insert id="create" parameterType="User">

@@ -11,5 +11,7 @@ public interface AuthMapper {
 
     public List<User> findAll();
 
+    public User findByUserId(String userId);
+
     public boolean create(User user);
 }

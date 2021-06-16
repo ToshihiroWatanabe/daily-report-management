@@ -19,6 +19,10 @@ public class AuthService {
         return authMapper.findAll();
     }
 
+    public User findByUserId(String userId) {
+        return authMapper.findByUserId(userId);
+    }
+
     public boolean create(User user) {
         return authMapper.create(user);
     }
