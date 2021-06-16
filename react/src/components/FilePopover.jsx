@@ -112,18 +112,18 @@ const FilePopover = memo((props) => {
           }}
         />
         <Button
-          onClick={props.onExportReportsToTxtButtonClick}
-          variant="outlined"
-          style={{ marginTop: "0.5rem" }}
-        >
-          テキスト形式でエクスポート
-        </Button>
-        <Button
           onClick={props.onExportReportsToJsonButtonClick}
           variant="outlined"
           style={{ marginTop: "0.5rem" }}
         >
           JSON形式でエクスポート
+        </Button>
+        <Button
+          onClick={props.onExportReportsToTxtButtonClick}
+          variant="outlined"
+          style={{ marginTop: "0.5rem" }}
+        >
+          テキスト形式でエクスポート
         </Button>
       </Popover>
       <Snackbar

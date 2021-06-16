@@ -1,9 +1,16 @@
-import React, { useContext } from "react";
-import { Card, makeStyles, TextField, Typography } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import {
+  Button,
+  Card,
+  makeStyles,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { Context } from "../contexts/Context";
+import SyncIcon from "@material-ui/icons/Sync";
 
 const useStyles = makeStyles((theme) => ({
-  form: {
+  slackTextField: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
@@ -12,6 +19,24 @@ const useStyles = makeStyles((theme) => ({
 const Settings = () => {
   const classes = useStyles();
   const [state, setState] = useContext(Context);
+  const [slackUserName, setSlackUserName] = useState(state.slackUserName);
+  const [slackWebhookUrl, setSlackWebhookUrl] = useState(state.slackWebhookUrl);
+
+  const onSlackUserNameChange = (event) => {
+    setSlackUserName(event.target.value);
+  };
+  const onSlackWebhookUrlChange = (event) => {
+    setSlackWebhookUrl(event.target.value);
+  };
+  const onApplyButtonClick = (event) => {
+    event.preventDefault();
+    setState({
+      ...state,
+      slackUserName: slackUserName,
+      slackWebhookUrl: slackWebhookUrl,
+    });
+  };
+
   return (
     <Card
       style={{
@@ -22,29 +47,36 @@ const Settings = () => {
       }}
     >
       Slack連携設定
-      <div className={classes.form}>
+      <form autoComplete="on">
         <TextField
           label="Slack ユーザー名"
+          name="slackUserName"
           variant="outlined"
           size="small"
-          value={state.slackUserName}
-          onChange={(e) =>
-            setState({ ...state, slackUserName: e.target.value })
-          }
+          defaultValue={state.slackUserName}
+          onChange={onSlackUserNameChange}
+          className={classes.slackTextField}
         />
-      </div>
-      <div className={classes.form}>
         <TextField
           label="Slack Webhook URL"
+          name="slackWebhookUrl"
           variant="outlined"
           size="small"
           fullWidth
-          value={state.slackWebhookUrl}
-          onChange={(e) =>
-            setState({ ...state, slackWebhookUrl: e.target.value })
-          }
+          defaultValue={state.slackWebhookUrl}
+          onChange={onSlackWebhookUrlChange}
+          className={classes.slackTextField}
         />
-      </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="secondary"
+          onClick={onApplyButtonClick}
+        >
+          <SyncIcon />
+          適用する
+        </Button>
+      </form>
     </Card>
   );
 };

@@ -251,7 +251,7 @@ export default function Signup() {
         </form>
       </div>
       <Box mt={5}>{/* <Copyright /> */}</Box>
-      <Link to="/" id="linkToHome">
+      <Link to="/" id="linkToHome" style={{ visibility: "hidden" }}>
         ホームに戻る
       </Link>
     </Container>

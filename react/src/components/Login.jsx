@@ -221,7 +221,7 @@ export default function Login() {
         </form>
       </div>
       <Box mt={8}>{/* <Copyright /> */}</Box>
-      <Link to="/" id="linkToHome">
+      <Link to="/" id="linkToHome" style={{ visibility: "hidden" }}>
         ホームに戻る
       </Link>
     </Container>
