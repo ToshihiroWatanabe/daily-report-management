@@ -15,4 +15,10 @@
             )
     </insert>
 
+    <update id="update">
+        UPDATE reports SET
+        report = #{report}
+        WHERE report_id = #{reportId}
+    </update>
+
 </mapper>

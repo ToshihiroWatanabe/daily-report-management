@@ -44,6 +44,10 @@ const AccountPopover = memo((props) => {
     setAnchorEl(null);
   };
 
+  const onLogoutButtonClick = () => {
+    setState({ ...state, userId: "", password: "" });
+  };
+
   return (
     <>
       <Tooltip title="アカウントメニュー">
@@ -72,7 +76,7 @@ const AccountPopover = memo((props) => {
         {state.userId === "" && (
           <>
             <Typography style={{ padding: "1rem 1rem 0 1rem" }}>
-              ログインしていません(未実装)
+              ログインしていません
             </Typography>
             <Link onClick={handleClose} to="/login" className={classes.link}>
               <Button
@@ -96,7 +100,21 @@ const AccountPopover = memo((props) => {
         )}
         {state.userId !== "" && (
           <>
-            <Button onClick={props.onSyncButtonClick}>同期</Button>
+            <Button
+              className={classes.button}
+              variant="outlined"
+              onClick={props.onSyncButtonClick}
+            >
+              日報データを同期
+            </Button>
+            <Button
+              className={classes.button}
+              variant="outlined"
+              size="small"
+              onClick={onLogoutButtonClick}
+            >
+              <ListItemText primary="ログアウト" />
+            </Button>
           </>
         )}
         <List>

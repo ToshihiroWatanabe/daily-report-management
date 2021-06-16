@@ -6,4 +6,8 @@ const sync = (userId, password, report) => {
   return axios.post(API_URL + "sync", { userId, password, report });
 };
 
-export default { sync };
+const update = (userId, password, report) => {
+  return axios.post(API_URL + "update", { userId, password, report });
+};
+
+export default { sync, update };

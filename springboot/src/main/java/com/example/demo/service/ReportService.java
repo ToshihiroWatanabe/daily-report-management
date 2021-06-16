@@ -19,4 +19,8 @@ public class ReportService {
     public boolean create(Report report) {
         return reportMapper.create(report);
     }
+
+    public boolean update(Report report) {
+        return reportMapper.update(report);
+    }
 }

@@ -319,7 +319,19 @@ const App = () => {
       state.userId,
       state.password,
       JSON.stringify(reports)
-    ).then((response) => console.log(response));
+    ).then((response) => {
+      console.log(response);
+      // オブジェクトが返ってきたらローカルの日報を更新
+      if (typeof response.data === "object") {
+        importReportsFromJson(response.data);
+        // 更新したものを送信
+        ReportService.update(
+          state.userId,
+          state.password,
+          JSON.stringify(reports)
+        ).then((response) => console.log(response));
+      }
+    });
   };
 
   return (

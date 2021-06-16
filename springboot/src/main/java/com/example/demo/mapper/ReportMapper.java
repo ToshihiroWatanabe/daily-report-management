@@ -9,4 +9,6 @@ public interface ReportMapper {
     public Report findByReportId(String reportId);
 
     public boolean create(Report report);
+
+    public boolean update(Report report);
 }
