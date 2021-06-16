@@ -10,4 +10,8 @@ const update = (userId, password, report) => {
   return axios.post(API_URL + "update", { userId, password, report });
 };
 
-export default { sync, update };
+const findByReportId = (reportId) => {
+  return axios.get(API_URL + "findbyreportid/" + reportId);
+};
+
+export default { sync, update, findByReportId };
