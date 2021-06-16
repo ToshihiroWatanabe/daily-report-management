@@ -51,12 +51,14 @@ const filterOptions = createFilterOptions({
 
 let isControlPressed = false;
 
+/** タスク数の上限 */
+const REPORT_ITEMS_MAX = 32;
 /** カテゴリーの文字数制限 */
-const REPORT_ITEMS_CATEGORY_LIMIT = 45;
+const REPORT_ITEMS_CATEGORY_MAX = 45;
 /** 内容の文字数制限 */
-const REPORT_ITEMS_CONTENT_LIMIT = 45;
+const REPORT_ITEMS_CONTENT_MAX = 45;
 /** 感想の文字数制限 */
-const REPORT_CONTENT_LIMIT = 304;
+const REPORT_CONTENT_MAX = 304;
 
 /**
  * 日報データを入力するダイアログのコンポーネントです。
@@ -104,10 +106,10 @@ const ReportFormDialog = memo((props) => {
   const validate = () => {
     for (let i = 0; i < report.report_items.length; i++) {
       let category = report.report_items[i].category.trim();
-      if (category.length > REPORT_ITEMS_CATEGORY_LIMIT) {
+      if (category.length > REPORT_ITEMS_CATEGORY_MAX) {
         console.error(
           "カテゴリーは" +
-            REPORT_ITEMS_CATEGORY_LIMIT +
+            REPORT_ITEMS_CATEGORY_MAX +
             "文字以内で入力してください"
         );
       } else if (category.length === 0) {
@@ -399,7 +401,7 @@ const ReportFormDialog = memo((props) => {
                       style={{ width: "8rem", marginRight: "4px" }}
                       inputProps={{
                         ...params.inputProps,
-                        maxLength: REPORT_ITEMS_CATEGORY_LIMIT,
+                        maxLength: REPORT_ITEMS_CATEGORY_MAX,
                       }}
                     />
                   )}
@@ -411,7 +413,7 @@ const ReportFormDialog = memo((props) => {
                   value={value.content}
                   onChange={(e, v) => onItemContentChange(index, e.target)}
                   style={{ width: "14rem", marginRight: "4px" }}
-                  inputProps={{ maxLength: REPORT_ITEMS_CONTENT_LIMIT }}
+                  inputProps={{ maxLength: REPORT_ITEMS_CONTENT_MAX }}
                 />
                 {/* 時間 */}
                 <FormControl>
@@ -539,7 +541,9 @@ const ReportFormDialog = memo((props) => {
                     size="small"
                     style={{
                       visibility:
-                        report.report_items.length > 16 ? "hidden" : "",
+                        report.report_items.length > REPORT_ITEMS_MAX
+                          ? "hidden"
+                          : "",
                       margin: "0 0.5rem",
                     }}
                     onClick={onAddButtonClick}
@@ -581,10 +585,10 @@ const ReportFormDialog = memo((props) => {
             fullWidth
             value={report.content}
             onChange={onContentChange}
-            inputProps={{ maxLength: REPORT_CONTENT_LIMIT }}
+            inputProps={{ maxLength: REPORT_CONTENT_MAX }}
           />
-          {report.content.length >= REPORT_CONTENT_LIMIT ? (
-            <>感想は{REPORT_CONTENT_LIMIT}字までです</>
+          {report.content.length >= REPORT_CONTENT_MAX ? (
+            <>感想は{REPORT_CONTENT_MAX}字までです</>
           ) : (
             ""
           )}
