@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Portfolio;
 import com.example.demo.model.User;
-import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.PortfolioUpdateRequest;
 import com.example.demo.service.PortfolioService;
 import com.example.demo.service.ReportService;

@@ -14,3 +14,5 @@ VALUES(
         );
 INSERT IGNORE INTO portfolios(report_id)
 VALUES('reportId');
+INSERT IGNORE INTO settings(user_id)
+VALUES('userId');

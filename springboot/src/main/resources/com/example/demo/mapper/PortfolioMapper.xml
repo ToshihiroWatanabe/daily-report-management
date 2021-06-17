@@ -6,6 +6,7 @@
         SELECT * FROM portfolios
         WHERE report_id = #{reportId}
     </select>
+
     <insert id="create">
         INSERT INTO portfolios(
             report_id

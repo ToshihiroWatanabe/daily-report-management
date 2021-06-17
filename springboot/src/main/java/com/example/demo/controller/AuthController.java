@@ -4,12 +4,14 @@ import java.util.List;
 
 import com.example.demo.model.Portfolio;
 import com.example.demo.model.Report;
+import com.example.demo.model.Setting;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.PortfolioService;
 import com.example.demo.service.ReportService;
+import com.example.demo.service.SettingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,14 +29,16 @@ public class AuthController {
     private final AuthService authService;
     private final ReportService reportService;
     private final PortfolioService portfolioService;
+    private final SettingService settingService;
     private final PasswordEncoder encoder;
 
     @Autowired
     public AuthController(AuthService authService, ReportService reportService, PortfolioService portfolioService,
-            PasswordEncoder encoder) {
+            SettingService settingService, PasswordEncoder encoder) {
         this.authService = authService;
         this.reportService = reportService;
         this.portfolioService = portfolioService;
+        this.settingService = settingService;
         this.encoder = encoder;
     }
 
@@ -64,6 +68,9 @@ public class AuthController {
         Portfolio portfolio = new Portfolio();
         portfolio.setReportId(user.getReportId());
         portfolioService.create(portfolio);
+        Setting setting = new Setting();
+        setting.setUserId(signupRequest.getUserId());
+        settingService.create(setting);
         return "true: " + user.getReportId();
     }
 

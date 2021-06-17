@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.SettingMapper">
+
+    <select id="findByUserId" resultType="Setting">
+        SELECT * FROM settings
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="create">
+        INSERT INTO settings(
+            user_id
+        )
+        VALUES(
+            #{userId}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE settings SET
+        slack_setting = #{slackSetting}
+        WHERE
+        user_id = #{userId}
+    </update>
+</mapper>
