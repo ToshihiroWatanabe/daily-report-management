@@ -5,8 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateRequest {
+
+public class PortfolioUpdateRequest {
     private String userId;
     private String password;
-    private String report;
+    private String userName;
+    private String introduction;
+    private String skillSet;
 }

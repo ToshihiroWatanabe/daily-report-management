@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Report;
 import com.example.demo.model.User;
-import com.example.demo.payload.request.UpdateRequest;
+import com.example.demo.payload.request.ReportUpdateRequest;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.ReportService;
 
@@ -32,7 +32,7 @@ public class ReportController {
     }
 
     @PostMapping("/update")
-    public String update(@RequestBody UpdateRequest updateRequest) {
+    public String update(@RequestBody ReportUpdateRequest updateRequest) {
         System.out.println("updateRequest: " + updateRequest.getUserId() + ", " + updateRequest.getPassword() + ", "
                 + updateRequest.getReport());
         User user = authService.findByUserId(updateRequest.getUserId());
