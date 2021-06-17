@@ -76,6 +76,11 @@ const Settings = () => {
           <SyncIcon />
           適用する
         </Button>
+        {state.userId === "" && (
+          <>
+            ※ログインしていない場合、この設定はページをリロードするとリセットされます。
+          </>
+        )}
       </form>
     </Card>
   );

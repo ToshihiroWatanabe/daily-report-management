@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,11 +13,18 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 import SimpleSnackbar from "./SimpleSnackbar";
 import TagsInput from "./TagsInput";
 import SyncIcon from "@material-ui/icons/Sync";
+import { Link } from "react-router-dom";
 
 const PortfolioSettings = () => {
   const [state, setState] = useContext(Context);
   const [skillSet, setSkillSet] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  useEffect(() => {
+    if (state.userId === "") {
+      document.getElementById("linkToHome").click();
+    }
+  }, []);
 
   const onClipBoardButtonClick = () => {
     // 一時的に要素を追加
@@ -113,6 +120,9 @@ const PortfolioSettings = () => {
           message="URLをコピーしました！"
         />
       </Card>
+      <Link to="/" id="linkToHome" style={{ visibility: "hidden" }}>
+        ホームに戻る
+      </Link>
     </>
   );
 };
