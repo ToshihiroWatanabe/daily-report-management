@@ -20,6 +20,7 @@ export default function TagsInput({ ...props }) {
   useEffect(() => {
     setSelectedItem(tags);
   }, [tags]);
+
   useEffect(() => {
     selectedTags(selectedItem);
   }, [selectedItem, selectedTags]);
@@ -67,6 +68,7 @@ export default function TagsInput({ ...props }) {
   function handleInputChange(event) {
     setInputValue(event.target.value);
   }
+
   return (
     <React.Fragment>
       <Downshift
