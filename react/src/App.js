@@ -314,8 +314,8 @@ const App = () => {
     ReportService.findByReportId(state.reportId).then((response) => {
       console.log(response);
       // オブジェクトが返ってきたらローカルの日報を更新
-      if (typeof response.data.report === "object") {
-        importReportsFromJson(response.data);
+      if (response.data.report.match(/[.*.*]/)) {
+        importReportsFromJson(JSON.parse(response.data.report));
         // 更新したものを送信
         ReportService.update(
           state.userId,
