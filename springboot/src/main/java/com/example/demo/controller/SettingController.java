@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/setting")
@@ -20,9 +22,10 @@ public class SettingController {
     private final PasswordEncoder encoder;
 
     @Autowired
-    public SettingController(SettingService settingService, AuthService authService) {
+    public SettingController(SettingService settingService, AuthService authService, PasswordEncoder encoder) {
         this.settingService = settingService;
         this.authService = authService;
+        this.encoder = encoder;
     }
 
     @PostMapping("/findbyuserid")
@@ -37,6 +40,14 @@ public class SettingController {
 
     @PostMapping("/update")
     public boolean update(@RequestBody SettingUpdateRequest request) {
-
+        User user = authService.findByUserId(request.getUserId());
+        if (encoder.matches(request.getPassword(), user.getPassword())) {
+            Setting setting = new Setting();
+            setting.setUserId(request.getUserId());
+            setting.setSlackSetting(request.getSlackSetting());
+            return settingService.update(setting);
+        } else {
+            return false;
+        }
     }
 }

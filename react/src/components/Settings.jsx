@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  makeStyles,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, Card, makeStyles, TextField } from "@material-ui/core";
 import { Context } from "../contexts/Context";
 import SyncIcon from "@material-ui/icons/Sync";
 import SettingService from "../service/setting.service";
@@ -31,6 +25,9 @@ const Settings = () => {
       SettingService.findByUserId(state.userId, state.password).then(
         (response) => {
           console.log(response);
+          if (response.data) {
+            setSettingDisabled(false);
+          }
         }
       );
     }
@@ -49,6 +46,21 @@ const Settings = () => {
       slackUserName: slackUserName,
       slackWebhookUrl: slackWebhookUrl,
     });
+    if (state.userId !== "") {
+      SettingService.update(
+        state.userId,
+        state.password,
+        JSON.stringify({
+          slackUserName: slackUserName,
+          slackWebhookUrl: slackWebhookUrl,
+        })
+      ).then((response) => {
+        console.log(response);
+        if (response.data) {
+          // TODO: 適用しましたスナックバーを出す
+        }
+      });
+    }
   };
 
   return (
