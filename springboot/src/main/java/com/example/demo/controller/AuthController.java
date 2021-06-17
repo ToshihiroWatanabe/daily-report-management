@@ -56,6 +56,7 @@ public class AuthController {
                 String.valueOf(chars.charAt((int) (chars.length() * Math.random())))));
         System.out.println("signup: " + signupRequest.getUserId() + ", " + signupRequest.getPassword() + ", "
                 + user.getReportId());
+        authService.create(user);
         // テーブルにレコードを挿入
         Report report = new Report();
         report.setReportId(user.getReportId());
@@ -63,8 +64,7 @@ public class AuthController {
         Portfolio portfolio = new Portfolio();
         portfolio.setReportId(user.getReportId());
         portfolioService.create(portfolio);
-
-        return String.valueOf(authService.create(user)) + ": " + user.getReportId();
+        return "true: " + user.getReportId();
     }
 
     @PostMapping("/login")

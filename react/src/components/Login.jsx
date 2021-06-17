@@ -18,6 +18,7 @@ import AuthService from "../service/auth.service";
 import { Context } from "../contexts/Context";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
+import SimpleSnackbar from "./SimpleSnackbar";
 
 const USER_ID_LENGTH_MIN = 5;
 const USER_ID_LENGTH_MAX = 32;
@@ -65,6 +66,7 @@ export default function Login() {
   const [formValue, setFormValue] = useState({ userId: "", password: "" });
   const [userIdHelperText, setUserIdHelperText] = useState("");
   const [passwordHelperText, setPasswordHelperText] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   /** ユーザーIDの入力値に変化があったときの処理です。 */
   const onUserIdChange = (event) => {
@@ -126,7 +128,10 @@ export default function Login() {
       AuthService.login(formValue.userId, formValue.password).then(
         (response) => {
           console.log(response);
-          if (response.match(/true: .*/)) {
+          if (response === false) {
+            // ログインに失敗しました
+            setSnackbarOpen(true);
+          } else if (response.match(/true: .*/)) {
             setState({
               ...state,
               userId: formValue.userId,
@@ -141,91 +146,102 @@ export default function Login() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          ログイン
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            error={userIdHelperText !== ""}
-            helperText={userIdHelperText}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="userId"
-            label="ユーザーID"
-            name="userId"
-            autoComplete="userId"
-            value={formValue.userId}
-            onChange={onUserIdChange}
-            onBlur={onUserIdBlur}
-            autoFocus
-          />
-          <TextField
-            error={passwordHelperText !== ""}
-            helperText={passwordHelperText}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="パスワード"
-            type={showPassword ? "text" : "password"}
-            id="password"
-            autoComplete="current-password"
-            value={formValue.password}
-            onChange={onPasswordChange}
-            onBlur={onPasswordBlur}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          {/* <FormControlLabel
+    <>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            ログイン
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              error={userIdHelperText !== ""}
+              helperText={userIdHelperText}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="userId"
+              label="ユーザーID"
+              name="userId"
+              autoComplete="userId"
+              value={formValue.userId}
+              onChange={onUserIdChange}
+              onBlur={onUserIdBlur}
+              autoFocus
+            />
+            <TextField
+              error={passwordHelperText !== ""}
+              helperText={passwordHelperText}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="パスワード"
+              type={showPassword ? "text" : "password"}
+              id="password"
+              autoComplete="current-password"
+              value={formValue.password}
+              onChange={onPasswordChange}
+              onBlur={onPasswordBlur}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={onLoginButtonClick}
-          >
-            ログイン
-          </Button>
-          <Grid container>
-            {/* <Grid item xs>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={onLoginButtonClick}
+            >
+              ログイン
+            </Button>
+            <Grid container>
+              {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
             </Grid> */}
-            <Grid item>
-              <Link to="/signup">{"新規登録はこちら"}</Link>
+              <Grid item>
+                <Link to="/signup">{"新規登録はこちら"}</Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>{/* <Copyright /> */}</Box>
-      <Link to="/" id="linkToHome" style={{ visibility: "hidden" }}>
-        ホームに戻る
-      </Link>
-    </Container>
+          </form>
+        </div>
+        <Box mt={8}>{/* <Copyright /> */}</Box>
+        <Link to="/" id="linkToHome" style={{ visibility: "hidden" }}>
+          ホームに戻る
+        </Link>
+      </Container>
+      <SimpleSnackbar
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+        message="ログインに失敗しました。"
+      />
+    </>
   );
 }

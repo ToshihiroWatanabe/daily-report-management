@@ -9,9 +9,9 @@
 
     <insert id="create">
         INSERT INTO reports(
-            report_id, report)
+            report_id)
             VALUES(
-                #{reportId}, #{report}
+                #{reportId}
             )
     </insert>
 

@@ -14,6 +14,7 @@ import SimpleSnackbar from "./SimpleSnackbar";
 import TagsInput from "./TagsInput";
 import SyncIcon from "@material-ui/icons/Sync";
 import { Link } from "react-router-dom";
+import PortfolioService from "../service/portfolio.service";
 
 const PortfolioSettings = () => {
   const [state, setState] = useContext(Context);
