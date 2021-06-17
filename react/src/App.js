@@ -312,14 +312,10 @@ const App = () => {
    * 同期ボタンが押されたときの処理です。
    */
   const onSyncButtonClick = () => {
-    ReportService.sync(
-      state.userId,
-      state.password,
-      JSON.stringify(reports)
-    ).then((response) => {
-      console.log(response);
+    ReportService.findByReportId(state.reportId).then((response) => {
+      console.log(response.data.report);
       // オブジェクトが返ってきたらローカルの日報を更新
-      if (typeof response.data === "object") {
+      if (typeof response.data.report === "object") {
         importReportsFromJson(response.data);
         // 更新したものを送信
         ReportService.update(

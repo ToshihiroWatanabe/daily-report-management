@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
-import java.io.IOException;
-
 import com.example.demo.model.Report;
 import com.example.demo.model.User;
-import com.example.demo.payload.request.SyncRequest;
 import com.example.demo.payload.request.UpdateRequest;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.ReportService;
@@ -28,19 +25,10 @@ public class ReportController {
     @Autowired
     private PasswordEncoder encoder;
 
-    @PostMapping("/sync")
-    public String sync(@RequestBody SyncRequest syncRequest) throws IOException {
-        System.out.println("syncRequest: " + syncRequest.getUserId() + ", " + syncRequest.getPassword() + ", "
-                + syncRequest.getReport());
-        User user = authService.findByUserId(syncRequest.getUserId());
-        if (encoder.matches(syncRequest.getPassword(), user.getPassword())) {
-            System.out.println("パスワードが一致しました");
-            Report findByReportIdResult = reportService.findByReportId(user.getReportId());
-            return findByReportIdResult.getReport();
-        } else {
-            System.out.println("パスワードが一致していません");
-            return "passwordDoesNotMatch";
-        }
+    @GetMapping("/findbyreportid/{reportId}")
+    public Report findByReportId(@PathVariable String reportId) {
+        System.out.println("findByReportId: " + reportId);
+        return reportService.findByReportId(reportId);
     }
 
     @PostMapping("/update")
@@ -59,11 +47,5 @@ public class ReportController {
             System.out.println("パスワードが一致していません");
             return "passwordDoesNotMatch";
         }
-    }
-
-    @GetMapping("/findbyreportid/{reportId}")
-    public Report findByReportId(@PathVariable String reportId) {
-        System.out.println("findByReportId: " + reportId);
-        return reportService.findByReportId(reportId);
     }
 }
