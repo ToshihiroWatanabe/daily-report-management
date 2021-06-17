@@ -22,6 +22,7 @@ const PortfolioSettings = () => {
   const [introduction, setIntroduction] = useState("");
   const [skillSet, setSkillSet] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [profileDisabled, setProfileDisabled] = useState(true);
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const PortfolioSettings = () => {
     textArea.select(document.getElementById("copyArea"));
     document.execCommand("Copy");
     document.getElementById("copyArea").remove();
+    setSnackbarMessage("URLをコピーしました！");
     setSnackbarOpen(true);
   };
 
@@ -74,6 +76,10 @@ const PortfolioSettings = () => {
       JSON.stringify(skillSet)
     ).then((response) => {
       console.log(response);
+      if (response.data === true) {
+        setSnackbarMessage("プロフィールを更新しました！");
+        setSnackbarOpen(true);
+      }
     });
   };
 
@@ -126,7 +132,7 @@ const PortfolioSettings = () => {
           variant="outlined"
           id="tags"
           name="tags"
-          placeholder="タグを入力してEnterで追加"
+          placeholder="スキルを入力してEnterで追加"
           disabled={profileDisabled}
           skillSet={skillSet}
           setSkillSet={setSkillSet}
@@ -169,7 +175,7 @@ const PortfolioSettings = () => {
         <SimpleSnackbar
           open={snackbarOpen}
           setOpen={setSnackbarOpen}
-          message="URLをコピーしました！"
+          message={snackbarMessage}
         />
       </Card>
       <Link to="/" id="linkToHome" style={{ visibility: "hidden" }}>
