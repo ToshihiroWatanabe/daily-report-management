@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import com.example.demo.model.Portfolio;
 import com.example.demo.model.Report;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.PortfolioService;
 import com.example.demo.service.ReportService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
     private final ReportService reportService;
+    private final PortfolioService portfolioService;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public AuthController(AuthService authService, ReportService reportService, PasswordEncoder encoder) {
+    public AuthController(AuthService authService, ReportService reportService, PortfolioService portfolioService,
+            PasswordEncoder encoder) {
         this.authService = authService;
         this.reportService = reportService;
+        this.portfolioService = portfolioService;
         this.encoder = encoder;
     }
 
@@ -51,10 +56,13 @@ public class AuthController {
                 String.valueOf(chars.charAt((int) (chars.length() * Math.random())))));
         System.out.println("signup: " + signupRequest.getUserId() + ", " + signupRequest.getPassword() + ", "
                 + user.getReportId());
-        // 日報テーブルにレコードを挿入
+        // テーブルにレコードを挿入
         Report report = new Report();
         report.setReportId(user.getReportId());
         reportService.create(report);
+        Portfolio portfolio = new Portfolio();
+        portfolio.setReportId(user.getReportId());
+        portfolioService.create(portfolio);
 
         return String.valueOf(authService.create(user)) + ": " + user.getReportId();
     }
