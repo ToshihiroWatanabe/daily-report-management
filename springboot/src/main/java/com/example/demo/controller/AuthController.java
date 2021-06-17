@@ -2,10 +2,12 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import com.example.demo.model.Report;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.ReportService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
+    private final ReportService reportService;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public AuthController(AuthService authService, PasswordEncoder encoder) {
+    public AuthController(AuthService authService, ReportService reportService, PasswordEncoder encoder) {
         this.authService = authService;
+        this.reportService = reportService;
         this.encoder = encoder;
     }
 
@@ -47,6 +51,11 @@ public class AuthController {
                 String.valueOf(chars.charAt((int) (chars.length() * Math.random())))));
         System.out.println("signup: " + signupRequest.getUserId() + ", " + signupRequest.getPassword() + ", "
                 + user.getReportId());
+        // 日報テーブルにレコードを挿入
+        Report report = new Report();
+        report.setReportId(user.getReportId());
+        reportService.create(report);
+
         return String.valueOf(authService.create(user)) + ": " + user.getReportId();
     }
 

@@ -36,18 +36,7 @@ public class ReportController {
         if (encoder.matches(syncRequest.getPassword(), user.getPassword())) {
             System.out.println("パスワードが一致しました");
             Report findByReportIdResult = reportService.findByReportId(user.getReportId());
-            if (findByReportIdResult == null) {
-                // create
-                Report report = new Report();
-                report.setReportId(user.getReportId());
-                report.setReport(syncRequest.getReport());
-                reportService.create(report);
-                return "created";
-            } else {
-                String serverReport = findByReportIdResult.getReport();
-                String clientReport = syncRequest.getReport();
-                return findByReportIdResult.getReport();
-            }
+            return findByReportIdResult.getReport();
         } else {
             System.out.println("パスワードが一致していません");
             return "passwordDoesNotMatch";

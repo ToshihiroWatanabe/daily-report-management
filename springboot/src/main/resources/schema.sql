@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS portfolios(
     -- 日報ID
     report_id VARCHAR(255) NOT NULL UNIQUE,
     -- 名前
-    author_name VARCHAR(32),
+    user_name VARCHAR(32),
     -- 紹介文
     introduction VARCHAR(400),
     -- スキルセット
