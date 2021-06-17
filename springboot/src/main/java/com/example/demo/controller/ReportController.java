@@ -73,9 +73,8 @@ public class ReportController {
     }
 
     @GetMapping("/findbyreportid/{reportId}")
-    public String findByReportId(@PathVariable String reportId) {
+    public Report findByReportId(@PathVariable String reportId) {
         System.out.println("findByReportId: " + reportId);
-        Report report = reportService.findByReportId(reportId);
-        return report.getReport();
+        return reportService.findByReportId(reportId);
     }
 }

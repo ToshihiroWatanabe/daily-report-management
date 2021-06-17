@@ -113,6 +113,7 @@ export default function Signup() {
     setFormValue({ ...formValue, password: event.target.value });
   };
 
+  /** 新規登録ボタンがクリックされたときの処理です。 */
   const onSignupButtonClick = (e) => {
     e.preventDefault();
     if (

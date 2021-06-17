@@ -8,13 +8,17 @@ const Portfolio = () => {
   const [reports, setReports] = useState([]);
   const reportId = document.location.href.split("/").slice(-1)[0];
 
+  const [message, setMessage] = useState("読込中...");
+
   useEffect(() => {
-    ReportService.findByReportId(reportId).then((response) => {
-      console.log(response);
-      if (typeof response.data === "object") {
-        setReports(response.data);
-      }
-    });
+    ReportService.findByReportId(reportId)
+      .then((response) => {
+        console.log(response);
+        setReports(JSON.parse(response.data.report));
+      })
+      .catch((e) => {
+        setMessage("エラーが発生しました。");
+      });
   }, []);
 
   return (
@@ -35,7 +39,7 @@ const Portfolio = () => {
       {reports.length > 0 && <ReportAnalytics reports={reports} />}
       {reports.length === 0 && (
         <>
-          <div>読込中...</div>
+          <div>{message}</div>
         </>
       )}
     </>

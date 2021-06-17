@@ -17,6 +17,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import { Link } from "react-router-dom";
 import { Context } from "../contexts/Context";
 import SyncIcon from "@material-ui/icons/Sync";
+import ReportService from "../service/report.service";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -39,6 +40,11 @@ const AccountPopover = memo((props) => {
    * @param {*} event
    */
   const handleClick = (event) => {
+    if (state.userId !== "") {
+      ReportService.findByReportId(state.reportId).then((response) => {
+        setState({ ...state, reportUpdatedAt: response.data.updatedAt });
+      });
+    }
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -109,6 +115,13 @@ const AccountPopover = memo((props) => {
               <SyncIcon />
               日報をサーバーと同期
             </Button>
+            {state.reportUpdatedAt !== "" && (
+              <>
+                <Typography style={{ marginLeft: "1rem" }}>
+                  前回の同期時刻: {state.reportUpdatedAt}
+                </Typography>
+              </>
+            )}
             <Button
               className={classes.button}
               variant="outlined"

@@ -8,4 +8,5 @@ import lombok.Setter;
 public class Report {
     private String reportId;
     private String report;
+    private String updatedAt;
 }

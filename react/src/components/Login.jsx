@@ -114,6 +114,7 @@ export default function Login() {
     setFormValue({ ...formValue, password: event.target.value });
   };
 
+  /** ログインボタンがクリックされたときの処理です。 */
   const onLoginButtonClick = (e) => {
     e.preventDefault();
     if (

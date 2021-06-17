@@ -17,6 +17,7 @@ export function ContextProvider(props) {
     userId: "",
     password: "",
     reportId: "",
+    reportUpdatedAt: "",
   });
 
   return (

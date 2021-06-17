@@ -103,9 +103,8 @@ const ResponsiveDrawer = memo((props) => {
         {pages.map(
           (page, index) =>
             (state.userId !== "" || page.label !== "ポートフォリオ") && (
-              <>
+              <Fragment key={index}>
                 <Link
-                  key={index}
                   to={page.path}
                   style={{ color: "inherit", textDecoration: "none" }}
                 >
@@ -124,7 +123,7 @@ const ResponsiveDrawer = memo((props) => {
                     <ListItemText primary={page.label} />
                   </ListItem>
                 </Link>
-              </>
+              </Fragment>
             )
         )}
       </List>
