@@ -18,6 +18,7 @@ import { Context } from "./contexts/Context";
 import Portfolio from "./components/Portfolio";
 import PortfolioSettings from "./components/PortfolioSettings";
 import About from "./components/About";
+import SyncSnackbar from "./components/SimpleSnackbar";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -120,6 +121,7 @@ const App = () => {
     format(new Date(), "yyyy-MM")
   );
   const [formDialogOpen, setFormDialogOpen] = useState(false);
+  const [syncSnackbarOpen, setSyncSnackbarOpen] = useState(false);
   const [reports, setReports] = useState(localStorageGetItemReports);
   // 日報入力ダイアログの初期値
   const [defaultReport, setDefaultReport] = useState(
@@ -323,7 +325,10 @@ const App = () => {
           state.userId,
           state.password,
           JSON.stringify(reports)
-        ).then((response) => console.log(response));
+        ).then((response) => {
+          console.log(response);
+          setSyncSnackbarOpen(true);
+        });
       }
     });
   };
@@ -472,6 +477,11 @@ const App = () => {
             onCreate={onCreateReport}
             defaultReport={defaultReport}
             categories={categories}
+          />
+          <SyncSnackbar
+            open={syncSnackbarOpen}
+            setOpen={setSyncSnackbarOpen}
+            message="同期しました！"
           />
         </>
       )}
