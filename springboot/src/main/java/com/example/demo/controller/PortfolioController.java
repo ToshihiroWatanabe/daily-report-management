@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Portfolio;
 import com.example.demo.model.User;
+import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.PortfolioUpdateRequest;
 import com.example.demo.service.PortfolioService;
 import com.example.demo.service.AuthService;
@@ -25,6 +26,16 @@ public class PortfolioController {
         this.portfolioService = portfolioService;
         this.authService = authService;
         this.encoder = encoder;
+    }
+
+    @PostMapping("/findbyreportid")
+    public Portfolio findByReportId(@RequestBody LoginRequest request) {
+        User user = authService.findByUserId(request.getUserId());
+        if (encoder.matches(request.getPassword(), user.getPassword())) {
+            return portfolioService.findByReportId(user.getReportId());
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/update")

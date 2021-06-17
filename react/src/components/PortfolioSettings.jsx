@@ -18,15 +18,38 @@ import PortfolioService from "../service/portfolio.service";
 
 const PortfolioSettings = () => {
   const [state, setState] = useContext(Context);
+  const [userName, setUserName] = useState("");
+  const [introduction, setIntroduction] = useState("");
   const [skillSet, setSkillSet] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [profileDisabled, setProfileDisabled] = useState(true);
 
   useEffect(() => {
+    // 未ログイン時はホームにリダイレクト
     if (state.userId === "") {
       document.getElementById("linkToHome").click();
     }
+    PortfolioService.findByReportId(state.userId, state.password).then(
+      (response) => {
+        console.log(response);
+        console.log(JSON.parse(response.data.skillSet));
+        setUserName(
+          response.data.userName === null ? "" : response.data.userName
+        );
+        setIntroduction(
+          response.data.introduction === null ? "" : response.data.introduction
+        );
+        setSkillSet(
+          response.data.skillSet === null
+            ? []
+            : JSON.parse(response.data.skillSet)
+        );
+        setProfileDisabled(false);
+      }
+    );
   }, []);
 
+  // クリップボードにコピーするボタンがクリックされたときの処理です。
   const onClipBoardButtonClick = () => {
     // 一時的に要素を追加
     let textArea = document.createElement("textarea");
@@ -40,8 +63,20 @@ const PortfolioSettings = () => {
   };
 
   const handleSelecetedTags = (items) => {
-    console.log(items);
     setSkillSet(items);
+  };
+
+  // 適用するボタンが押されたときの処理です。
+  const onApplyButtonClick = () => {
+    PortfolioService.update(
+      state.userId,
+      state.password,
+      userName,
+      introduction,
+      JSON.stringify(skillSet)
+    ).then((response) => {
+      console.log(response);
+    });
   };
 
   return (
@@ -57,8 +92,17 @@ const PortfolioSettings = () => {
         <Typography variant="h6">プロフィール設定</Typography>
         <Divider style={{ margin: "0.5rem 0" }} />
         <div style={{ width: "360px" }}>
+          {/* TODO: バリデーション */}
           <Typography>名前</Typography>
-          <TextField variant="outlined" fullWidth />
+          <TextField
+            variant="outlined"
+            onChange={(e) => {
+              setUserName(e.target.value);
+            }}
+            fullWidth
+            disabled={profileDisabled}
+            value={userName}
+          />
           <Typography>紹介文</Typography>
           <TextField
             variant="outlined"
@@ -70,6 +114,11 @@ const PortfolioSettings = () => {
               maxLength: "400",
             }}
             placeholder="自己アピールをどうぞ！"
+            onChange={(e) => {
+              setIntroduction(e.target.value);
+            }}
+            disabled={profileDisabled}
+            value={introduction}
           />
         </div>
         <Typography>スキルセット</Typography>
@@ -80,13 +129,15 @@ const PortfolioSettings = () => {
           id="tags"
           name="tags"
           placeholder="タグを入力してEnterで追加"
-          // label="tags"
+          disabled={profileDisabled}
         />
         <Button
           type="submit"
           variant="contained"
           color="secondary"
           style={{ marginTop: "1rem" }}
+          onClick={onApplyButtonClick}
+          disabled={profileDisabled}
         >
           <SyncIcon />
           適用する

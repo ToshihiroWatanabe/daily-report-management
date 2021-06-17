@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.PortfolioMapper">
 
+    <select id="findByReportId" resultType="Portfolio">
+        SELECT * FROM portfolios
+        WHERE report_id = #{reportId}
+    </select>
     <insert id="create">
         INSERT INTO portfolios(
             report_id
