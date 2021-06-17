@@ -31,8 +31,6 @@ const PortfolioSettings = () => {
     }
     PortfolioService.findByReportId(state.userId, state.password).then(
       (response) => {
-        console.log(response);
-        console.log(JSON.parse(response.data.skillSet));
         setUserName(
           response.data.userName === null ? "" : response.data.userName
         );
@@ -130,6 +128,8 @@ const PortfolioSettings = () => {
           name="tags"
           placeholder="タグを入力してEnterで追加"
           disabled={profileDisabled}
+          skillSet={skillSet}
+          setSkillSet={setSkillSet}
         />
         <Button
           type="submit"

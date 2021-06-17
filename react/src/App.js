@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
-import { Switch, Route, Router } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import ReportAnalytics from "./components/ReportAnalytics";
 import { exportReportsToTxt, exportReportsToJson } from "./utils/export";
 import Settings from "./components/Settings";
@@ -252,7 +252,6 @@ const App = () => {
    */
   const importReportsFromJson = (data) => {
     // TODO: データのフォーマットが正しいか検証する処理を入れる？例外処理
-    console.log(data);
     let additionalReports = [];
     // データの数だけ繰り返す
     for (let i = 0; i < data.length; i++) {
@@ -313,7 +312,7 @@ const App = () => {
    */
   const onSyncButtonClick = () => {
     ReportService.findByReportId(state.reportId).then((response) => {
-      console.log(response.data.report);
+      console.log(response);
       // オブジェクトが返ってきたらローカルの日報を更新
       if (typeof response.data.report === "object") {
         importReportsFromJson(response.data);

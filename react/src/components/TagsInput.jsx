@@ -15,19 +15,18 @@ export default function TagsInput({ ...props }) {
   const classes = useStyles();
   const { selectedTags, placeholder, tags, ...other } = props;
   const [inputValue, setInputValue] = React.useState("");
-  const [selectedItem, setSelectedItem] = React.useState([]);
 
   useEffect(() => {
-    setSelectedItem(tags);
+    props.setSkillSet(tags);
   }, [tags]);
 
   useEffect(() => {
-    selectedTags(selectedItem);
-  }, [selectedItem, selectedTags]);
+    selectedTags(props.skillSet);
+  }, [props.skillSet, selectedTags]);
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
-      const newSelectedItem = [...selectedItem];
+      const newSelectedItem = [...props.skillSet];
       const duplicatedValues = newSelectedItem.indexOf(
         event.target.value.trim()
       );
@@ -39,30 +38,30 @@ export default function TagsInput({ ...props }) {
       if (!event.target.value.replace(/\s/g, "").length) return;
 
       newSelectedItem.push(event.target.value.trim());
-      setSelectedItem(newSelectedItem);
+      props.setSkillSet(newSelectedItem);
       setInputValue("");
     }
     if (
-      selectedItem.length &&
+      props.skillSet.length &&
       !inputValue.length &&
       event.key === "Backspace"
     ) {
-      setSelectedItem(selectedItem.slice(0, selectedItem.length - 1));
+      props.setSkillSet(props.skillSet.slice(0, props.skillSet.length - 1));
     }
   }
   function handleChange(item) {
-    let newSelectedItem = [...selectedItem];
+    let newSelectedItem = [...props.skillSet];
     if (newSelectedItem.indexOf(item) === -1) {
       newSelectedItem = [...newSelectedItem, item];
     }
     setInputValue("");
-    setSelectedItem(newSelectedItem);
+    props.setSkillSet(newSelectedItem);
   }
 
   const handleDelete = (item) => () => {
-    const newSelectedItem = [...selectedItem];
+    const newSelectedItem = [...props.skillSet];
     newSelectedItem.splice(newSelectedItem.indexOf(item), 1);
-    setSelectedItem(newSelectedItem);
+    props.setSkillSet(newSelectedItem);
   };
 
   function handleInputChange(event) {
@@ -75,7 +74,7 @@ export default function TagsInput({ ...props }) {
         id="downshift-multiple"
         inputValue={inputValue}
         onChange={handleChange}
-        selectedItem={selectedItem}
+        selectedItem={props.skillSet}
       >
         {({ getInputProps }) => {
           const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
@@ -86,7 +85,7 @@ export default function TagsInput({ ...props }) {
             <div>
               <TextField
                 InputProps={{
-                  startAdornment: selectedItem.map((item) => (
+                  startAdornment: props.skillSet.map((item) => (
                     <Chip
                       key={item}
                       tabIndex={-1}
