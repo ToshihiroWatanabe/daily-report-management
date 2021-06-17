@@ -1,7 +1,7 @@
 INSERT IGNORE INTO users(user_id, password, user_name, report_id)
 VALUES(
                 'userId',
-                '$10$Y.Iuos//ulAe8Cwh8eFki.Qbas0q4HkHLR3g5uwfYvjyYLI8VY24u',
+                '$2a$10$bHmTQZcBq0/T3eAXUZ6TUuLQJAdtrhM/o/xVgwjPh1rUP6WzsOIZa',
                 'userName',
                 'reportId'
         );

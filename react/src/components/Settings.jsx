@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { Context } from "../contexts/Context";
 import SyncIcon from "@material-ui/icons/Sync";
+import SettingService from "../service/setting.service";
 
 const useStyles = makeStyles((theme) => ({
   slackTextField: {
@@ -21,6 +22,19 @@ const Settings = () => {
   const [state, setState] = useContext(Context);
   const [slackUserName, setSlackUserName] = useState(state.slackUserName);
   const [slackWebhookUrl, setSlackWebhookUrl] = useState(state.slackWebhookUrl);
+  const [settingDisabled, setSettingDisabled] = useState(
+    state.userId === "" ? false : true
+  );
+
+  useEffect(() => {
+    if (state.userId !== "") {
+      SettingService.findByUserId(state.userId, state.password).then(
+        (response) => {
+          console.log(response);
+        }
+      );
+    }
+  }, []);
 
   const onSlackUserNameChange = (event) => {
     setSlackUserName(event.target.value);
@@ -56,6 +70,7 @@ const Settings = () => {
           defaultValue={state.slackUserName}
           onChange={onSlackUserNameChange}
           className={classes.slackTextField}
+          disabled={settingDisabled}
         />
         <TextField
           label="Slack Webhook URL"
@@ -66,12 +81,14 @@ const Settings = () => {
           defaultValue={state.slackWebhookUrl}
           onChange={onSlackWebhookUrlChange}
           className={classes.slackTextField}
+          disabled={settingDisabled}
         />
         <Button
           type="submit"
           variant="contained"
           color="secondary"
           onClick={onApplyButtonClick}
+          disabled={settingDisabled}
         >
           <SyncIcon />
           適用する
