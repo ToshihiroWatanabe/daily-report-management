@@ -49,7 +49,7 @@ const Settings = () => {
       Slack連携設定
       <form autoComplete="on">
         <TextField
-          label="Slack ユーザー名"
+          label="ユーザー名(任意)"
           name="slackUserName"
           variant="outlined"
           size="small"

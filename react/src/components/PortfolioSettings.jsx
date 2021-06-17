@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import {
+  Button,
   Card,
+  Divider,
   IconButton,
   InputAdornment,
   TextField,
@@ -9,9 +11,12 @@ import {
 import { Context } from "../contexts/Context";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import SimpleSnackbar from "./SimpleSnackbar";
+import TagsInput from "./TagsInput";
+import SyncIcon from "@material-ui/icons/Sync";
 
 const PortfolioSettings = () => {
   const [state, setState] = useContext(Context);
+  const [skillSet, setSkillSet] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const onClipBoardButtonClick = () => {
@@ -26,6 +31,11 @@ const PortfolioSettings = () => {
     setSnackbarOpen(true);
   };
 
+  const handleSelecetedTags = (items) => {
+    console.log(items);
+    setSkillSet(items);
+  };
+
   return (
     <>
       <Card
@@ -36,9 +46,43 @@ const PortfolioSettings = () => {
           marginBottom: "1rem",
         }}
       >
-        <Typography>名前</Typography>
-        <Typography>紹介文</Typography>
+        <Typography variant="h6">プロフィール設定</Typography>
+        <Divider style={{ margin: "0.5rem 0" }} />
+        <div style={{ width: "360px" }}>
+          <Typography>名前</Typography>
+          <TextField variant="outlined" fullWidth />
+          <Typography>紹介文</Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            rowsMax={10}
+            inputProps={{
+              maxLength: "400",
+            }}
+            placeholder="自己アピールをどうぞ！"
+          />
+        </div>
         <Typography>スキルセット</Typography>
+        <TagsInput
+          selectedTags={handleSelecetedTags}
+          fullWidth
+          variant="outlined"
+          id="tags"
+          name="tags"
+          placeholder="タグを入力してEnterで追加"
+          // label="tags"
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="secondary"
+          style={{ marginTop: "1rem" }}
+        >
+          <SyncIcon />
+          適用する
+        </Button>
       </Card>
       <Card
         style={{
