@@ -1,4 +1,4 @@
-import React, { useState, memo, Fragment } from "react";
+import React, { useState, memo, Fragment, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
@@ -25,6 +25,7 @@ import FilePopover from "./FilePopover";
 import AccountPopover from "./AccountPopover";
 import SettingsIcon from "@material-ui/icons/Settings";
 import PortraitIcon from "@material-ui/icons/Portrait";
+import { Context } from "../contexts/Context";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -82,6 +83,7 @@ const ResponsiveDrawer = memo((props) => {
   const classes = useStyles();
   /** Material-UIのテーマ */
   const theme = useTheme();
+  const [state, setState] = useContext(Context);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // リストの項目が押されたときの処理です。
@@ -98,28 +100,33 @@ const ResponsiveDrawer = memo((props) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {pages.map((page, index) => (
-          <Link
-            key={index}
-            to={page.path}
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <ListItem
-              button
-              onClick={() => handleListItemClick(index)}
-              data-num={index.toString()}
-            >
-              <ListItemIcon>
-                {page.label === "日報管理" ? <DescriptionIcon /> : ""}
-                {page.label === "分析レポート" ? <AssessmentIcon /> : ""}
-                {page.label === "ポートフォリオ" ? <PortraitIcon /> : ""}
-                {page.label === "設定" ? <SettingsIcon /> : ""}
-                {page.label === "このアプリについて" ? <InfoIcon /> : ""}
-              </ListItemIcon>
-              <ListItemText primary={page.label} />
-            </ListItem>
-          </Link>
-        ))}
+        {pages.map(
+          (page, index) =>
+            (state.userId !== "" || page.label !== "ポートフォリオ") && (
+              <>
+                <Link
+                  key={index}
+                  to={page.path}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  <ListItem
+                    button
+                    onClick={() => handleListItemClick(index)}
+                    data-num={index.toString()}
+                  >
+                    <ListItemIcon>
+                      {page.label === "日報管理" ? <DescriptionIcon /> : ""}
+                      {page.label === "分析レポート" ? <AssessmentIcon /> : ""}
+                      {page.label === "ポートフォリオ" ? <PortraitIcon /> : ""}
+                      {page.label === "設定" ? <SettingsIcon /> : ""}
+                      {page.label === "このアプリについて" ? <InfoIcon /> : ""}
+                    </ListItemIcon>
+                    <ListItemText primary={page.label} />
+                  </ListItem>
+                </Link>
+              </>
+            )
+        )}
       </List>
     </>
   );
