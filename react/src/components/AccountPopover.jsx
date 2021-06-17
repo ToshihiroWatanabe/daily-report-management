@@ -118,7 +118,7 @@ const AccountPopover = memo((props) => {
             {state.reportUpdatedAt !== "" && (
               <>
                 <Typography style={{ marginLeft: "1rem" }}>
-                  前回の同期時刻: {state.reportUpdatedAt}
+                  最終更新: {state.reportUpdatedAt}
                 </Typography>
               </>
             )}

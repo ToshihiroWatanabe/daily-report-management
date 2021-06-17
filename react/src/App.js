@@ -122,6 +122,7 @@ const App = () => {
   );
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [syncSnackbarOpen, setSyncSnackbarOpen] = useState(false);
+  const [syncSnackbarMessage, setSyncSnackbarMessage] = useState("");
   const [reports, setReports] = useState(localStorageGetItemReports);
   // 日報入力ダイアログの初期値
   const [defaultReport, setDefaultReport] = useState(
@@ -327,6 +328,11 @@ const App = () => {
           JSON.stringify(reports)
         ).then((response) => {
           console.log(response);
+          // if (response.data.updatedAt === state.reportUpdatedAt) {
+          // setSyncSnackbarMessage("更新はありません");
+          // } else {
+          setSyncSnackbarMessage("同期しました！");
+          // }
           setSyncSnackbarOpen(true);
         });
       }
@@ -481,7 +487,7 @@ const App = () => {
           <SyncSnackbar
             open={syncSnackbarOpen}
             setOpen={setSyncSnackbarOpen}
-            message="同期しました！"
+            message={syncSnackbarMessage}
           />
         </>
       )}
