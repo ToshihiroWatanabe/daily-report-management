@@ -3,7 +3,6 @@ import ReportDatePicker from "./components/ReportDatePicker";
 import ReportFormDialog from "./components/ReportFormDialog";
 import ReportCard from "./components/ReportCard";
 import format from "date-fns/format";
-import preval from "preval.macro";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
@@ -14,7 +13,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import GitHubIcon from "@material-ui/icons/GitHub";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { Switch, Route, Router } from "react-router-dom";
 import ReportAnalytics from "./components/ReportAnalytics";
@@ -26,6 +24,7 @@ import ReportService from "./service/report.service";
 import { Context } from "./contexts/Context";
 import Portfolio from "./components/Portfolio";
 import PortfolioSettings from "./components/PortfolioSettings";
+import About from "./components/About";
 
 /** ドロワーの横幅 */
 const DRAWER_WIDTH = "15rem";
@@ -456,47 +455,8 @@ const App = () => {
               <Route exact path="/analytics">
                 <ReportAnalytics reports={reports} />
               </Route>
-              {/* TODO: Aboutコンポーネント分割 */}
               <Route exact path="/about">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "0 1rem",
-                  }}
-                >
-                  <h2>日報管理アプリ</h2>
-                  <Typography
-                    variant="caption"
-                    style={{ margin: "0 1rem", marginTop: "0.5rem" }}
-                  >
-                    ビルド時刻{" "}
-                    {format(
-                      preval`module.exports = Date.now();`,
-                      "yyyy/MM/dd HH:mm:ss"
-                    )}
-                  </Typography>
-                  <Tooltip title="GitHubのリポジトリを見る">
-                    <Link
-                      href="https://github.com/ToshihiroWatanabe/daily-report-management"
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      <IconButton size="small">
-                        <GitHubIcon></GitHubIcon>
-                      </IconButton>
-                    </Link>
-                  </Tooltip>
-                </div>
-                <Typography
-                  component="p"
-                  style={{
-                    margin: "0 1rem",
-                  }}
-                >
-                  Copyright © {new Date().getFullYear()} ワタナベトシヒロ All
-                  Rights Reserved.
-                </Typography>
+                <About />
               </Route>
               <Route exact path="/portfolio">
                 <PortfolioSettings />
