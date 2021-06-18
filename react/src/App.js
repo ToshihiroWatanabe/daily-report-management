@@ -179,6 +179,25 @@ const App = () => {
           return b.date.replaceAll("-", "") - a.date.replaceAll("-", "");
         });
       localStorage.setItem("reports", JSON.stringify(newReports));
+      if (state.userId !== "") {
+        ReportService.findByReportId(state.reportId).then((response) => {
+          console.log(response);
+          // ローカルの日報を更新
+          if (response.data.report !== null) {
+            importReportsFromJson(JSON.parse(response.data.report));
+          }
+          // 更新したものを送信
+          ReportService.update(
+            state.userId,
+            state.password,
+            JSON.stringify(newReports)
+          ).then((response) => {
+            console.log(response);
+            setSyncSnackbarMessage("同期しました！");
+            setSyncSnackbarOpen(true);
+          });
+        });
+      }
       return newReports;
     });
   };
@@ -237,17 +256,39 @@ const App = () => {
    * @param {*} date 削除する日報の日付
    */
   const onDeleteButtonClick = (date) => {
+    // ログイン時
+    if (state.userId !== "") {
+      ReportService.findByReportId(state.reportId).then((response) => {
+        console.log(response);
+        // ローカルの日報を更新
+        if (response.data.report !== null) {
+          importReportsFromJson(JSON.parse(response.data.report));
+        }
+      });
+    }
     setReports((reports) => {
       let newReports = reports.filter((report) => {
         return report.date !== date;
       });
       localStorage.setItem("reports", JSON.stringify(newReports));
+      if (state.userId !== "") {
+        // 更新したものを送信
+        ReportService.update(
+          state.userId,
+          state.password,
+          JSON.stringify(newReports)
+        ).then((response) => {
+          console.log(response);
+          setSyncSnackbarMessage("同期しました！");
+          setSyncSnackbarOpen(true);
+        });
+      }
       return newReports;
     });
   };
 
   /**
-   * JSONファイルから日報をインポートする処理です。
+   * JSONから日報をインポートする処理です。
    * @param {*} data
    */
   const importReportsFromJson = (data) => {
