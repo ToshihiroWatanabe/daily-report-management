@@ -19,6 +19,7 @@ import { Context } from "../contexts/Context";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import SimpleSnackbar from "./SimpleSnackbar";
+import SettingService from "../service/setting.service";
 
 const USER_ID_LENGTH_MIN = 5;
 const USER_ID_LENGTH_MAX = 32;
@@ -137,6 +138,22 @@ export default function Login() {
               userId: formValue.userId,
               password: formValue.password,
               reportId: response.split("true: ")[1],
+            });
+            // 設定を取得
+            SettingService.findByUserId(
+              formValue.userId,
+              formValue.password
+            ).then((response) => {
+              console.log(response);
+              setState((state) => {
+                return {
+                  ...state,
+                  slackUserName: JSON.parse(response.data.slackSetting)
+                    .slackUserName,
+                  slackWebhookUrl: JSON.parse(response.data.slackSetting)
+                    .slackWebhookUrl,
+                };
+              });
             });
             document.getElementById("linkToHome").click();
           }
