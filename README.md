@@ -1,4 +1,5 @@
 # daily-report-management
+![image](https://user-images.githubusercontent.com/79039863/122550211-5ec6d100-d06e-11eb-9ffe-2e3e183313a6.png)
 
 
 日報管理アプリ  
