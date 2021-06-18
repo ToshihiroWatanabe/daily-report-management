@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8150/api/portfolio";
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api/portfolio"
+    : "http://localhost:8150/api/portfolio";
 
 const findByReportId = (reportId) => {
   return axios.get(API_URL + "/findbyreportid/" + reportId);

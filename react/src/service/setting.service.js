@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8150/api/setting";
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api/setting"
+    : "http://localhost:8150/api/setting";
 
 const findByUserId = (userId, password) => {
   return axios.post(API_URL + "/findbyuserid", { userId, password });
