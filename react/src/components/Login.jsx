@@ -145,15 +145,17 @@ export default function Login() {
               formValue.password
             ).then((response) => {
               console.log(response);
-              setState((state) => {
-                return {
-                  ...state,
-                  slackUserName: JSON.parse(response.data.slackSetting)
-                    .slackUserName,
-                  slackWebhookUrl: JSON.parse(response.data.slackSetting)
-                    .slackWebhookUrl,
-                };
-              });
+              if (response.data.slackSetting !== null) {
+                setState((state) => {
+                  return {
+                    ...state,
+                    slackUserName: JSON.parse(response.data.slackSetting)
+                      .slackUserName,
+                    slackWebhookUrl: JSON.parse(response.data.slackSetting)
+                      .slackWebhookUrl,
+                  };
+                });
+              }
             });
             document.getElementById("linkToHome").click();
           }

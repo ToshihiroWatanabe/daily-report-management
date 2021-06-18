@@ -313,24 +313,24 @@ const App = () => {
   const onSyncButtonClick = () => {
     ReportService.findByReportId(state.reportId).then((response) => {
       console.log(response);
-      // オブジェクトが返ってきたらローカルの日報を更新
-      if (response.data.report.match(/[.*.*]/)) {
+      // ローカルの日報を更新
+      if (response.data.report !== null) {
         importReportsFromJson(JSON.parse(response.data.report));
-        // 更新したものを送信
-        ReportService.update(
-          state.userId,
-          state.password,
-          JSON.stringify(reports)
-        ).then((response) => {
-          console.log(response);
-          // if (response.data.updatedAt === state.reportUpdatedAt) {
-          // setSyncSnackbarMessage("更新はありません");
-          // } else {
-          setSyncSnackbarMessage("同期しました！");
-          // }
-          setSyncSnackbarOpen(true);
-        });
       }
+      // 更新したものを送信
+      ReportService.update(
+        state.userId,
+        state.password,
+        JSON.stringify(reports)
+      ).then((response) => {
+        console.log(response);
+        // if (response.data.updatedAt === state.reportUpdatedAt) {
+        // setSyncSnackbarMessage("更新はありません");
+        // } else {
+        setSyncSnackbarMessage("同期しました！");
+        // }
+        setSyncSnackbarOpen(true);
+      });
     });
   };
 

@@ -16,15 +16,17 @@ const Portfolio = () => {
   useEffect(() => {
     PortfolioService.findReportByReportId(reportId)
       .then((response) => {
-        console.log(response.data);
-        setReports(JSON.parse(response.data.report));
-        setUserName(response.data.userName);
-        setIntroduction(response.data.introduction);
-        setSkillSet(
-          JSON.parse(
-            response.data.skillSet === null ? [] : response.data.skillSet
-          )
-        );
+        if (response.data.report.length > 0) {
+          console.log(response.data);
+          setReports(JSON.parse(response.data.report));
+          setUserName(response.data.userName);
+          setIntroduction(response.data.introduction);
+          setSkillSet(
+            JSON.parse(
+              response.data.skillSet === null ? [] : response.data.skillSet
+            )
+          );
+        }
       })
       .catch((e) => {
         setMessage("エラーが発生しました。");
@@ -58,7 +60,7 @@ const Portfolio = () => {
           >
             <Typography variant="h5">{userName}</Typography>
             <Typography>{introduction}</Typography>
-            <Typography variant="h6">
+            <Typography variant="h6" style={{ marginTop: "1rem" }}>
               {skillSet.length > 0 && "スキルセット"}
             </Typography>
             {skillSet.map((e) => {
