@@ -82,6 +82,10 @@ const ReportCard = memo((props) => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [slackDialogOpen, setSlackDialogOpen] = useState(false);
 
+  // 曜日
+  const youbi = ["日", "月", "火", "水", "木", "金", "土"];
+  const day = youbi[new Date(props.report.date).getDay()];
+
   let text = state.slackUserName !== "" ? state.slackUserName + "\n\n" : "";
   text +=
     "🌟*" + props.report.date.replaceAll("-", ".") + "*\n\n💡*やったこと*\n";
@@ -199,7 +203,7 @@ const ReportCard = memo((props) => {
                 color="textSecondary"
                 gutterBottom
               >
-                {props.report.date.replaceAll("-", ".")}
+                {props.report.date.replaceAll("-", ".") + "(" + day + ")"}
                 {/* ツイートするボタン */}
                 <Tooltip title="ツイートする" placement="top">
                   <IconButton
