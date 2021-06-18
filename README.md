@@ -11,6 +11,9 @@
 MYSQL_URL|mysql://ホスト名:ポート/データベース名
 MYSQL_USERNAME|データベースに接続するユーザー名
 MYSQL_PASSWORD|データベースに接続するユーザーのパスワード
+
+  
+springboot\src\main\resources\schema.sqlにあるSQLを実行して、テーブルを作成してください。
   
 ### Spring Bootアプリケーションの起動
 `cd springboot`  
