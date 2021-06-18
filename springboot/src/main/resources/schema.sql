@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users(
     -- パスワード
     password VARCHAR(100) NOT NULL,
     -- ユーザー名
-    user_name VARCHAR(32),
+    user_name VARCHAR(32) NOT NULL DEFAULT '',
     -- 日報ID
     report_id VARCHAR(255) NOT NULL UNIQUE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -29,9 +29,9 @@ CREATE TABLE IF NOT EXISTS portfolios(
     -- 日報ID
     report_id VARCHAR(255) NOT NULL UNIQUE,
     -- 名前
-    user_name VARCHAR(32),
+    user_name VARCHAR(32) NOT NULL DEFAULT '',
     -- 紹介文
-    introduction VARCHAR(400),
+    introduction VARCHAR(400) NOT NULL DEFAULT '',
     -- スキルセット
     skill_set JSON,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

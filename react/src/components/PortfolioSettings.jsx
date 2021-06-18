@@ -32,12 +32,8 @@ const PortfolioSettings = () => {
     }
     PortfolioService.findByReportId(state.reportId).then((response) => {
       if (response.data !== "") {
-        setUserName(
-          response.data.userName === null ? "" : response.data.userName
-        );
-        setIntroduction(
-          response.data.introduction === null ? "" : response.data.introduction
-        );
+        setUserName(response.data.userName);
+        setIntroduction(response.data.introduction);
         setSkillSet(
           response.data.skillSet === null
             ? []
