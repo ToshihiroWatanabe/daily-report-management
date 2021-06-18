@@ -20,7 +20,11 @@ const Portfolio = () => {
         setReports(JSON.parse(response.data.report));
         setUserName(response.data.userName);
         setIntroduction(response.data.introduction);
-        setSkillSet(JSON.parse(response.data.skillSet));
+        setSkillSet(
+          JSON.parse(
+            response.data.skillSet === null ? [] : response.data.skillSet
+          )
+        );
       })
       .catch((e) => {
         setMessage("エラーが発生しました。");
@@ -54,7 +58,9 @@ const Portfolio = () => {
           >
             <Typography variant="h5">{userName}</Typography>
             <Typography>{introduction}</Typography>
-            <Typography variant="h6">スキルセット</Typography>
+            <Typography variant="h6">
+              {skillSet.length > 0 && "スキルセット"}
+            </Typography>
             {skillSet.map((e) => {
               return (
                 <>

@@ -30,8 +30,8 @@ const PortfolioSettings = () => {
     if (state.userId === "") {
       document.getElementById("linkToHome").click();
     }
-    PortfolioService.findByReportId(state.userId, state.password).then(
-      (response) => {
+    PortfolioService.findByReportId(state.reportId).then((response) => {
+      if (response.data !== "") {
         setUserName(
           response.data.userName === null ? "" : response.data.userName
         );
@@ -43,9 +43,9 @@ const PortfolioSettings = () => {
             ? []
             : JSON.parse(response.data.skillSet)
         );
-        setProfileDisabled(false);
       }
-    );
+      setProfileDisabled(false);
+    });
   }, []);
 
   // クリップボードにコピーするボタンがクリックされたときの処理です。
