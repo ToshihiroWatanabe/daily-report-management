@@ -391,6 +391,9 @@ const ReportFormDialog = memo((props) => {
                   }}
                   onChange={(e, v, r) => onCategoryChange(index, v.value, r)}
                   onClose={(e, r) => onCategoryClose(index, e, r)}
+                  onFocus={(e) => {
+                    e.target.select();
+                  }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -430,6 +433,9 @@ const ReportFormDialog = memo((props) => {
                         value: value.hour,
                       }}
                       onChange={(e, v) => onHourChange(index, v.value)}
+                      onFocus={(e) => {
+                        e.target.select();
+                      }}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -487,6 +493,9 @@ const ReportFormDialog = memo((props) => {
                         value: report.report_items[index].minute,
                       }}
                       onChange={(e, v) => onMinuteChange(index, v.value)}
+                      onFocus={(e) => {
+                        e.target.select();
+                      }}
                       renderInput={(params) => (
                         <TextField
                           {...params}
