@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users(
     -- ユーザー名
     user_name VARCHAR(32) NOT NULL DEFAULT '',
     -- 日報ID
-    report_id VARCHAR(255) NOT NULL UNIQUE,
+    report_id TEXT(255) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -16,19 +16,19 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS reports(
     id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     -- 日報ID
-    report_id VARCHAR(255) NOT NULL UNIQUE,
+    report_id TEXT(255) NOT NULL,
     -- 日報
     -- report JSON,
     report TEXT,
-    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     -- CHECK (JSON_VALID(report)),
-    FOREIGN KEY (report_id) REFERENCES users(report_id)
+    -- FOREIGN KEY (report_id) REFERENCES users(report_id)
 );
 -- ポートフォリオのテーブル
 CREATE TABLE IF NOT EXISTS portfolios(
     id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     -- 日報ID
-    report_id VARCHAR(255) NOT NULL UNIQUE,
+    report_id TEXT(255) NOT NULL,
     -- 名前
     user_name VARCHAR(32) NOT NULL DEFAULT '',
     -- 紹介文
@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS portfolios(
     -- スキルセット
     -- skill_set JSON,
     skill_set TEXT,
-    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     -- CHECK (JSON_VALID(skill_set)),
-    FOREIGN KEY (report_id) REFERENCES users(report_id)
+    -- FOREIGN KEY (report_id) REFERENCES users(report_id)
 );
 -- 設定のテーブル
 CREATE TABLE IF NOT EXISTS settings(
