@@ -66,7 +66,11 @@ const Portfolio = () => {
             {skillSet.map((e) => {
               return (
                 <>
-                  <Chip label={e} style={{ margin: "0.1rem" }} />
+                  <Chip
+                    label={e}
+                    style={{ margin: "0.1rem" }}
+                    variant="outlined"
+                  />
                 </>
               );
             })}
