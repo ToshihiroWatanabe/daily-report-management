@@ -1,9 +1,10 @@
 # daily-report-management
-![image](https://user-images.githubusercontent.com/79039863/122550211-5ec6d100-d06e-11eb-9ffe-2e3e183313a6.png)
+![dairy-report-management 2021-07-25](https://user-images.githubusercontent.com/79039863/126899855-e21c4b4c-8141-48e3-b3a7-2072d7f0f10a.gif)
 
 ## Overview 概要
 
 日々の取り組みを可視化する日報アプリ『[BuildUp](https://build-up.info/)』のクローンアプリです。
+
 フロントエンドはReact、バックエンドはSpring Bootで制作しています。
 
 ## Description 説明
