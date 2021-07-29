@@ -88,7 +88,7 @@ const ReportAnalytics = (props) => {
 
   // 直近12ヶ月
   for (let i = 11; i >= 0; i--) {
-    const now = new Date();
+    const now = new Date(new Date().setDate(1));
     let month = format(now.setMonth(now.getMonth() - i), "yyyy-MM");
     let uv = 0;
     let localTotalMinute = 0;
