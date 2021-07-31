@@ -1,6 +1,9 @@
 # daily-report-management
 ![dairy-report-management 2021-07-25](https://user-images.githubusercontent.com/79039863/126899855-e21c4b4c-8141-48e3-b3a7-2072d7f0f10a.gif)
 
+![daily-report-management 2021-07-31](https://user-images.githubusercontent.com/79039863/127731120-4158a469-b0e1-4349-ab7d-93cc53ddfc24.gif)
+
+
 ## Overview 概要
 
 日々の取り組みを可視化する日報アプリ『[BuildUp](https://build-up.info/)』のクローンアプリです。
