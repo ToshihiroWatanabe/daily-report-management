@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS reports(
     report_id TEXT(255) NOT NULL,
     -- 日報
     -- report JSON,
-    report TEXT,
+    report LONGTEXT,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     -- CHECK (JSON_VALID(report)),
     -- FOREIGN KEY (report_id) REFERENCES users(report_id)
